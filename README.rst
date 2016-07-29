@@ -1,10 +1,10 @@
-Home Assistant Command-line Interface (```hass-cli```)
-======================================================
+Home Assistant Command-line Interface (``hass-cli``)
+====================================================
 
 |Join the chat at https://gitter.im/home-assistant/home-assistant| |Join the dev chat at https://gitter.im/home-assistant/home-assistant/devs| |License| |PyPI|
 
-The Home Assistant Command-line interface (```hass-cli```) allows one to
-work with a local or a remote `Host Assistant <https://home-assistant.io>`_
+The Home Assistant Command-line interface (``hass-cli``) allows one to
+work with a local or a remote `Home Assistant <https://home-assistant.io>`_
 instance directly from the command-line.
 
 .. code:: bash
@@ -27,7 +27,7 @@ instance directly from the command-line.
      state   Get, set or remove the state of entity..
      status  Show the status of an instance.
 
-Documentation will be available at `Host Assistant <https://home-assistant.io>`_.
+Documentation will be available at `Home Assistant <https://home-assistant.io>`_.
 
 This tool is in ALPHA stage.
 
