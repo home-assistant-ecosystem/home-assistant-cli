@@ -1,5 +1,7 @@
-Home Assistant Command-line Interface (hass-cli) |Join the chat at https://gitter.im/home-assistant/home-assistant| |Join the dev chat at https://gitter.im/home-assistant/home-assistant/devs| |License| |PyPI|
-================================================================================================================================================================================================================
+Home Assistant Command-line Interface (```hass-cli```)
+======================================================
+
+|Join the chat at https://gitter.im/home-assistant/home-assistant| |Join the dev chat at https://gitter.im/home-assistant/home-assistant/devs| |License| |PyPI|
 
 The Home Assistant Command-line interface (```hass-cli```) allows one to
 work with a local or a remote `Host Assistant <https://home-assistant.io>`_
