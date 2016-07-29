@@ -37,8 +37,8 @@ This tool is in ALPHA stage.
 .. |Join the dev chat at https://gitter.im/home-assistant/home-assistant/devs| image:: https://img.shields.io/badge/gitter-development-yellowgreen.svg
    :target: https://gitter.im/home-assistant/home-assistant/devs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
 .. |License| image:: https://img.shields.io/pypi/l/home-assistant-cli.svg
-   :target: https://github.com/fabaff/python-mystrom/blob/master/LICENSE
+   :target: https://github.com/home-assistant/home-assistant-cli/blob/master/LICENSE
    :alt: License
 .. |PyPI| image:: https://img.shields.io/pypi/v/home-assistant-cli.svg
-   :target: https://pypi.python.org/pypi/python-mystrom
+   :target: https://pypi.python.org/pypi/phome-assistant-cli
    :alt: PyPI release
