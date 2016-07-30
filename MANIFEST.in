@@ -1,0 +1,4 @@
+include README.rst
+include LICENSE
+graft homeassistant_cli
+recursive-exclude * *.py[co]
