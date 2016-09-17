@@ -16,7 +16,7 @@ Icon
 # pytest
 .cache
 
-# GITHUB Proposed Python stuff:
+# GitHub Proposed Python stuff:
 *.py[cod]
 
 # C extensions
