@@ -8,7 +8,8 @@ from homeassistant_cli.helper import timestamp, req
 @pass_context
 def cli(ctx):
     """Show the status of an instance."""
-    config = req('get', ctx.host, ctx.password, 'config')
+    import homeassistant.remote as remote
+    config = remote.get_config(ctx.api)
     events = event_counter(ctx.api)
 
     ctx.log('Status of %s - %s - %s', ctx.host, config['location_name'],
