@@ -1,10 +1,7 @@
 """Configuration for Home Assistant CLI (hass-cli)."""
 import sys
-
 import click
-
-from homeassistant_cli.const import DEFAULT_HOST
-from homeassistant_cli.const import DEFAULT_PORT
+from homeassistant_cli.const import DEFAULT_HOST, DEFAULT_PORT
 
 class Configuration(object):
     """The configuration context for the Home Assistant CLI."""
