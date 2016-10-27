@@ -40,20 +40,28 @@ class HomeAssistantCli(click.MultiCommand):
 @click.version_option(__version__)
 @click.option('--host', '-h',
               help='The IP address of Home Assistant instance.')
+@click.option('--port', '-o',
+              help='The port the Home Assistant instance listens on.')
 @click.option('--password', '-p', hide_input=True,
               help='The API password of Home Assistant instance.')
+@click.option('--ssl', '-s', is_flag=True,
+              help='Enables SSL connection.')
 @click.option('-v', '--verbose', is_flag=True,
               help='Enables verbose mode.')
+
 @pass_context
-def cli(ctx, verbose, host, password):
+def cli(ctx, verbose, host, password, ssl, port):
     """A command line interface for Home Assistant."""
     import requests
 
     ctx.verbose = verbose
     ctx.password = password
+    ctx.ssl = ssl
     if host is not None:
         ctx.host = host
-    ctx.api = remote.API(ctx.host, ctx.password)
+    if port is not None:
+        ctx.port = port        
+    ctx.api = remote.API(ctx.host, ctx.password, ctx.port, ctx.ssl)
     if str(remote.validate_api(ctx.api)) == 'invalid_password':
         ctx.log("Your API password for %s was not provided or is wrong. "
                 "Use '--password/-p'", ctx.host)

@@ -1,9 +1,7 @@
 """Configuration for Home Assistant CLI (hass-cli)."""
 import sys
-
 import click
-
-from homeassistant_cli.const import DEFAULT_HOST
+from homeassistant_cli.const import DEFAULT_HOST, DEFAULT_PORT
 
 class Configuration(object):
     """The configuration context for the Home Assistant CLI."""
@@ -12,7 +10,9 @@ class Configuration(object):
         """Initialize the configuration."""
         self.verbose = False
         self.host = DEFAULT_HOST
+        self.port = DEFAULT_PORT
         self.password = None
+        self.ssl = None
 
     def log(self, msg, *args):
         """Log a message to stdout."""
