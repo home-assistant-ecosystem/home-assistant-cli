@@ -36,7 +36,7 @@ def req(method, host, password, endpoint, *args):
                'content-type': 'application/json'}
 
     if method == 'get':
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers, timeout=TIMEOUT)
         return response.json()
 
     elif method == 'post':
