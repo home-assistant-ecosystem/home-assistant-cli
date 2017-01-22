@@ -47,7 +47,7 @@ Home Assistant is able to run with Python 3.4.2.
    :target: https://gitter.im/home-assistant/home-assistant?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
 .. |Join the dev chat at https://gitter.im/home-assistant/home-assistant/devs| image:: https://img.shields.io/badge/gitter-development-yellowgreen.svg
    :target: https://gitter.im/home-assistant/home-assistant/devs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
-.. |License| image:: himage:: https://img.shields.io/github/license/mashape/apistatus.svg
+.. |License| image:: https://img.shields.io/github/license/mashape/apistatus.svg
    :target: https://github.com/home-assistant/home-assistant-cli/blob/master/LICENSE
    :alt: License
 .. |PyPI| image:: https://img.shields.io/pypi/v/home-assistant-cli.svg
