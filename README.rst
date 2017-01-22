@@ -51,6 +51,6 @@ Home Assistant is able to run with Python 3.4.2.
    :target: https://github.com/home-assistant/home-assistant-cli/blob/master/LICENSE
    :alt: License
 .. |PyPI| image:: https://img.shields.io/pypi/v/home-assistant-cli.svg
-   :target: https://pypi.python.org/pypi/phome-assistant-cli
+   :target: https://pypi.python.org/pypi/home-assistant-cli
    :alt: PyPI release
 
