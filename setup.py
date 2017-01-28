@@ -17,8 +17,8 @@ REQUIRES = [
 setup(
     name=PACKAGE_NAME,
     version=__version__,
-    license='MIT License',
-    url='https://home-assistant.io/',
+    license='Apache License 2.0',
+    url='https://github.com/home-assistant/home-assistant-cli',
     download_url=DOWNLOAD_URL,
     author='Fabian Affolter',
     author_email='fabian@affolter-engineering.ch',
@@ -38,7 +38,7 @@ setup(
     classifiers=[
         'Intended Audience :: End Users/Desktop',
         'Intended Audience :: Developers',
-        'License :: OSI Approved :: MIT License',
+        'License :: OSI Approved :: Apache Software License',
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
