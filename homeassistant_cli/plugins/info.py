@@ -6,7 +6,6 @@ import click
 
 from homeassistant_cli.cli import pass_context
 from homeassistant_cli.helper import json_output, timestamp, req
-from homeassistant_cli.const import DEFAULT_PORT
 
 OSM_URL = 'https://www.openstreetmap.org'
 ZOOM = 17
@@ -30,6 +29,6 @@ def cli(ctx, location, connect):
         webbrowser.open_new_tab(url)
 
     if connect and not location:
-        url = 'http://{}:{}'.format(ctx.host, DEFAULT_PORT)
+        url = 'http://{}:{}'.format(ctx.host, ctx.port)
         webbrowser.open_new_tab(url)
 
