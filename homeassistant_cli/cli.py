@@ -66,3 +66,6 @@ def cli(ctx, verbose, host, password, ssl, port):
         ctx.log("Your API password for %s was not provided or is wrong. "
                 "Use '--password/-p'", ctx.host)
         sys.exit(1)
+
+if __name__  == '__main__':
+    cli()
