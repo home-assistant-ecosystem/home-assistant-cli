@@ -1,7 +1,7 @@
 Home Assistant Command-line Interface (``hass-cli``)
 ====================================================
 
-|Join the chat at https://gitter.im/home-assistant/home-assistant| |Join the dev chat at https://gitter.im/home-assistant/home-assistant/devs| |License| |PyPI|
+|Chat Status| |License| |PyPI|
 
 The Home Assistant Command-line interface (``hass-cli``) allows one to
 work with a local or a remote `Home Assistant <https://home-assistant.io>`_
@@ -43,10 +43,8 @@ Clone the git repository and
 A hard requirement is that ``hass-cli`` needs to support Python 3.4 because 
 Home Assistant is able to run with Python 3.4.2.
 
-.. |Join the chat at https://gitter.im/home-assistant/home-assistant| image:: https://img.shields.io/badge/gitter-general-blue.svg
-   :target: https://gitter.im/home-assistant/home-assistant?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
-.. |Join the dev chat at https://gitter.im/home-assistant/home-assistant/devs| image:: https://img.shields.io/badge/gitter-development-yellowgreen.svg
-   :target: https://gitter.im/home-assistant/home-assistant/devs?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge
+.. |Chat Status| image:: https://img.shields.io/discord/330944238910963714.svg
+   :target: https://discord.gg/c5DvZ4e
 .. |License| image:: https://img.shields.io/github/license/mashape/apistatus.svg
    :target: https://github.com/home-assistant/home-assistant-cli/blob/master/LICENSE
    :alt: License
