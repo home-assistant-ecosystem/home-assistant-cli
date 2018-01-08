@@ -14,6 +14,7 @@ pass_context = click.make_pass_decorator(Configuration, ensure=True)
 cmd_folder = os.path.abspath(os.path.join(os.path.dirname(__file__),
                                           'plugins'))
 
+
 class HomeAssistantCli(click.MultiCommand):
     """The Home Assistant Command-line."""
 

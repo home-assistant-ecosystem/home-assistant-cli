@@ -4,6 +4,7 @@ import click
 from homeassistant_cli.cli import pass_context
 from homeassistant_cli.helper import timestamp, req
 
+
 @click.command('status')
 @pass_context
 def cli(ctx):

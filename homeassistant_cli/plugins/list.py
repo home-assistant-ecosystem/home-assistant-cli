@@ -4,6 +4,7 @@ import click
 from homeassistant_cli.cli import pass_context
 from homeassistant_cli.helper import json_output, timestamp
 
+
 @click.command('list')
 @click.option('--entry', '-e',
               type=click.Choice(['services', 'events', 'entities']),

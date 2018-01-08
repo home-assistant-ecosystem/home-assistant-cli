@@ -6,6 +6,7 @@ import click
 from homeassistant_cli.cli import pass_context
 from homeassistant_cli.helper import timestamp
 
+
 @click.command('list')
 @click.option('--action', '-a',
               type=click.Choice(['set', 'get', 'remove']),
