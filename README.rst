@@ -40,12 +40,12 @@ Clone the git repository and
     $ pip3 install --editable .
 
 
-A hard requirement is that ``hass-cli`` needs to support Python 3.4 because 
+A hard requirement is that ``hass-cli`` needs to support Python 3.4 because
 Home Assistant is able to run with Python 3.4.2.
 
 .. |Chat Status| image:: https://img.shields.io/discord/330944238910963714.svg
    :target: https://discord.gg/c5DvZ4e
-.. |License| image:: https://img.shields.io/github/license/mashape/apistatus.svg
+.. |License| image:: https://img.shields.io/badge/License-Apache%202.0-blue.svg
    :target: https://github.com/home-assistant/home-assistant-cli/blob/master/LICENSE
    :alt: License
 .. |PyPI| image:: https://img.shields.io/pypi/v/home-assistant-cli.svg
