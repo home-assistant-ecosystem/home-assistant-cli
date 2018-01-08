@@ -1,4 +1,4 @@
-"""Configuration plugin for Home Assistant CLI (hass-cli)."""
+"""Location plugin for Home Assistant CLI (hass-cli)."""
 import webbrowser
 import urllib.parse
 
@@ -10,6 +10,7 @@ from homeassistant_cli.const import DEFAULT_PORT
 
 OSM_URL = 'https://www.openstreetmap.org'
 ZOOM = 17
+
 
 @click.command('info')
 @click.option('--location', '-l', is_flag=True)
