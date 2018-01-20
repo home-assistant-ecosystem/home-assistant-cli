@@ -16,8 +16,14 @@ def get_services(api, domain):
 
 def json_output(input):
     """Format JSON output."""
+    class JsonEncoder(json.JSONEncoder):
+        def default(self, obj):
+            if isinstance(obj, set):
+                return list(obj)
+            return super().default(self, obj)
+
     try:
-        return json.dumps(input, indent=2, sort_keys=True)
+        return json.dumps(input, indent=2, sort_keys=True, cls=JsonEncoder)
     except ValueError:
         return input
 
