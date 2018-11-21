@@ -3,10 +3,10 @@ import os
 import sys
 
 import click
-import homeassistant.remote as remote
 
+from homeassistant_cli.const import DEFAULT_SERVER, DEFAULT_TIMEOUT, PACKAGE_NAME, __version__
 from homeassistant_cli.config import Configuration
-from homeassistant_cli.const import PACKAGE_NAME, __version__
+from homeassistant_cli.helper import debug_requests_on
 
 CONTEXT_SETTINGS = dict(auto_envvar_prefix='HOMEASSISTANT')
 
@@ -25,6 +25,7 @@ class HomeAssistantCli(click.MultiCommand):
             if filename.endswith('.py') and not filename.startswith('__'):
                 rv.append(filename[:-3])
         rv.sort()
+        
         return rv
 
     def get_command(self, ctx, name):
@@ -32,38 +33,37 @@ class HomeAssistantCli(click.MultiCommand):
         try:
             mod = __import__('{}.plugins.{}'.format(PACKAGE_NAME, name),
                              None, None, ['cli'])
-        except ImportError:
+        except ImportError as ie:
+            ## todo: print out issue of loading plugins ?
             return
         return mod.cli
 
 
 @click.command(cls=HomeAssistantCli, context_settings=CONTEXT_SETTINGS)
 @click.version_option(__version__)
-@click.option('--host', '-h',
-              help='The IP address of Home Assistant instance.')
-@click.option('--port', '-o',
-              help='The port the Home Assistant instance listens on.')
-@click.option('--password', '-p', hide_input=True,
-              help='The API password of Home Assistant instance.')
-@click.option('--ssl', '-s', is_flag=True,
-              help='Enables SSL connection.')
+@click.option('--server', '-s',
+              help='The server URL of Home Assistant instance.', default=DEFAULT_SERVER, show_default=True, envvar="HASS_SERVER")
+@click.option('--token', 
+              help='The Bearer token for Home Assistant instance.', envvar="HASS_TOKEN")
+@click.option('--timeout',
+              help='Timeout for network operations.', default=DEFAULT_TIMEOUT)
+@click.option('--output', '-o',
+              help="Output format", type=click.Choice(['json', 'yaml']), default="json", show_default=True )
 @click.option('-v', '--verbose', is_flag=True,
               help='Enables verbose mode.')
-
+@click.option('--debug', is_flag=True, default=False,
+              help='Enables debug mode.')
 @pass_context
-def cli(ctx, verbose, host, password, ssl, port):
+def cli(ctx, verbose, server, token, output, timeout, debug):
     """A command line interface for Home Assistant."""
-    import requests
-
+    
     ctx.verbose = verbose
-    ctx.password = password
-    ctx.ssl = ssl
-    if host is not None:
-        ctx.host = host
-    if port is not None:
-        ctx.port = port        
-    ctx.api = remote.API(ctx.host, ctx.password, ctx.port, ctx.ssl)
-    if str(remote.validate_api(ctx.api)) == 'invalid_password':
-        ctx.log("Your API password for %s was not provided or is wrong. "
-                "Use '--password/-p'", ctx.host)
-        sys.exit(1)
+    ctx.server = server
+    ctx.token = token
+    ctx.timeout = timeout
+    ctx.output = output 
+    ctx.debug = debug
+
+    if debug:
+        debug_requests_on()
+
