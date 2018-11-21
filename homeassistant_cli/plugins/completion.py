@@ -1,4 +1,4 @@
-"""Location plugin for Home Assistant CLI (hass-cli)."""
+"""Auto-completion for Home Assistant CLI (hass-cli)."""
 import webbrowser
 import urllib.parse
 
@@ -11,13 +11,10 @@ from homeassistant_cli.helper import req, req_raw, format_output
 @click.group('completion')
 @pass_context
 def cli(ctx):
-    """Output shell completion code for the specified shell (bash or zsh).
-    
-    her we go
-    
-    """
+    """Output shell completion code for the specified shell (bash or zsh)."""
 
 def dump_script(shell):
+    """Dump the script content."""
     ## todo resolve actual script name in case user aliased it
     prog_name = "hass-cli"
     cvar = '_%s_COMPLETE' % (prog_name.replace('-', '_')).upper()
