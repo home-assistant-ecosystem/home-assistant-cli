@@ -2,6 +2,9 @@
 *.sublime-project
 *.sublime-workspace
 
+# Hide vscode
+.vscode
+
 # Hide some OS X stuff
 .DS_Store
 .AppleDouble

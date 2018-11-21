@@ -1,5 +1,3 @@
 # Home Assistant CLI requirements
-click
-homeassistant
-netdisco
-tabulate
+# let setup.py do the heavy lifting
+.
