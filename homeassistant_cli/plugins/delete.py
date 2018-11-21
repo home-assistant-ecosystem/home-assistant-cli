@@ -1,4 +1,4 @@
-"""Location plugin for Home Assistant CLI (hass-cli)."""
+"""Delete plugin for Home Assistant CLI (hass-cli)."""
 import webbrowser
 import urllib.parse
 import yaml
@@ -13,13 +13,13 @@ import homeassistant_cli.autocompletion as autocompletion
 @click.group('delete')
 @pass_context
 def cli(ctx):
-    """Delete entities"""
+    """Delete entities."""
 
 @cli.command()
 @click.argument('entity', required="true", autocompletion=autocompletion.entities)
 @pass_context
 def state(ctx, entity):
-    """delete state from Home Assistant"""
+    """Delete state from Home Assistant."""
     response = req_raw(ctx,"delete", "states/{}".format(entity))
     click.echo(response)
     
