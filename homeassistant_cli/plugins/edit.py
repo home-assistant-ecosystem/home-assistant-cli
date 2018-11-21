@@ -1,4 +1,4 @@
-"""Location plugin for Home Assistant CLI (hass-cli)."""
+"""Edit plugin for Home Assistant CLI (hass-cli)."""
 import webbrowser
 import urllib.parse
 import yaml
@@ -13,7 +13,7 @@ import homeassistant_cli.autocompletion as autocompletion
 @click.group('edit')
 @pass_context
 def cli(ctx):
-    """Edit entities"""
+    """Edit entities."""
 
 @cli.command()
 @click.argument('entity', required="true", autocompletion=autocompletion.entities)
@@ -23,15 +23,15 @@ def cli(ctx):
 @click.option('--merge', is_flag=True, default=False, help="If set and the entity exists the state and attributes will be merged into the state rather than overwrite.", show_default=True)
 @pass_context
 def state(ctx, entity, newstate, attributes, merge, json):
-    """edit state from Home Assistant"""
+    """Edit state from Home Assistant."""
     if json:
-        response = req_raw(ctx,"post", "states/{}".format(entity), json)
+        response = req_raw(ctx, "post", "states/{}".format(entity), json)
     elif newstate or attributes:
         
         wanted_state = {}
         existing_state = None 
 
-        response = req_raw(ctx,"get", "states/{}".format(entity))
+        response = req_raw(ctx, "get", "states/{}".format(entity))
 
         if(response.ok):
             click.echo("Existing state found for {}".format(entity))
@@ -81,10 +81,10 @@ def state(ctx, entity, newstate, attributes, merge, json):
 
 @cli.command()
 @click.argument('event', required=True, autocompletion=autocompletion.events)
-@click.option('--json', help="Raw json state to use for event. Overrides any other state values provided.")
+@click.option('--json', help="Raw JSON state to use for event. Overrides any other state values provided.")
 @pass_context
 def event(ctx, event, json):
-    """Edit/fire event in Home Assistant"""
+    """Edit/fire event in Home Assistant."""
     if json:
         click.echo("Fire {}".format(event))
         response = req_raw(ctx,"post", "events/{}".format(event), json)
@@ -101,5 +101,3 @@ def event(ctx, event, json):
             response.raise_for_status()
         else:
             print("No edits/changes.")
-
-    
