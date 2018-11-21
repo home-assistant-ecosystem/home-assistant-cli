@@ -8,6 +8,7 @@ import requests
 from tabulate import tabulate
 
 def raw_format_output(output, data):
+    """Format the raw output."""
     if output == "json":
         try:
             return json.dumps(data, indent=2, sort_keys=False)
@@ -24,22 +25,21 @@ def raw_format_output(output, data):
        raise ValueError("Output Format was {}, expected either 'json' or 'yaml'".format(output))
     
 def format_output(ctx, data):
-    """Format json to defined output."""
+    """Format JSON to defined output."""
     return raw_format_output(ctx.output, data)
         
 def req_raw(ctx, method, endpoint, *args):
-    """Use REST API to get details.
-
-    """
+    """Use REST API to get details."""
     import requests
 
 
     url = '{}/api/{}'.format(ctx.server, endpoint)
-    headers = {'Authorization': 'Bearer {}'.format(ctx.token),
-               'content-type': 'application/json'}
+    headers = {
+        'Authorization': 'Bearer {}'.format(ctx.token),
+        'content-type': 'application/json',
+    }
         
     if method == 'get':
-
         response = requests.get(url, headers=headers, timeout=ctx.timeout)
         return response
 
@@ -60,6 +60,7 @@ def req_raw(ctx, method, endpoint, *args):
         raise ValueError("Unsupported method " + method)
 
 def req(ctx, method, endpoint, *args):
+    """Create a request."""
     resp = req_raw(ctx, method, endpoint, *args)
 
     resp.raise_for_status()
@@ -77,7 +78,7 @@ except ImportError:
     from httplib import HTTPConnection # py2
 
 def debug_requests_on():
-    '''Switches on logging of the requests module.'''
+    """Switch on logging of the requests module."""
     HTTPConnection.debuglevel = 1
 
     logging.basicConfig()
@@ -87,7 +88,7 @@ def debug_requests_on():
     requests_log.propagate = True
 
 def debug_requests_off():
-    '''Switches off logging of the requests module, might be some side-effects'''
+    """Switch off logging of the requests module, might be some side-effects."""
     HTTPConnection.debuglevel = 0
 
     root_logger = logging.getLogger()
@@ -99,11 +100,11 @@ def debug_requests_off():
 
 @contextlib.contextmanager
 def debug_requests():
-    '''Use with 'with'!'''
+    """Use with 'with'!"""
     debug_requests_on()
     yield
     debug_requests_off()
 
 def table(elements):
-        """Create a table-like output."""
-        click.echo(tabulate(elements))
+    """Create a table-like output."""
+    click.echo(tabulate(elements))
