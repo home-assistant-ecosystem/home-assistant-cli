@@ -1,12 +1,12 @@
 """Auto-completion for Home Assistant CLI (hass-cli)."""
-import webbrowser
 import urllib.parse
+import webbrowser
 
 import click
 from click._bashcomplete import get_completion_script
-
 from homeassistant_cli.cli import pass_context
-from homeassistant_cli.helper import req, req_raw, format_output
+from homeassistant_cli.helper import format_output, req, req_raw
+
 
 @click.group('completion')
 @pass_context
@@ -15,7 +15,7 @@ def cli(ctx):
 
 def dump_script(shell):
     """Dump the script content."""
-    ## todo resolve actual script name in case user aliased it
+    # todo resolve actual script name in case user aliased it
     prog_name = "hass-cli"
     cvar = '_%s_COMPLETE' % (prog_name.replace('-', '_')).upper()
 
@@ -25,13 +25,10 @@ def dump_script(shell):
 @pass_context
 def bash(ctx):
     """Output shell completion code for bash."""
-    
     dump_script("bash")
 
 @cli.command()
 @pass_context
 def zsh(ctx):
     """Output shell completion code for zsh."""
-
     dump_script("zsh")
-    

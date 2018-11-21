@@ -1,7 +1,9 @@
 """Configuration for Home Assistant CLI (hass-cli)."""
 import sys
+
 import click
-from homeassistant_cli.const import DEFAULT_SERVER, DEFAULT_OUTPUT
+from homeassistant_cli.const import DEFAULT_OUTPUT, DEFAULT_SERVER
+
 
 class Configuration(object):
     """The configuration context for the Home Assistant CLI."""

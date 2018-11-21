@@ -1,11 +1,16 @@
+"""Details for the auto-completion."""
 import os
+
 import homeassistant_cli.const as const
+from homeassistant_cli.helper import (
+    debug_requests_on, format_output, req, req_raw)
 from requests.exceptions import HTTPError
-from homeassistant_cli.helper import req, req_raw, format_output,debug_requests_on
+
 
 def _init_ctx(ctx):
-    ## ctx is incomplete thus need to 'hack' arond it
-    ## see bug https://github.com/pallets/click/issues/942
+    """Initialize ctx."""
+    # ctx is incomplete thus need to 'hack' around it
+    # see bug https://github.com/pallets/click/issues/942
     if not hasattr(ctx, 'server'):
         ctx.server = os.environ.get('HASS_SERVER', const.DEFAULT_SERVER)
     
@@ -15,8 +20,10 @@ def _init_ctx(ctx):
     if not hasattr(ctx, "timeout"):
         ctx.timeout = os.environ.get('HASS_TIMEOUT', const.DEFAULT_TIMEOUT)
 
+
 def entities(ctx, args, incomplete):
-    _init_ctx(ctx)    
+    """Entities."""
+    _init_ctx(ctx)
     try:
         x = req(ctx, "get", "states")
     except HTTPError:
@@ -36,6 +43,7 @@ def entities(ctx, args, incomplete):
 
 
 def events(ctx, args, incomplete):
+    """Events."""
     _init_ctx(ctx)    
     try:
         x = req(ctx, "get", "events")

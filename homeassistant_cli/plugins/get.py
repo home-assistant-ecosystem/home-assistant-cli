@@ -1,15 +1,15 @@
 """Location plugin for Home Assistant CLI (hass-cli)."""
-import webbrowser
+import os
 import urllib.parse
+import webbrowser
 
 import click
-
-import os
-import homeassistant_cli.const as const
-from homeassistant_cli.cli import pass_context
-from homeassistant_cli.helper import req, req_raw, format_output,debug_requests_on
-
 import homeassistant_cli.autocompletion as autocompletion
+from homeassistant_cli.cli import pass_context
+import homeassistant_cli.const as const
+from homeassistant_cli.helper import (
+    debug_requests_on, format_output, req, req_raw)
+
 
 @click.group('get')
 @pass_context
@@ -65,5 +65,3 @@ def error(ctx):
     """get errors from Home Assistant"""
     
     click.echo(req_raw(ctx, "get", "error_log").text)
-
-

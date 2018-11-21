@@ -1,13 +1,11 @@
 """Location plugin for Home Assistant CLI (hass-cli)."""
-import webbrowser
 import urllib.parse
+import webbrowser
 
 import click
-
-from homeassistant_cli.cli import pass_context
-from homeassistant_cli.helper import req, req_raw, format_output
-
 import homeassistant_cli.autocompletion as autocompletion
+from homeassistant_cli.cli import pass_context
+from homeassistant_cli.helper import format_output, req, req_raw
 
 
 @click.group('toggle')
@@ -31,4 +29,3 @@ def state(ctx, entities):
                 result = response.json()
                 click.echo(format_output(ctx,response.json()))
                 click.echo("{} entities reported to be toggled".format(len(result)))
-                
