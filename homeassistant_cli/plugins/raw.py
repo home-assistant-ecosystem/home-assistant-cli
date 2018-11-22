@@ -1,7 +1,4 @@
 """Raw plugin for Home Assistant CLI (hass-cli)."""
-import urllib.parse
-import webbrowser
-
 import click
 from homeassistant_cli.cli import pass_context
 from homeassistant_cli.helper import format_output, req, req_raw
@@ -12,17 +9,19 @@ from homeassistant_cli.helper import format_output, req, req_raw
 def cli(ctx):
     """Call the raw API (advanced)."""
 
+
 @cli.command()
 @click.argument("method")
 @pass_context
 def get(ctx, method):
     """Do a GET request against api/<method>."""
-    click.echo(format_output(ctx,req(ctx, "get", method)))
-    
+    click.echo(format_output(ctx, req(ctx, 'get', method)))
+
+
 @cli.command()
 @click.argument("method")
 @click.option('--json')
 @pass_context
-def post(ctx, method,json):
+def post(ctx, method, json):
     """Do a POST request against api/<method>."""
-    click.echo(format_output(ctx,req(ctx, "post", method,json)))
+    click.echo(format_output(ctx, req(ctx, 'post', method, json)))

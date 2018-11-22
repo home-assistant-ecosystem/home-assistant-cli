@@ -10,7 +10,7 @@ class Configuration(object):
 
     def __init__(self):
         """Initialize the configuration."""
-        
+
         self.verbose = False
         self.server = DEFAULT_SERVER
         self.output = DEFAULT_OUTPUT

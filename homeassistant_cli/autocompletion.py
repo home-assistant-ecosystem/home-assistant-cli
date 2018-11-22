@@ -1,7 +1,6 @@
 """Details for the auto-completion."""
 import os
 
-import homeassistant_cli.const as const
 from homeassistant_cli.helper import (
     debug_requests_on, format_output, req, req_raw)
 from requests.exceptions import HTTPError
@@ -13,7 +12,7 @@ def _init_ctx(ctx):
     # see bug https://github.com/pallets/click/issues/942
     if not hasattr(ctx, 'server'):
         ctx.server = os.environ.get('HASS_SERVER', const.DEFAULT_SERVER)
-    
+
     if not hasattr(ctx, 'token'):
         ctx.token = os.environ.get('HASS_TOKEN')
 
@@ -25,14 +24,14 @@ def entities(ctx, args, incomplete):
     """Entities."""
     _init_ctx(ctx)
     try:
-        x = req(ctx, "get", "states")
+        response = req(ctx, "get", "states")
     except HTTPError:
-        x = None
+        response = None
 
     entities = []
 
-    if x is not None:
-        for entity in x:
+    if response is not None:
+        for entity in response:
             entities.append((entity["entity_id"], ''))
 
         entities.sort()
@@ -44,16 +43,16 @@ def entities(ctx, args, incomplete):
 
 def events(ctx, args, incomplete):
     """Events."""
-    _init_ctx(ctx)    
+    _init_ctx(ctx)
     try:
-        x = req(ctx, "get", "events")
+        response = req(ctx, "get", "events")
     except HTTPError:
-        x = None
+        response = None
 
     entities = []
 
     if x is not None:
-        for entity in x:
+        for entity in response:
             entities.append((entity["event"], ''))
 
         entities.sort()

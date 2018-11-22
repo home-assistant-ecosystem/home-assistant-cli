@@ -1,6 +1,5 @@
 """Helpers used by Home Assistant CLI (hass-cli)."""
 import contextlib
-from datetime import datetime
 from http.client import HTTPConnection
 import json
 import logging
@@ -21,7 +20,7 @@ def raw_format_output(output, data):
             return input
     elif output == "yaml":
         try:
-            return yaml.safe_dump(data, default_flow_style=False) 
+            return yaml.safe_dump(data, default_flow_style=False)
         except ValueError:
             return input
     # todo fix this so gets a jsonpath list to transpose data
@@ -45,7 +44,7 @@ def req_raw(ctx, method, endpoint, *args):
         'Authorization': 'Bearer {}'.format(ctx.token),
         'content-type': 'application/json',
     }
-        
+
     if method == 'get':
         response = requests.get(url, headers=headers, timeout=ctx.timeout)
         return response
@@ -63,7 +62,7 @@ def req_raw(ctx, method, endpoint, *args):
     elif method == 'delete':
         response = requests.delete(url, headers=headers, timeout=ctx.timeout)
         return response
-    else:   
+    else:
         raise ValueError("Unsupported method " + method)
 
 
