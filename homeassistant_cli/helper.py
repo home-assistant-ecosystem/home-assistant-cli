@@ -13,18 +13,18 @@ import yaml
 
 def raw_format_output(output, data):
     """Format the raw output."""
-    if output == "json":
+    if output == 'json':
         try:
             return json.dumps(data, indent=2, sort_keys=False)
         except ValueError:
             return input
-    elif output == "yaml":
+    elif output == 'yaml':
         try:
             return yaml.safe_dump(data, default_flow_style=False)
         except ValueError:
             return input
     # todo fix this so gets a jsonpath list to transpose data
-    elif output == "human":
+    elif output == 'human':
         return table(data)
     else:
         raise ValueError(
@@ -84,7 +84,7 @@ def debug_requests_on():
 
     logging.basicConfig()
     logging.getLogger().setLevel(logging.DEBUG)
-    requests_log = logging.getLogger("requests.packages.urllib3")
+    requests_log = logging.getLogger('requests.packages.urllib3')
     requests_log.setLevel(logging.DEBUG)
     requests_log.propagate = True
 
@@ -96,7 +96,7 @@ def debug_requests_off():
     root_logger = logging.getLogger()
     root_logger.setLevel(logging.WARNING)
     root_logger.handlers = []
-    requests_log = logging.getLogger("requests.packages.urllib3")
+    requests_log = logging.getLogger('requests.packages.urllib3')
     requests_log.setLevel(logging.WARNING)
     requests_log.propagate = False
 
