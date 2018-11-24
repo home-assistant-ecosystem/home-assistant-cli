@@ -7,5 +7,5 @@ from homeassistant_cli.helper import format_output, req
 @click.command('info')
 @pass_context
 def cli(ctx):
-    """Get basic info from Home Assistant using /api/discovery_info."""
+    """Get basic info from Home Assistant."""
     click.echo(format_output(ctx, req(ctx, 'get', 'discovery_info')))

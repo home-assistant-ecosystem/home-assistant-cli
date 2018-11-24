@@ -2,15 +2,13 @@
 import click
 import homeassistant_cli.autocompletion as autocompletion
 from homeassistant_cli.cli import pass_context
-import homeassistant_cli.const as const
-from homeassistant_cli.helper import (
-    debug_requests_on, format_output, req, req_raw)
+from homeassistant_cli.helper import format_output, req, req_raw
 
 
 @click.group('get')
 @pass_context
 def cli(ctx):
-    """list info from Home Assistant"""
+    """List info from Home Assistant."""
 
 
 @cli.command()

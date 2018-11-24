@@ -113,31 +113,32 @@ help
 
 .. code:: bash
 
-  Usage: hass-cli [OPTIONS] COMMAND [ARGS]...
+    Usage: hass-cli [OPTIONS] COMMAND [ARGS]...
 
-    A command line interface for Home Assistant.
+      A command line interface for Home Assistant.
 
-  Options:
-    --version                 Show the version and exit.
-    -s, --server TEXT         The server URL of Home Assistant instance.
-                              [default: http://localhost:8123]
-    --token TEXT              The Bearer token for Home Assistant instance.
-    --timeout INTEGER         Timeout for network operations.
-    -o, --output [json|yaml]  Output format  [default: json]
-    -v, --verbose             Enables verbose mode.
-    --help                    Show this message and exit.
+    Options:
+      --version                 Show the version and exit.
+      -s, --server TEXT         The server URL of Home Assistant instance.
+                                [default: http://localhost:8123]
+      --token TEXT              The Bearer token for Home Assistant instance.
+      --timeout INTEGER         Timeout for network operations.
+      -o, --output [json|yaml]  Output format  [default: json]
+      -v, --verbose             Enables verbose mode.
+      --debug                   Enables debug mode.
+      --help                    Show this message and exit.
 
-  Commands:
-    completion  Output shell completion code for the specified shell (bash or...
-    config      Get basic info from Home Assistant using /api/config.
-    delete      Delete entities.
-    discover    Discovery for the local network.
-    edit        Edit entities.
-    get         list info from Home Assistant
-    info        Get basic info from Home Assistant using /api/discovery_info.
-    map         Print the current location on a map.
-    raw         Call the raw API (advanced).
-    toggle      toggle data from Home Assistant
+    Commands:
+      completion  Output shell completion code for the specified shell (bash or...
+      config      Get configuration from Home Assistant.
+      delete      Delete entities.
+      discover    Discovery for the local network.
+      edit        Edit entities.
+      get         List info from Home Assistant.
+      info        Get basic info from Home Assistant.
+      map         Print the current location on a map.
+      raw         Call the raw API (advanced).
+      toggle      Toggle data from Home Assistant.
 
 
 Clone the git repository and 
