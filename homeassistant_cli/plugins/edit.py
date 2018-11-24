@@ -106,4 +106,4 @@ def event(ctx, event, json):
             response = req_raw(ctx, 'post', 'events/{}'.format(event), new)
             response.raise_for_status()
         else:
-            click.echo(("No edits/changes.")
+            click.echo("No edits/changes.")
