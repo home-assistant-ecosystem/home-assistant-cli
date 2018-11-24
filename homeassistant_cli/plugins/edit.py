@@ -1,13 +1,12 @@
 """Edit plugin for Home Assistant CLI (hass-cli)."""
 import json as json_
 import shlex
-import urllib.parse
 
 import click
 import homeassistant_cli.autocompletion as autocompletion
 from homeassistant_cli.cli import pass_context
 from homeassistant_cli.helper import (
-    format_output, raw_format_output, req, req_raw)
+    raw_format_output, req_raw)
 import yaml
 
 
@@ -54,22 +53,22 @@ def state(ctx, entity, newstate, attributes, merge, json):
             lexer.whitespace = ','
             attributes_dict = dict(pair.split('=', 1) for pair in lexer)
 
-            newattr = wanted_state.get("attributes", {})
+            newattr = wanted_state.get('attributes', {})
             newattr.update(attributes_dict)
-            wanted_state["attributes"] = newattr
+            wanted_state['attributes'] = newattr
 
         if newstate:
-            wanted_state["state"] = newstate
+            wanted_state['state'] = newstate
         else:
             if not existing_state:
                 raise ValueError("No new or existing state provided.")
-            wanted_state["state"] = existing_state["state"]
+            wanted_state['state'] = existing_state['state']
 
         print("wanted:", str(wanted_state))
-        newjson = raw_format_output("json", wanted_state)
+        newjson = raw_format_output('json', wanted_state)
 
         response = req_raw(ctx, 'post', 'states/{}'.format(entity), newjson)
-    else: ## no data passed, just use editor
+    else:
         existing = req_raw(ctx, 'get', 'states/{}'.format(entity)).json()
 
         existing = raw_format_output(ctx.output, existing)
@@ -107,4 +106,4 @@ def event(ctx, event, json):
             response = req_raw(ctx, 'post', 'events/{}'.format(event), new)
             response.raise_for_status()
         else:
-            print("No edits/changes.")
+            click.echo("No edits/changes.")
