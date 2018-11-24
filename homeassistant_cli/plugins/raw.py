@@ -11,7 +11,7 @@ def cli(ctx):
 
 
 @cli.command()
-@click.argument("method")
+@click.argument('method')
 @pass_context
 def get(ctx, method):
     """Do a GET request against api/<method>."""
@@ -19,7 +19,7 @@ def get(ctx, method):
 
 
 @cli.command()
-@click.argument("method")
+@click.argument('method')
 @click.option('--json')
 @pass_context
 def post(ctx, method, json):
