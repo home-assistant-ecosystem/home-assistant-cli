@@ -1,6 +1,7 @@
 """Constants used by Home Assistant CLI (hass-cli)."""
 PACKAGE_NAME = 'homeassistant_cli'
-__version__ = '0.1.0'
+
+__version__ = '0.2.0-dev'
 
 REQUIRED_PYTHON_VER = (3, 5, 3)
 
