@@ -19,13 +19,13 @@ class HomeAssistantCli(click.MultiCommand):
 
     def list_commands(self, ctx):
         """List all command available as plugin."""
-        rv = []
+        commands = []
         for filename in os.listdir(cmd_folder):
             if filename.endswith('.py') and not filename.startswith('__'):
-                rv.append(filename[:-3])
-        rv.sort()
+                commands.append(filename[:-3])
+        commands.sort()
 
-        return rv
+        return commands
 
     def get_command(self, ctx, name):
         """Import the commands of the plugins."""
