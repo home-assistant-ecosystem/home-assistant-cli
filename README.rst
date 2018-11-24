@@ -128,12 +128,17 @@ help
     --help                    Show this message and exit.
 
   Commands:
-    discover  Discovery for the local network.
-    edit      list info from Home Assistant
-    get       list info from Home Assistant
-    info      Get basic info from Home Assistant using /api/discovery_info.
-    raw       call raw api (advanced)
-    toggle    toggle data from Home Assistant
+    completion  Output shell completion code for the specified shell (bash or...
+    config      Get basic info from Home Assistant using /api/config.
+    delete      Delete entities.
+    discover    Discovery for the local network.
+    edit        Edit entities.
+    get         list info from Home Assistant
+    info        Get basic info from Home Assistant using /api/discovery_info.
+    map         Print the current location on a map.
+    raw         Call the raw API (advanced).
+    toggle      toggle data from Home Assistant
+
 
 Clone the git repository and 
 
