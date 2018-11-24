@@ -102,7 +102,7 @@ def event(ctx, event, json):
         if new is not None:
             click.echo("Fire {}".format(event))
             if ctx.output == 'yaml':
-                new = json_json.dumps(yaml.load(new))
+                new = json_.dumps(yaml.load(new))
             response = req_raw(ctx, 'post', 'events/{}'.format(event), new)
             response.raise_for_status()
         else:
