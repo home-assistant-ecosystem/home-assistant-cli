@@ -74,8 +74,8 @@ def req(ctx, method, endpoint, *args):
 
     if resp:
         return resp.json()
-    else:
-        click.echo("Got empty response from server")
+
+    click.echo("Got empty response from server")
 
 
 def debug_requests_on():

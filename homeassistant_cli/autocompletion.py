@@ -1,8 +1,8 @@
 """Details for the auto-completion."""
 import os
 
-from homeassistant_cli.helper import (
-    debug_requests_on, format_output, req, req_raw)
+from homeassistant_cli import const
+from homeassistant_cli.helper import req
 from requests.exceptions import HTTPError
 
 
@@ -16,7 +16,7 @@ def _init_ctx(ctx):
     if not hasattr(ctx, 'token'):
         ctx.token = os.environ.get('HASS_TOKEN')
 
-    if not hasattr(ctx, "timeout"):
+    if not hasattr(ctx, 'timeout'):
         ctx.timeout = os.environ.get('HASS_TIMEOUT', const.DEFAULT_TIMEOUT)
 
 
@@ -24,7 +24,7 @@ def entities(ctx, args, incomplete):
     """Entities."""
     _init_ctx(ctx)
     try:
-        response = req(ctx, "get", "states")
+        response = req(ctx, 'get', 'states')
     except HTTPError:
         response = None
 
@@ -32,7 +32,7 @@ def entities(ctx, args, incomplete):
 
     if response is not None:
         for entity in response:
-            entities.append((entity["entity_id"], ''))
+            entities.append((entity['entity_id'], ''))
 
         entities.sort()
 
@@ -45,15 +45,15 @@ def events(ctx, args, incomplete):
     """Events."""
     _init_ctx(ctx)
     try:
-        response = req(ctx, "get", "events")
+        response = req(ctx, 'get', 'events')
     except HTTPError:
         response = None
 
     entities = []
 
-    if x is not None:
+    if response is not None:
         for entity in response:
-            entities.append((entity["event"], ''))
+            entities.append((entity['event'], ''))
 
         entities.sort()
 
