@@ -1,13 +1,12 @@
 """Edit plugin for Home Assistant CLI (hass-cli)."""
-import json as json_
+import json
 import shlex
-import urllib.parse
 
 import click
 import homeassistant_cli.autocompletion as autocompletion
 from homeassistant_cli.cli import pass_context
 from homeassistant_cli.helper import (
-    format_output, raw_format_output, req, req_raw)
+    raw_format_output, req_raw)
 import yaml
 
 
@@ -78,7 +77,7 @@ def state(ctx, entity, newstate, attributes, merge, json):
         if new is not None:
             click.echo("Updating '{}'".format(entity))
             if ctx.output == 'yaml':
-                new = json_.dumps(yaml.load(new))
+                new = json.dumps(yaml.load(new))
             response = req_raw(ctx, 'post', 'states/{}'.format(entity), new)
         else:
             click.echo("No edits/changes.")
@@ -103,7 +102,7 @@ def event(ctx, event, json):
         if new is not None:
             click.echo("Fire {}".format(event))
             if ctx.output == 'yaml':
-                new = json_.dumps(yaml.load(new))
+                new = json.dumps(yaml.load(new))
             response = req_raw(ctx, 'post', 'events/{}'.format(event), new)
             response.raise_for_status()
         else:
