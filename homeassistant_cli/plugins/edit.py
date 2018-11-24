@@ -1,5 +1,5 @@
 """Edit plugin for Home Assistant CLI (hass-cli)."""
-import json
+import json as json_
 import shlex
 
 import click
@@ -53,22 +53,22 @@ def state(ctx, entity, newstate, attributes, merge, json):
             lexer.whitespace = ','
             attributes_dict = dict(pair.split('=', 1) for pair in lexer)
 
-            newattr = wanted_state.get("attributes", {})
+            newattr = wanted_state.get('attributes', {})
             newattr.update(attributes_dict)
-            wanted_state["attributes"] = newattr
+            wanted_state['attributes'] = newattr
 
         if newstate:
-            wanted_state["state"] = newstate
+            wanted_state['state'] = newstate
         else:
             if not existing_state:
                 raise ValueError("No new or existing state provided.")
-            wanted_state["state"] = existing_state["state"]
+            wanted_state['state'] = existing_state['state']
 
         print("wanted:", str(wanted_state))
-        newjson = raw_format_output("json", wanted_state)
+        newjson = raw_format_output('json', wanted_state)
 
         response = req_raw(ctx, 'post', 'states/{}'.format(entity), newjson)
-    else: ## no data passed, just use editor
+    else:
         existing = req_raw(ctx, 'get', 'states/{}'.format(entity)).json()
 
         existing = raw_format_output(ctx.output, existing)
@@ -77,7 +77,7 @@ def state(ctx, entity, newstate, attributes, merge, json):
         if new is not None:
             click.echo("Updating '{}'".format(entity))
             if ctx.output == 'yaml':
-                new = json.dumps(yaml.load(new))
+                new = json_.dumps(yaml.load(new))
             response = req_raw(ctx, 'post', 'states/{}'.format(entity), new)
         else:
             click.echo("No edits/changes.")
@@ -102,8 +102,8 @@ def event(ctx, event, json):
         if new is not None:
             click.echo("Fire {}".format(event))
             if ctx.output == 'yaml':
-                new = json.dumps(yaml.load(new))
+                new = json_json.dumps(yaml.load(new))
             response = req_raw(ctx, 'post', 'events/{}'.format(event), new)
             response.raise_for_status()
         else:
-            print("No edits/changes.")
+            click.echo(("No edits/changes.")
