@@ -7,7 +7,8 @@ import click
 import click_log
 from homeassistant_cli.config import Configuration
 from homeassistant_cli.const import (
-    DEFAULT_SERVER, DEFAULT_TIMEOUT, PACKAGE_NAME, __version__)
+    DEFAULT_SERVER, DEFAULT_HASSIO_SERVER,
+    DEFAULT_TIMEOUT, PACKAGE_NAME, __version__)
 from homeassistant_cli.helper import debug_requests_on
 
 
@@ -49,11 +50,11 @@ def run():
     except click.Abort:
         _LOGGER.fatal("Aborted!")
         sys.exit(1)
-    except Exception as e: # noqa: WO703
+    except Exception as ex: # noqa: WO703
         if verbose:
-            _LOGGER.exception(e)
+            _LOGGER.exception(ex)
         else:
-            _LOGGER.error("%s: %s", type(e).__name__, e)
+            _LOGGER.error("%s: %s", type(ex).__name__, ex)
             _LOGGER.info("Run with %s to see full exception info.",
                          " or ".join(exceptionflags))
         sys.exit(1)
@@ -83,17 +84,35 @@ class HomeAssistantCli(click.MultiCommand):
         return mod.cli
 
 
+def _default_server():
+    if ("HASSIO_TOKEN" in os.environ and
+            "HASS_TOKEN" not in os.environ):
+                return DEFAULT_HASSIO_SERVER
+    else:
+        return DEFAULT_SERVER
+
+
+def _default_token():
+    return os.environ.get('HASS_TOKEN',
+                          os.environ.get(
+                              'HASSIO_TOKEN',
+                              None
+                          ))
+
+
 @click.command(cls=HomeAssistantCli, context_settings=CONTEXT_SETTINGS)
 @click_log.simple_verbosity_option(logging.getLogger(), "--loglevel", "-l")
 @click.version_option(__version__)
 @click.option('--server', '-s',
               help='The server URL of Home Assistant instance.',
-              default=DEFAULT_SERVER, show_default=True, envvar='HASS_SERVER')
+              default=lambda: _default_server(), envvar='HASS_SERVER')
 @click.option('--token',
+              default=lambda: _default_token(),
               help='The Bearer token for Home Assistant instance.',
               envvar='HASS_TOKEN')
 @click.option('--timeout',
-              help='Timeout for network operations.', default=DEFAULT_TIMEOUT)
+              help='Timeout for network operations.', default=DEFAULT_TIMEOUT,
+              show_default=True)
 @click.option('--output', '-o',
               help="Output format", type=click.Choice(['json', 'yaml']),
               default='json', show_default=True)
