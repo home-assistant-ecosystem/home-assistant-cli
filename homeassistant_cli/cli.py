@@ -99,10 +99,15 @@ class HomeAssistantCli(click.MultiCommand):
               default='json', show_default=True)
 @click.option('-v', '--verbose', is_flag=True,
               help='Enables verbose mode.')
+@click.option('--insecure', is_flag=True, default=False,
+              help=('Ignore SSL Certificates.'
+                    ' Allow to connect to servers with'
+                    ' self-signed certificates.'
+                    ' Be careful!'))
 @click.option('--debug', is_flag=True, default=False,
               help='Enables debug mode.')
 @pass_context
-def cli(ctx, verbose, server, token, output, timeout, debug):
+def cli(ctx, verbose, server, token, output, timeout, debug, insecure):
     """Command line interface for Home Assistant."""
     ctx.verbose = verbose
     ctx.server = server
@@ -110,6 +115,7 @@ def cli(ctx, verbose, server, token, output, timeout, debug):
     ctx.timeout = timeout
     ctx.output = output
     ctx.debug = debug
+    ctx.insecure = insecure
 
     _LOGGER.debug("Using settings: %s", ctx)
 

@@ -14,6 +14,7 @@ class Configuration(object):
         self.server = DEFAULT_SERVER
         self.output = DEFAULT_OUTPUT
         self.token = None
+        self.insecure = False
 
     def log(self, msg, *args):
         """Log a message to stdout."""
@@ -31,8 +32,9 @@ class Configuration(object):
         view = {
             "server": self.server,
             "access-token": 'yes' if self.token is not None else 'no',
+            "insecure": self.insecure,
             "output":  self.output,
-            "verbose": self.verbose
+            "verbose": self.verbose,
         }
 
         return "<Configuration({})".format(view)
