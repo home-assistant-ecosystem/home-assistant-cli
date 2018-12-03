@@ -28,11 +28,11 @@ class Configuration(object):
 
     def __repr__(self) -> str:
         """Return the representation of the Configuration."""
-        
         view = {
-            "server" : self.server,
+            "server": self.server,
             "access-token": 'yes' if self.token is not None else 'no',
-            "output" :  self.output,
-            "verbose" : self.verbose
+            "output":  self.output,
+            "verbose": self.verbose
         }
+
         return "<Configuration({})".format(view)

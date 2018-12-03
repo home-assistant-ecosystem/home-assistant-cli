@@ -112,6 +112,6 @@ def cli(ctx, verbose, server, token, output, timeout, debug):
     ctx.debug = debug
 
     _LOGGER.debug("Using settings: %s", ctx)
-        
+
     if debug:
         debug_requests_on()
