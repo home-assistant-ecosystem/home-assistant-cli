@@ -28,17 +28,17 @@ def entities(ctx, args, incomplete):
     except HTTPError:
         response = None
 
-    entities = []
+    completions = []
 
     if response is not None:
         for entity in response:
-            entities.append((entity['entity_id'], ''))
+            completions.append((entity['entity_id'], ''))
 
-        entities.sort()
+        completions.sort()
 
         return [c for c in entities if incomplete in c[0]]
     else:
-        return entities
+        return completions
 
 
 def events(ctx, args, incomplete):
@@ -49,14 +49,14 @@ def events(ctx, args, incomplete):
     except HTTPError:
         response = None
 
-    entities = []
+    completions = []
 
     if response is not None:
         for entity in response:
-            entities.append((entity['event'], ''))
+            completions.append((entity['event'], ''))
 
-        entities.sort()
+        completions.sort()
 
         return [c for c in entities if incomplete in c[0]]
     else:
-        return entities
+        return completions

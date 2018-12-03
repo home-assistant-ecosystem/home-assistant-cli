@@ -7,7 +7,6 @@ import logging
 import click
 import requests
 import tabulate
-from tabulate import tabulate
 import yaml
 
 
@@ -90,7 +89,10 @@ def debug_requests_on():
 
 
 def debug_requests_off():
-    """Switch off logging of the requests module, might be some side-effects."""
+    """Switch off logging of the requests module.
+
+    Might have some side-effects.
+    """
     HTTPConnection.debuglevel = 0
 
     root_logger = logging.getLogger()
@@ -103,7 +105,10 @@ def debug_requests_off():
 
 @contextlib.contextmanager
 def debug_requests():
-    """Use with 'with'!"""
+    """Yieldable way to turn on debugs for requests.
+
+    with debug_requests(): <do things>
+    """
     debug_requests_on()
     yield
     debug_requests_off()

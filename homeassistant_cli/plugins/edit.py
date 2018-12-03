@@ -17,7 +17,8 @@ def cli(ctx):
 
 
 @cli.command()
-@click.argument('entity', required=True, autocompletion=autocompletion.entities)
+@click.argument('entity', required=True,
+                autocompletion=autocompletion.entities)
 @click.argument('newstate', required=False)
 @click.option('--attributes',
               help="Comma separated key/value pairs to use as attributes")

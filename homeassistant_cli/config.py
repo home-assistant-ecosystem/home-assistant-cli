@@ -10,10 +10,10 @@ class Configuration(object):
 
     def __init__(self):
         """Initialize the configuration."""
-
         self.verbose = False
         self.server = DEFAULT_SERVER
         self.output = DEFAULT_OUTPUT
+        self.token = None
 
     def log(self, msg, *args):
         """Log a message to stdout."""
@@ -25,3 +25,10 @@ class Configuration(object):
         """Log a message only if verbose is enabled."""
         if self.verbose:
             self.log(msg, *args)
+
+    def __repr__(self) -> str:
+        """Return the representation of the Configuration."""
+        return "<Configuration({}, access-token: {}, \
+                output: {}, verbose: {})>".format(
+            self.server, 'yes' if self.token is not None else 'no',
+            self.output, self.verbose)
