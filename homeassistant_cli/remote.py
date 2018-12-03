@@ -57,11 +57,11 @@ def restapi(ctx: Configuration, method: str, path: str,
         if method == METH_GET:
             return requests.get(
                 url, params=data_str, timeout=ctx.timeout,
-                headers=headers)
+                headers=headers, verify=not ctx.insecure)
 
         return requests.request(
             method, url, data=data_str, timeout=ctx.timeout,
-            headers=headers)
+            headers=headers, verify=not ctx.insecure)
 
     except requests.exceptions.ConnectionError:
         raise HomeAssistantCliError("Error connecting to {}".format(url))
