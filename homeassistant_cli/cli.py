@@ -1,17 +1,62 @@
 """Configuration plugin for Home Assistant CLI (hass-cli)."""
 import os
+import sys
+import logging
 
 import click
+import click_log
 from homeassistant_cli.config import Configuration
 from homeassistant_cli.const import (
     DEFAULT_SERVER, DEFAULT_TIMEOUT, PACKAGE_NAME, __version__)
 from homeassistant_cli.helper import debug_requests_on
+
+
+click_log.basic_config()
+
+_LOGGER = logging.getLogger(__name__)
 
 CONTEXT_SETTINGS = dict(auto_envvar_prefix='HOMEASSISTANT')
 
 pass_context = click.make_pass_decorator(Configuration, ensure=True)
 cmd_folder = os.path.abspath(os.path.join(
     os.path.dirname(__file__), 'plugins'))
+
+
+def run():
+    """Custom run entry point.
+
+    Wraps click for full control
+    over exception handling in Click.
+    """
+    # a hack to see if exception details should be printed.
+    exceptionflags = ['-v', '--verbose']
+    verbose = [c for c in exceptionflags if c in sys.argv]
+
+    try:
+        # could use cli.invoke here to use the just created context
+        # but then shell completion will not work. Thus calling
+        # standalone mode to keep that working.
+        result = cli.main(standalone_mode=False)
+        if isinstance(result, int):
+            sys.exit(result)
+
+    # exception handling below is done to use logger
+    # and mimick as close as possible what click would
+    # do normally in its main()
+    except click.ClickException as ex:
+        ex.show()  # let Click handle its own errors
+        sys.exit(ex.exit_code)
+    except click.Abort:
+        _LOGGER.fatal("Aborted!")
+        sys.exit(1)
+    except Exception as e: # noqa: WO703
+        if verbose:
+            _LOGGER.exception(e)
+        else:
+            _LOGGER.error("%s: %s", type(e).__name__, e)
+            _LOGGER.info("Run with %s to see full exception info.",
+                         " or ".join(exceptionflags))
+        sys.exit(1)
 
 
 class HomeAssistantCli(click.MultiCommand):
@@ -27,10 +72,10 @@ class HomeAssistantCli(click.MultiCommand):
 
         return commands
 
-    def get_command(self, ctx, name):
+    def get_command(self, ctx, cmd_name):
         """Import the commands of the plugins."""
         try:
-            mod = __import__('{}.plugins.{}'.format(PACKAGE_NAME, name),
+            mod = __import__('{}.plugins.{}'.format(PACKAGE_NAME, cmd_name),
                              None, None, ['cli'])
         except ImportError:
             # todo: print out issue of loading plugins?
@@ -39,6 +84,7 @@ class HomeAssistantCli(click.MultiCommand):
 
 
 @click.command(cls=HomeAssistantCli, context_settings=CONTEXT_SETTINGS)
+@click_log.simple_verbosity_option(logging.getLogger(), "--loglevel", "-l")
 @click.version_option(__version__)
 @click.option('--server', '-s',
               help='The server URL of Home Assistant instance.',
@@ -57,8 +103,7 @@ class HomeAssistantCli(click.MultiCommand):
               help='Enables debug mode.')
 @pass_context
 def cli(ctx, verbose, server, token, output, timeout, debug):
-    """A command line interface for Home Assistant."""
-
+    """Command line interface for Home Assistant."""
     ctx.verbose = verbose
     ctx.server = server
     ctx.token = token
