@@ -19,8 +19,8 @@ def state(ctx, entity):
     """Get/read state from Home Assistant."""
     if not entity:
         response = req_raw(ctx, 'get', 'states')
-        response.raise_for_status
-        click.echo(format_output(ctx, r.json()))
+        response.raise_for_status()
+        click.echo(format_output(ctx, response.json()))
     else:
         click.echo(format_output(ctx, req(
             ctx, 'get', 'states/{}'.format(entity))))
@@ -39,9 +39,11 @@ def service(ctx):
     """List services from Home Assistant."""
     click.echo(format_output(ctx, req(ctx, 'get', 'services')))
 
+# todo: time from/to as human delta dates
+
 
 @cli.command()
-@click.argument('entities', nargs=-1) ## do time from/to as human delta dates
+@click.argument('entities', nargs=-1)
 @pass_context
 def history(ctx, entities):
     """List history from Home Assistant."""
