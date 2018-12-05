@@ -6,5 +6,6 @@ __version__ = '0.2.0.dev'
 REQUIRED_PYTHON_VER = (3, 5, 3)
 
 DEFAULT_SERVER = 'http://localhost:8123'
+DEFAULT_HASSIO_SERVER = 'http://hassio/homeassistant'
 DEFAULT_TIMEOUT = 5
 DEFAULT_OUTPUT = 'json'  # TODO: Have default be human table relevant output
