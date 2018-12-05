@@ -32,11 +32,12 @@ def entities(ctx, args, incomplete):
 
     if response is not None:
         for entity in response:
-            completions.append((entity['entity_id'], ''))
+            friendly_name = entity['attributes'].get('friendly_name', '')
+            completions.append((entity['entity_id'], friendly_name))
 
         completions.sort()
 
-        return [c for c in entities if incomplete in c[0]]
+        return [c for c in completions if incomplete in c[0]]
     else:
         return completions
 
@@ -57,6 +58,6 @@ def events(ctx, args, incomplete):
 
         completions.sort()
 
-        return [c for c in entities if incomplete in c[0]]
+        return [c for c in completions if incomplete in c[0]]
     else:
         return completions
