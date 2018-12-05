@@ -125,6 +125,7 @@ def _default_token():
                     ' Be careful!'))
 @click.option('--debug', is_flag=True, default=False,
               help='Enables debug mode.')
+@click.version_option()
 @pass_context
 def cli(ctx, verbose, server, token, output, timeout, debug, insecure):
     """Command line interface for Home Assistant."""
