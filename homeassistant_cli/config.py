@@ -5,10 +5,10 @@ import click
 from homeassistant_cli.const import DEFAULT_OUTPUT, DEFAULT_SERVER
 
 
-class Configuration(object):
+class Configuration:
     """The configuration context for the Home Assistant CLI."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the configuration."""
         self.verbose = False
         self.server = DEFAULT_SERVER
@@ -16,7 +16,7 @@ class Configuration(object):
         self.token = None
         self.insecure = False
 
-    def log(self, msg, *args):
+    def log(self, msg, *args):  # pylint: disable=no-self-use
         """Log a message to stdout."""
         if args:
             msg %= args
@@ -33,7 +33,7 @@ class Configuration(object):
             "server": self.server,
             "access-token": 'yes' if self.token is not None else 'no',
             "insecure": self.insecure,
-            "output":  self.output,
+            "output": self.output,
             "verbose": self.verbose,
         }
 

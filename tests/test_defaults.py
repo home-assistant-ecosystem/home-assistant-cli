@@ -1,9 +1,9 @@
 """Tests file for Home Assistant CLI (hass-cli)."""
 import os
+from typing import Dict, Optional
 from unittest import mock
 
 import homeassistant_cli.cli as cli
-from homeassistant_cli.config import Configuration
 import pytest
 
 HASSIO_SERVER_FALLBACK = "http://hassio/homeassistant"
@@ -37,8 +37,13 @@ HASS_SERVER = "http://localhost:8123"
         ),
     ],
 )
-def test_defaults(description, env, expected_server, expected_token):
-
+def test_defaults(
+    description: str,
+    env: Dict[str, str],
+    expected_server: str,
+    expected_token: Optional[str],
+) -> None:
+    """Test defaults applied correctly for server and token."""
     mockenv = mock.patch.dict(os.environ, env)
 
     try:
@@ -47,10 +52,10 @@ def test_defaults(description, env, expected_server, expected_token):
         with ctx:
             try:
                 cli.cli.invoke(ctx)
-            except Exception:
+            except Exception:  # pylint: disable=broad-except
                 pass
 
-        cfg: Configuration = ctx.obj
+        cfg = ctx.obj
 
         assert cfg.server == expected_server
         assert cfg.token == expected_token

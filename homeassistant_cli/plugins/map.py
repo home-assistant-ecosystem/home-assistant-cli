@@ -2,7 +2,6 @@
 import webbrowser
 
 import click
-
 from homeassistant_cli.cli import pass_context
 from homeassistant_cli.helper import req
 
@@ -17,5 +16,6 @@ def cli(ctx):
     response = req(ctx, 'get', 'config')
 
     url = '{0}/?mlat={2}&mlon={3}#map={1}/{2}/{3}'.format(
-        OSM_URL, ZOOM, response.get('latitude'), response.get('longitude'))
+        OSM_URL, ZOOM, response.get('latitude'), response.get('longitude')
+    )
     webbrowser.open_new_tab(url)

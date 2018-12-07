@@ -16,7 +16,7 @@ _LOGGING = logging.getLogger(__name__)
 @pass_context
 def cli(ctx):
     """Edit entities."""
-    _LOGGING.warn(
+    _LOGGING.warning(
         "'edit' is deprecated use 'entity edit' or 'event fire' instead."
     )
 
@@ -97,7 +97,7 @@ def state(ctx, entity, newstate, attributes, merge, json):
             click.echo("No edits/changes.")
 
 
-@cli.command()
+@cli.command('event')
 @click.argument('event', required=True, autocompletion=autocompletion.events)
 @click.option(
     '--json',
@@ -105,7 +105,7 @@ def state(ctx, entity, newstate, attributes, merge, json):
     "values provided.",
 )
 @pass_context
-def event(ctx, event, json):
+def eventcmd(ctx, event, json):
     """Edit/fire event in Home Assistant."""
     if json:
         click.echo("Fire {}".format(event))

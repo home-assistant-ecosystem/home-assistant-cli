@@ -3,14 +3,16 @@ import contextlib
 from http.client import HTTPConnection
 import json
 import logging
+from typing import Dict, Optional
 
 import click
+from homeassistant_cli.config import Configuration
 import requests
-import tabulate
+from requests.models import Response
 import yaml
 
 
-def raw_format_output(output, data):
+def raw_format_output(output: str, data: Dict) -> str:
     """Format the raw output."""
     if output == 'json':
         try:
@@ -23,20 +25,20 @@ def raw_format_output(output, data):
         except ValueError:
             return input
     # todo fix this so gets a jsonpath list to transpose data
-    elif output == 'human':
-        return table(data)
     else:
         raise ValueError(
             "Output Format was {}, expected either 'json' or 'yaml'".format(
-                output))
+                output
+            )
+        )
 
 
-def format_output(ctx, data):
+def format_output(ctx: Configuration, data: Dict) -> str:
     """Format JSON to defined output."""
     return raw_format_output(ctx.output, data)
 
 
-def req_raw(ctx, method, endpoint, *args):
+def req_raw(ctx: Configuration, method: str, endpoint: str, *args) -> Response:
     """Use REST API to get details."""
     url = '{}/api/{}'.format(ctx.server, endpoint)
     headers = {
@@ -48,24 +50,29 @@ def req_raw(ctx, method, endpoint, *args):
         response = requests.get(url, headers=headers, timeout=ctx.timeout)
         return response
 
-    elif method == 'post':
+    if method == 'post':
         if args and args[0]:
-            payload = json.loads(*args)
+            payload = json.loads(  # pylint: disable=no-value-for-parameter
+                *args
+            )
             response = requests.post(
-                url, headers=headers, json=payload, timeout=ctx.timeout)
+                url, headers=headers, json=payload, timeout=ctx.timeout
+            )
         else:
-            response = requests.post(
-                url, headers=headers, timeout=ctx.timeout)
+            response = requests.post(url, headers=headers, timeout=ctx.timeout)
 
         return response
-    elif method == 'delete':
+
+    if method == 'delete':
         response = requests.delete(url, headers=headers, timeout=ctx.timeout)
         return response
-    else:
-        raise ValueError("Unsupported method " + method)
+
+    raise ValueError("Unsupported method " + method)
 
 
-def req(ctx, method, endpoint, *args):
+def req(
+    ctx: Configuration, method: str, endpoint: str, *args
+) -> Optional[Dict]:
     """Create a request."""
     resp = req_raw(ctx, method, endpoint, *args)
 
@@ -112,8 +119,3 @@ def debug_requests():
     debug_requests_on()
     yield
     debug_requests_off()
-
-
-def table(elements):
-    """Create a table-like output."""
-    click.echo(tabulate(elements))

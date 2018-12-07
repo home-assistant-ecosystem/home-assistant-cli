@@ -37,7 +37,6 @@ def get(ctx, entity):
 @pass_context
 def delete(ctx, entity):
     """Delete entity from Home Assistant."""
-
     deleted = api.remove_state(ctx, entity)
 
     if deleted:
@@ -87,11 +86,11 @@ def edit(ctx, entity, newstate, attributes, merge, json):
         existing_state = api.get_state(ctx, entity)
 
         if existing_state:
-            click.echo("Existing state found for {}".format(entity))
+            _LOGGING.info("Existing state found for %s", entity)
             if merge:
                 wanted_state = existing_state
         else:
-            _LOGGING.info("No existing state found for '{}'".format(entity))
+            _LOGGING.info("No existing state found for '%s'", entity)
 
         if attributes:
             lexer = shlex.shlex(attributes, posix=True)
@@ -117,7 +116,7 @@ def edit(ctx, entity, newstate, attributes, merge, json):
         new = click.edit(existing, extension='.{}'.format(ctx.output))
 
         if new is not None:
-            _LOGGING.info("Updating '{}'".format(entity))
+            _LOGGING.info("Updating '%s'", entity)
             if ctx.output == 'yaml':
                 wanted_state = yaml.load(new)
             if ctx.output == 'json':
@@ -143,7 +142,7 @@ def toggle(ctx, entities):
     """Toggle state for one or more entities in Home Assistant."""
     for entity in entities:
         data = {'entity_id': entity}
-        _LOGGING.info("Toggling {}".format(entity))
+        _LOGGING.info("Toggling %s", entity)
         result = api.call_service(ctx, 'homeassistant', 'toggle', data)
 
         _LOGGING.debug(format_output(ctx, result))

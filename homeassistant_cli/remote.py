@@ -36,7 +36,7 @@ class APIStatus(enum.Enum):
 
 
 def restapi(
-    ctx: Configuration, method: str, path: str, data: Dict = None
+    ctx: Configuration, method: str, path: str, data: Optional[Dict] = None
 ) -> requests.Response:
     """Make a call to the Home Assistant REST API."""
     if data is None:
@@ -137,10 +137,10 @@ def get_states(ctx: Configuration) -> Optional[Dict]:
 
     if req.status_code == 200:
         return req.json()
-    else:
-        raise HomeAssistantCliError(
-            "Error while getting all states".format(req.text)
-        )
+
+    raise HomeAssistantCliError(
+        "Error while getting all states: {}".format(req.text)
+    )
 
 
 def get_config(ctx: Configuration) -> Optional[Dict]:
@@ -154,16 +154,18 @@ def get_config(ctx: Configuration) -> Optional[Dict]:
 
     if req.status_code == 200:
         return req.json()
-    else:
-        raise HomeAssistantCliError(
-            "Error while getting all config".format(req.text)
-        )
+
+    raise HomeAssistantCliError(
+        "Error while getting all config: {}".format(req.text)
+    )
 
 
 def get_state(ctx: Configuration, entity_id: str) -> Optional[Dict]:
     """Get entity state. If ok, return dictionary with state.
+
     If no entity found return None - otherwise excepton raised
-    with details."""
+    with details.
+    """
     try:
         req = restapi(
             ctx, METH_GET, hass.URL_API_STATES_ENTITY.format(entity_id)
@@ -175,18 +177,19 @@ def get_state(ctx: Configuration, entity_id: str) -> Optional[Dict]:
 
     if req.status_code == 200:
         return req.json()
-    elif req.status_code == 404:
+    if req.status_code == 404:
         return None
-    else:
-        raise HomeAssistantCliError(
-            "Error while getting Entity {}: {}".format(entity_id, req.text)
-        )
+
+    raise HomeAssistantCliError(
+        "Error while getting Entity {}: {}".format(entity_id, req.text)
+    )
 
 
 def remove_state(ctx: Configuration, entity_id: str) -> bool:
     """Call API to remove state for entity_id.
-        If success return True, if could not find the entity return False.
-        Otherwise raise exception with details.
+
+    If success return True, if could not find the entity return False.
+    Otherwise raise exception with details.
     """
     try:
         req = restapi(
@@ -206,23 +209,23 @@ def remove_state(ctx: Configuration, entity_id: str) -> bool:
 
 
 def set_state(ctx: Configuration, entity_id: str, data: Dict):
-    """Set/update state for entity id"""
-
+    """Set/update state for entity id."""
     try:
         req = restapi(
             ctx, METH_POST, hass.URL_API_STATES_ENTITY.format(entity_id), data
         )
-    except HomeAssistantCliError as he:
+    except HomeAssistantCliError as exception:
         raise HomeAssistantCliError(
-            "Error updating state for entity {}: {}".format(entity_id, he)
+            "Error updating state for entity {}: {}".format(
+                entity_id, exception
+            )
         )
 
     if req.status_code not in (200, 201):
         raise HomeAssistantCliError(
-            "Error changing state for entity {}: %d - %s",
-            entity_id,
-            req.status_code,
-            req.text,
+            "Error changing state for entity {}: {} - {}".format(
+                entity_id, req.status_code, req.text
+            )
         )
     else:
         return req.json()
@@ -230,17 +233,20 @@ def set_state(ctx: Configuration, entity_id: str, data: Dict):
 
 def render_template(ctx: Configuration, template: str, variables: Dict):
     """Render template."""
-
     data = {"template": template, "variables": variables}
 
     try:
         req = restapi(ctx, METH_POST, hass.URL_API_TEMPLATE, data)
-    except HomeAssistantCliError as he:
-        raise HomeAssistantCliError("Error applying template: {}".format(he))
+    except HomeAssistantCliError as exception:
+        raise HomeAssistantCliError(
+            "Error applying template: {}".format(exception)
+        )
 
     if req.status_code not in (200, 201):
         raise HomeAssistantCliError(
-            "Error applying template: %s - %s", req.status_code, req.text
+            "Error applying template: {} - {}".format(
+                req.status_code, req.text
+            )
         )
     else:
         return req.text
@@ -279,7 +285,7 @@ def fire_event(ctx: Configuration, event_type: str, data: Dict = None) -> None:
 def call_service(
     ctx: Configuration, domain: str, service: str, service_data: Dict = None
 ) -> Optional[Dict]:
-    """ Call a service."""
+    """Call a service."""
     try:
         req = restapi(
             ctx,
@@ -289,12 +295,12 @@ def call_service(
         )
     except HomeAssistantCliError:
         raise HomeAssistantCliError(
-            "Error calling service: %d - %s".format(req.status_code, req.text)
+            "Error calling service: {} - {}".format(req.status_code, req.text)
         )
 
     if req.status_code != 200:
         raise HomeAssistantCliError(
-            "Error calling service: %d - %s".format(req.status_code, req.text)
+            "Error calling service: {} - {}".format(req.status_code, req.text)
         )
 
     return req.json()

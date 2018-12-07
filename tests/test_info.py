@@ -21,11 +21,12 @@ def ordered(obj):
         return sorted((k, ordered(v)) for k, v in obj.items())
     if isinstance(obj, list):
         return sorted(ordered(x) for x in obj)
-    else:
-        return obj
+
+    return obj
 
 
-def test_info_without_server_running():
+def test_info_without_server_running() -> None:
+    """Test proper failure when server not running."""
     runner = CliRunner()
     result = runner.invoke(
         cli.cli, ['--server', 'http://donotexist.inf', 'info']
@@ -35,29 +36,35 @@ def test_info_without_server_running():
     assert str(result.exception) == "Unexpected error retriving info"
 
 
-def test_info_json():
-    with requests_mock.Mocker() as m:
-        m.get(
+def test_info_json() -> None:
+    """Test info reads properly with json."""
+    with requests_mock.Mocker() as mock:
+        mock.get(
             'http://localhost:8123/api/discovery_info',
             json=VALID_INFO,
             status_code=200,
         )
 
         runner = CliRunner()
-        result = runner.invoke(cli.cli, ['info'], catch_exceptions=False)
+        result = runner.invoke(
+            cli.cli, ['--output=json', 'info'], catch_exceptions=False
+        )
         assert result.exit_code == 0
         assert VALID_INFO == json.loads(result.output)
 
 
-def test_info_yaml():
-    with requests_mock.Mocker() as m:
-        m.get(
+def test_info_yaml() -> None:
+    """Test info reads properly with yaml."""
+    with requests_mock.Mocker() as mock:
+        mock.get(
             'http://localhost:8123/api/discovery_info',
             json=VALID_INFO,
             status_code=200,
         )
 
         runner = CliRunner()
-        result = runner.invoke(cli.cli, ['info'], catch_exceptions=False)
+        result = runner.invoke(
+            cli.cli, ['--output=yaml', 'info'], catch_exceptions=False
+        )
         assert result.exit_code == 0
         assert VALID_INFO == yaml.load(result.output)

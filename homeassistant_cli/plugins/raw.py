@@ -21,7 +21,6 @@ def cli(ctx):
 @pass_context
 def get(ctx, method):
     """Do a GET request against api/<method>."""
-
     response = api.restapi(ctx, 'get', method)
 
     if response.text:

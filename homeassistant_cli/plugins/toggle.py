@@ -13,7 +13,7 @@ _LOGGING = logging.getLogger(__name__)
 @click.group('toggle', hidden=True)
 @pass_context
 def cli(ctx):
-    """Generic toggle of state/switches from Home Assistant."""
+    """Toggle state/switches within Home Assistant."""
     _LOGGING.warning("`toggle` is deprecated, use `entity toggle` instead.")
 
 

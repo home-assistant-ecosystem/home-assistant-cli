@@ -101,10 +101,10 @@ EDITED_ENTITY = """
 """
 
 
-def test_entity_list():
-    """Test entities can be listed"""
-    with requests_mock.Mocker() as m:
-        m.get(
+def test_entity_list() -> None:
+    """Test entities can be listed."""
+    with requests_mock.Mocker() as mock:
+        mock.get(
             "http://localhost:8123/api/states",
             text=VALID_INFO,
             status_code=200,
@@ -120,13 +120,14 @@ def test_entity_list():
         assert len(data) == 3
 
 
-def test_entity_get():
+def test_entity_get() -> None:
+    """Test entity get."""
     import click_log.core as logcore
 
     logcore.basic_config()
 
-    with requests_mock.Mocker() as m:
-        m.get(
+    with requests_mock.Mocker() as mock:
+        mock.get(
             re.compile("http://localhost:8123/api/states"),
             text=SINGLE_ENTITY,
             status_code=200,
@@ -144,19 +145,19 @@ def test_entity_get():
         assert data["entity_id"] == "group.all_remotes"
 
 
-def test_entity_edit():
-    """Test basic edit of state"""
+def test_entity_edit() -> None:
+    """Test basic edit of state."""
     import click_log.core as logcore
 
     logcore.basic_config()
 
-    with requests_mock.Mocker() as m:
-        get = m.get(
+    with requests_mock.Mocker() as mock:
+        get = mock.get(
             re.compile("http://localhost:8123/api/states"),
             text=SINGLE_ENTITY,
             status_code=200,
         )
-        post = m.post(
+        post = mock.post(
             re.compile("http://localhost:8123/api/states"),
             text=EDITED_ENTITY,
             status_code=200,

@@ -42,11 +42,9 @@ def render(template_path, data, strict=False):
 def cli(ctx, template, datafile, local):
     """Render templates on server or locally.
 
-     TEMPLATE - jinja2 template file
-     DATAFILE - yaml file with variables to pass to rendering
-
+    TEMPLATE - jinja2 template file
+    DATAFILE - yaml file with variables to pass to rendering
     """
-
     variables = {}
     if datafile:
         variables = yaml.load(datafile)

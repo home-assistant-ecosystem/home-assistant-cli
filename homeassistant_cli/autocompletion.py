@@ -1,12 +1,14 @@
 """Details for the auto-completion."""
 import os
+from typing import List, Tuple
 
 from homeassistant_cli import const
+from homeassistant_cli.config import Configuration
 from homeassistant_cli.helper import req
 from requests.exceptions import HTTPError
 
 
-def _init_ctx(ctx):
+def _init_ctx(ctx: Configuration) -> None:
     """Initialize ctx."""
     # ctx is incomplete thus need to 'hack' around it
     # see bug https://github.com/pallets/click/issues/942
@@ -20,7 +22,9 @@ def _init_ctx(ctx):
         ctx.timeout = os.environ.get('HASS_TIMEOUT', const.DEFAULT_TIMEOUT)
 
 
-def entities(ctx, args, incomplete):
+def entities(
+    ctx: Configuration, args: str, incomplete: str
+) -> List[Tuple[str, str]]:
     """Entities."""
     _init_ctx(ctx)
     try:
@@ -38,11 +42,13 @@ def entities(ctx, args, incomplete):
         completions.sort()
 
         return [c for c in completions if incomplete in c[0]]
-    else:
-        return completions
+
+    return completions
 
 
-def events(ctx, args, incomplete):
+def events(
+    ctx: Configuration, args: str, incomplete: str
+) -> List[Tuple[str, str]]:
     """Events."""
     _init_ctx(ctx)
     try:
@@ -59,5 +65,5 @@ def events(ctx, args, incomplete):
         completions.sort()
 
         return [c for c in completions if incomplete in c[0]]
-    else:
-        return completions
+
+    return completions
