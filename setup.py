@@ -59,7 +59,7 @@ TESTS_REQUIRE = [
     'pytest-timeout==1.3.2',
     'pytest==4.0.0',
     'requests_mock==1.5.2',
-    'black==18.9b0',
+    "black==18.9b0;python_version>'3.6'",
 ]
 
 MIN_PY_VERSION = '.'.join(map(str, hass_cli_const.REQUIRED_PYTHON_VER))
