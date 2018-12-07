@@ -1,34 +1,47 @@
 """Edit plugin for Home Assistant CLI (hass-cli)."""
 import json as json_
+import logging
 import shlex
 
 import click
 import homeassistant_cli.autocompletion as autocompletion
 from homeassistant_cli.cli import pass_context
-from homeassistant_cli.helper import (
-    raw_format_output, req_raw)
+from homeassistant_cli.helper import raw_format_output, req_raw
 import yaml
 
+_LOGGING = logging.getLogger(__name__)
 
-@click.group('edit')
+
+@click.group('edit', hidden=True)
 @pass_context
 def cli(ctx):
     """Edit entities."""
+    _LOGGING.warn(
+        "'edit' is deprecated use 'entity edit' or 'event fire' instead."
+    )
 
 
 @cli.command()
-@click.argument('entity', required=True,
-                autocompletion=autocompletion.entities)
+@click.argument(
+    'entity', required=True, autocompletion=autocompletion.entities
+)
 @click.argument('newstate', required=False)
-@click.option('--attributes',
-              help="Comma separated key/value pairs to use as attributes")
-@click.option('--json',
-              help="Raw JSON state to use for setting. Overrides any other"
-                   "state values provided.")
-@click.option('--merge', is_flag=True, default=False,
-              help="If set and the entity exists the state and attributes will"
-                   "be merged into the state rather than overwrite.",
-              show_default=True)
+@click.option(
+    '--attributes', help="Comma separated key/value pairs to use as attributes"
+)
+@click.option(
+    '--json',
+    help="Raw JSON state to use for setting. Overrides any other"
+    "state values provided.",
+)
+@click.option(
+    '--merge',
+    is_flag=True,
+    default=False,
+    help="If set and the entity exists the state and attributes will"
+    "be merged into the state rather than overwrite.",
+    show_default=True,
+)
 @pass_context
 def state(ctx, entity, newstate, attributes, merge, json):
     """Edit state from Home Assistant."""
@@ -86,9 +99,11 @@ def state(ctx, entity, newstate, attributes, merge, json):
 
 @cli.command()
 @click.argument('event', required=True, autocompletion=autocompletion.events)
-@click.option('--json',
-              help="Raw JSON state to use for event. Overrides any other state"
-                   "values provided.")
+@click.option(
+    '--json',
+    help="Raw JSON state to use for event. Overrides any other state"
+    "values provided.",
+)
 @pass_context
 def event(ctx, event, json):
     """Edit/fire event in Home Assistant."""
