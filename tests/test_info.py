@@ -1,18 +1,18 @@
 """Tests file for Home Assistant CLI (hass-cli)."""
 import json
-import yaml
 
 from click.testing import CliRunner
 import homeassistant_cli.cli as cli
-
+from homeassistant_cli.exceptions import HomeAssistantCliError
 import requests_mock
+import yaml
 
-from requests.exceptions import ConnectionError
-
-VALID_INFO = {"base_url": "http://192.168.1.156:8123",
-              "location_name": "Home",
-              "requires_api_password": "false",
-              "version": "0.82.1"}
+VALID_INFO = {
+    "base_url": "http://192.168.1.156:8123",
+    "location_name": "Home",
+    "requires_api_password": "false",
+    "version": "0.82.1",
+}
 
 
 def ordered(obj):
@@ -27,17 +27,21 @@ def ordered(obj):
 
 def test_info_without_server_running():
     runner = CliRunner()
-    result = runner.invoke(cli.cli, ['--server',
-                                     'http://donotexist.inf',
-                                     'info'])
+    result = runner.invoke(
+        cli.cli, ['--server', 'http://donotexist.inf', 'info']
+    )
     assert result.exit_code == 1
-    assert isinstance(result.exception, ConnectionError)
+    assert isinstance(result.exception, HomeAssistantCliError)
+    assert str(result.exception) == "Unexpected error retriving info"
 
 
 def test_info_json():
     with requests_mock.Mocker() as m:
-        m.get('http://localhost:8123/api/discovery_info',
-              json=VALID_INFO, status_code=200)
+        m.get(
+            'http://localhost:8123/api/discovery_info',
+            json=VALID_INFO,
+            status_code=200,
+        )
 
         runner = CliRunner()
         result = runner.invoke(cli.cli, ['info'], catch_exceptions=False)
@@ -47,8 +51,11 @@ def test_info_json():
 
 def test_info_yaml():
     with requests_mock.Mocker() as m:
-        m.get('http://localhost:8123/api/discovery_info',
-              json=VALID_INFO, status_code=200)
+        m.get(
+            'http://localhost:8123/api/discovery_info',
+            json=VALID_INFO,
+            status_code=200,
+        )
 
         runner = CliRunner()
         result = runner.invoke(cli.cli, ['info'], catch_exceptions=False)
