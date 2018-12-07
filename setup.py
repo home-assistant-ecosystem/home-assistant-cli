@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 """Setup script for Home Assistant CLI."""
 from datetime import datetime as dt
-from setuptools import setup, find_packages
 
 import homeassistant_cli.const as hass_cli_const
-
+from setuptools import find_packages, setup
 
 PROJECT_NAME = 'Home Assistant CLI'
 PROJECT_PACKAGE_NAME = 'homeassistant-cli'
@@ -35,14 +34,31 @@ PROJECT_URLS = {
 
 PACKAGES = find_packages(exclude=['tests', 'tests.*'])
 
-REQUIRES = ['click', 'click-log', 'homeassistant', 'netdisco', 'tabulate']
+REQUIRES = [
+    'requests==2.20.1',
+    'netdisco==2.2.0',
+    'click==7.0',
+    'click-log==0.3.2',
+    'homeassistant',
+    'tabulate==0.8.2',
+    'idna==2.5',
+]
 
+# should be as close to homeassistant dev/master as possible
 TESTS_REQUIRE = [
-    'requests_mock==1.5.2',
+    'coveralls==1.2.0',
     'flake8-docstrings==1.3.0',
     'flake8==3.6.0',
-    'pytest==4.0.0',
+    'mock-open==1.3.1',
+    'mypy==0.641',
+    'pydocstyle==2.1.1',
     'pylint==2.1.1',
+    'pytest-aiohttp==0.3.0',
+    'pytest-cov==2.6.0',
+    'pytest-sugar==0.9.2',
+    'pytest-timeout==1.3.2',
+    'pytest==4.0.0',
+    'requests_mock==1.5.2',
     'black==18.9b0',
 ]
 
