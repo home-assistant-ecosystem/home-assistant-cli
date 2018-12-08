@@ -5,6 +5,7 @@ import logging
 import click
 import homeassistant_cli.autocompletion as autocompletion
 from homeassistant_cli.cli import pass_context
+from homeassistant_cli.config import Configuration
 from homeassistant_cli.helper import raw_format_output, req_raw
 import yaml
 
@@ -18,14 +19,16 @@ def cli(ctx):
 
 
 @cli.command()
-@click.argument('event', required=True, autocompletion=autocompletion.events)
+@click.argument(  # type: ignore
+    'event', required=True, autocompletion=autocompletion.events
+)
 @click.option(
     '--json',
     help="Raw JSON state to use for event. Overrides any other state"
     "values provided.",
 )
 @pass_context
-def fire(ctx, event, json):
+def fire(ctx: Configuration, event, json):
     """Fire event in Home Assistant."""
     if json:
         click.echo("Fire {}".format(event))

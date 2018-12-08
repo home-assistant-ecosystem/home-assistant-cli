@@ -15,6 +15,7 @@
 # C0330 - https://github.com/PyCQA/pylint/issues/289
 # C0414 - https://github.com/PyCQA/pylint/issues/2423 can be readded when upgrading to pylint 2.2
 # fixme - for now it is useful having these. When getting more stable lets remove it.
+# unused-import - flake8 does this anyway
 disable=
   abstract-class-little-used,
   abstract-method,
@@ -38,7 +39,8 @@ disable=
   unused-argument,
   C0330,
   C0414,
-  fixme
+  fixme,
+  unused-import
 
 [REPORTS]
 reports=no

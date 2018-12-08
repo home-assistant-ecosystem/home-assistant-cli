@@ -2,7 +2,7 @@
 import logging
 import os
 import sys
-from typing import Optional, Union
+from typing import List, Optional, Union, cast
 
 import click
 from click.core import Command, Context, Group
@@ -22,7 +22,7 @@ pass_context = click.make_pass_decorator(  # pylint: disable=invalid-name
 )
 
 
-def run():
+def run() -> None:
     """Run entry point.
 
     Wraps click for full control
@@ -47,7 +47,7 @@ def run():
         ex.show()  # let Click handle its own errors
         sys.exit(ex.exit_code)
     except click.Abort:
-        _LOGGER.fatal("Aborted!")
+        _LOGGER.critical("Aborted!")
         sys.exit(1)
     except Exception as ex:  # pylint: disable=broad-except
         if verbose:
@@ -64,7 +64,7 @@ def run():
 class HomeAssistantCli(click.MultiCommand):
     """The Home Assistant Command-line."""
 
-    def list_commands(self, ctx):
+    def list_commands(self, ctx: Context) -> List[str]:
         """List all command available as plugin."""
         cmd_folder = os.path.abspath(
             os.path.join(os.path.dirname(__file__), 'plugins')
@@ -85,14 +85,14 @@ class HomeAssistantCli(click.MultiCommand):
         try:
             mod = __import__(
                 '{}.plugins.{}'.format(const.PACKAGE_NAME, cmd_name),
-                None,
-                None,
+                {},
+                {},
                 ['cli'],
             )
         except ImportError:
             # todo: print out issue of loading plugins?
-            return
-        return mod.cli
+            pass
+        return cast(Union[Group, Command], mod.cli)
 
 
 def _default_server() -> str:
@@ -113,12 +113,12 @@ def _default_token() -> Optional[str]:
     '--server',
     '-s',
     help='The server URL of Home Assistant instance.',
-    default=lambda: _default_server(),  # pylint: disable=unnecessary-lambda
+    default=_default_server,
     envvar='HASS_SERVER',
 )
 @click.option(
     '--token',
-    default=lambda: _default_token(),  # pylint: disable=unnecessary-lambda
+    default=_default_token,  # type: ignore
     help='The Bearer token for Home Assistant instance.',
     envvar='HASS_TOKEN',
 )
@@ -153,7 +153,16 @@ def _default_token() -> Optional[str]:
 )
 @click.version_option()
 @pass_context
-def cli(ctx, verbose, server, token, output, timeout, debug, insecure):
+def cli(
+    ctx: Configuration,
+    verbose: bool,
+    server: str,
+    token: Optional[str],
+    output: str,
+    timeout: int,
+    debug: bool,
+    insecure: bool,
+):
     """Command line interface for Home Assistant."""
     ctx.verbose = verbose
     ctx.server = server

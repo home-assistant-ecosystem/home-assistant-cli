@@ -68,7 +68,7 @@ def test_entity_completion() -> None:
         result = autocompletion.entities(cfg, "entity get", "")
         assert len(result) == 3
 
-        result = dict(result)
+        resultdict = dict(result)
 
-        assert "group.all_remotes" in result
-        assert result['group.all_remotes'] == 'all remotes'
+        assert "group.all_remotes" in resultdict
+        assert resultdict['group.all_remotes'] == 'all remotes'

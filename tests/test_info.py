@@ -1,5 +1,6 @@
 """Tests file for Home Assistant CLI (hass-cli)."""
 import json
+from typing import Any
 
 from click.testing import CliRunner
 import homeassistant_cli.cli as cli
@@ -15,7 +16,7 @@ VALID_INFO = {
 }
 
 
-def ordered(obj):
+def ordered(obj: Any):
     """Sort object recursively. Useful for comparing json/yaml dicts."""
     if isinstance(obj, dict):
         return sorted((k, ordered(v)) for k, v in obj.items())

@@ -1,6 +1,7 @@
 """Discovery plugin for Home Assistant CLI (hass-cli)."""
 import click
 from homeassistant_cli.cli import pass_context
+from homeassistant_cli.config import Configuration
 from homeassistant_cli.helper import format_output
 
 
@@ -9,7 +10,7 @@ from homeassistant_cli.helper import format_output
     '--raw', is_flag=True, help="Include raw data found during scan."
 )
 @pass_context
-def cli(ctx, raw):
+def cli(ctx: Configuration, raw):
     """Discovery for the local network."""
     from netdisco.discovery import NetworkDiscovery
 

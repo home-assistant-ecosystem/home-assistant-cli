@@ -1,6 +1,6 @@
 """Tests file for Home Assistant CLI (hass-cli)."""
 import os
-from typing import Dict, Optional
+from typing import Dict, Optional, no_type_check
 from unittest import mock
 
 import homeassistant_cli.cli as cli
@@ -10,6 +10,7 @@ HASSIO_SERVER_FALLBACK = "http://hassio/homeassistant"
 HASS_SERVER = "http://localhost:8123"
 
 
+@no_type_check
 @pytest.mark.parametrize(
     "description,env,expected_server,expected_token",
     [

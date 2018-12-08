@@ -3,7 +3,7 @@ import contextlib
 from http.client import HTTPConnection
 import json
 import logging
-from typing import Dict, Optional
+from typing import Any, Dict, Generator, cast
 
 import click
 from homeassistant_cli.config import Configuration
@@ -12,18 +12,18 @@ from requests.models import Response
 import yaml
 
 
-def raw_format_output(output: str, data: Dict) -> str:
+def raw_format_output(output: str, data: Dict[str, Any]) -> str:
     """Format the raw output."""
     if output == 'json':
         try:
             return json.dumps(data, indent=2, sort_keys=False)
         except ValueError:
-            return input
+            return str(data)
     elif output == 'yaml':
         try:
-            return yaml.safe_dump(data, default_flow_style=False)
+            return cast(str, yaml.safe_dump(data, default_flow_style=False))
         except ValueError:
-            return input
+            return str(data)
     # todo fix this so gets a jsonpath list to transpose data
     else:
         raise ValueError(
@@ -33,12 +33,14 @@ def raw_format_output(output: str, data: Dict) -> str:
         )
 
 
-def format_output(ctx: Configuration, data: Dict) -> str:
-    """Format JSON to defined output."""
+def format_output(ctx: Configuration, data: Dict[str, Any]) -> str:
+    """Format dict to defined output."""
     return raw_format_output(ctx.output, data)
 
 
-def req_raw(ctx: Configuration, method: str, endpoint: str, *args) -> Response:
+def req_raw(
+    ctx: Configuration, method: str, endpoint: str, *args: Any
+) -> Response:
     """Use REST API to get details."""
     url = '{}/api/{}'.format(ctx.server, endpoint)
     headers = {
@@ -71,22 +73,23 @@ def req_raw(ctx: Configuration, method: str, endpoint: str, *args) -> Response:
 
 
 def req(
-    ctx: Configuration, method: str, endpoint: str, *args
-) -> Optional[Dict]:
+    ctx: Configuration, method: str, endpoint: str, *args: Any
+) -> Dict[str, Any]:
     """Create a request."""
     resp = req_raw(ctx, method, endpoint, *args)
 
-    resp.raise_for_status()
-
     if resp:
-        return resp.json()
+        resp.raise_for_status()
+        return cast(Dict[str, Any], resp.json())
 
     click.echo("Got empty response from server")
 
+    return {}
 
-def debug_requests_on():
+
+def debug_requests_on() -> None:
     """Switch on logging of the requests module."""
-    HTTPConnection.debuglevel = 1
+    HTTPConnection.set_debuglevel(cast(HTTPConnection, HTTPConnection), 1)
 
     logging.basicConfig()
     logging.getLogger().setLevel(logging.DEBUG)
@@ -95,12 +98,12 @@ def debug_requests_on():
     requests_log.propagate = True
 
 
-def debug_requests_off():
+def debug_requests_off() -> None:
     """Switch off logging of the requests module.
 
     Might have some side-effects.
     """
-    HTTPConnection.debuglevel = 0
+    HTTPConnection.set_debuglevel(cast(HTTPConnection, HTTPConnection), 1)
 
     root_logger = logging.getLogger()
     root_logger.setLevel(logging.WARNING)
@@ -111,7 +114,7 @@ def debug_requests_off():
 
 
 @contextlib.contextmanager
-def debug_requests():
+def debug_requests() -> Generator:
     """Yieldable way to turn on debugs for requests.
 
     with debug_requests(): <do things>

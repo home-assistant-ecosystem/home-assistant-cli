@@ -1,6 +1,6 @@
 """Details for the auto-completion."""
 import os
-from typing import List, Tuple
+from typing import Any, Dict, List, Tuple  # NOQA
 
 from homeassistant_cli import const
 from homeassistant_cli.config import Configuration
@@ -16,10 +16,12 @@ def _init_ctx(ctx: Configuration) -> None:
         ctx.server = os.environ.get('HASS_SERVER', const.DEFAULT_SERVER)
 
     if not hasattr(ctx, 'token'):
-        ctx.token = os.environ.get('HASS_TOKEN')
+        ctx.token = os.environ.get('HASS_TOKEN', None)
 
     if not hasattr(ctx, 'timeout'):
-        ctx.timeout = os.environ.get('HASS_TIMEOUT', const.DEFAULT_TIMEOUT)
+        ctx.timeout = int(
+            os.environ.get('HASS_TIMEOUT', str(const.DEFAULT_TIMEOUT))
+        )
 
 
 def entities(
@@ -28,16 +30,20 @@ def entities(
     """Entities."""
     _init_ctx(ctx)
     try:
-        response = req(ctx, 'get', 'states')
+        response = req(ctx, 'get', 'states')  # type: Dict[str, Any]
     except HTTPError:
-        response = None
+        response = {}
 
-    completions = []
+    completions = []  # type List[Tuple[str, str]]
 
-    if response is not None:
+    if response:
         for entity in response:
-            friendly_name = entity['attributes'].get('friendly_name', '')
-            completions.append((entity['entity_id'], friendly_name))
+            friendly_name = entity['attributes'].get(  # type: ignore
+                'friendly_name', ''
+            )
+            completions.append(
+                (entity['entity_id'], friendly_name)  # type: ignore
+            )
 
         completions.sort()
 
@@ -54,13 +60,13 @@ def events(
     try:
         response = req(ctx, 'get', 'events')
     except HTTPError:
-        response = None
+        response = {}
 
     completions = []
 
-    if response is not None:
+    if response:
         for entity in response:
-            completions.append((entity['event'], ''))
+            completions.append((entity['event'], ''))  # type: ignore
 
         completions.sort()
 

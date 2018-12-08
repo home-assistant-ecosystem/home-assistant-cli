@@ -4,6 +4,7 @@ import logging
 
 import click
 from homeassistant_cli.cli import pass_context
+from homeassistant_cli.config import Configuration
 from homeassistant_cli.helper import format_output
 import homeassistant_cli.remote as api
 
@@ -19,7 +20,7 @@ def cli(ctx):
 @cli.command()
 @click.argument('method')
 @pass_context
-def get(ctx, method):
+def get(ctx: Configuration, method):
     """Do a GET request against api/<method>."""
     response = api.restapi(ctx, 'get', method)
 
@@ -44,7 +45,7 @@ def get(ctx, method):
 @click.argument('method')
 @click.option('--json')
 @pass_context
-def post(ctx, method, json):
+def post(ctx: Configuration, method, json):
     """Do a POST request against api/<method>."""
     if json:
         data = json_.loads(json)

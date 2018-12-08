@@ -5,6 +5,7 @@ import logging
 import click
 import homeassistant_cli.autocompletion as autocompletion
 from homeassistant_cli.cli import pass_context
+from homeassistant_cli.config import Configuration
 from homeassistant_cli.helper import format_output, req_raw
 
 _LOGGING = logging.getLogger(__name__)
@@ -18,11 +19,11 @@ def cli(ctx):
 
 
 @cli.command()
-@click.argument(
+@click.argument(  # type: ignore
     'entities', nargs=-1, required=True, autocompletion=autocompletion.entities
 )
 @pass_context
-def state(ctx, entities):
+def state(ctx: Configuration, entities):
     """Toggle state from Home Assistant."""
     for entity in entities:
         data = {'entity_id': entity}

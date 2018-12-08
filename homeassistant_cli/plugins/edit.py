@@ -2,10 +2,12 @@
 import json as json_
 import logging
 import shlex
+from typing import Any, Dict, cast, no_type_check  # NOQA
 
 import click
 import homeassistant_cli.autocompletion as autocompletion
 from homeassistant_cli.cli import pass_context
+from homeassistant_cli.config import Configuration
 from homeassistant_cli.helper import raw_format_output, req_raw
 import yaml
 
@@ -22,6 +24,7 @@ def cli(ctx):
 
 
 @cli.command()
+@no_type_check
 @click.argument(
     'entity', required=True, autocompletion=autocompletion.entities
 )
@@ -43,12 +46,12 @@ def cli(ctx):
     show_default=True,
 )
 @pass_context
-def state(ctx, entity, newstate, attributes, merge, json):
+def state(ctx: Configuration, entity, newstate, attributes, merge, json):
     """Edit state from Home Assistant."""
     if json:
         response = req_raw(ctx, 'post', 'states/{}'.format(entity), json)
     elif newstate or attributes:
-        wanted_state = {}
+        wanted_state = {}  # type: Dict[str, Any]
         existing_state = None
 
         response = req_raw(ctx, 'get', 'states/{}'.format(entity))
@@ -65,7 +68,9 @@ def state(ctx, entity, newstate, attributes, merge, json):
             lexer = shlex.shlex(attributes, posix=True)
             lexer.whitespace_split = True
             lexer.whitespace = ','
-            attributes_dict = dict(pair.split('=', 1) for pair in lexer)
+            attributes_dict = cast(
+                Dict[str, str], dict(pair.split('=', 1) for pair in lexer)
+            )
 
             newattr = wanted_state.get('attributes', {})
             newattr.update(attributes_dict)
@@ -98,6 +103,7 @@ def state(ctx, entity, newstate, attributes, merge, json):
 
 
 @cli.command('event')
+@no_type_check
 @click.argument('event', required=True, autocompletion=autocompletion.events)
 @click.option(
     '--json',
@@ -105,7 +111,7 @@ def state(ctx, entity, newstate, attributes, merge, json):
     "values provided.",
 )
 @pass_context
-def eventcmd(ctx, event, json):
+def eventcmd(ctx: Configuration, event, json):
     """Edit/fire event in Home Assistant."""
     if json:
         click.echo("Fire {}".format(event))
