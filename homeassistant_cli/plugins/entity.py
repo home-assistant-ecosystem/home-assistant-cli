@@ -3,10 +3,12 @@
 import json as json_
 import logging
 import shlex
+from typing import no_type_check
 
 import click
 import homeassistant_cli.autocompletion as autocompletion
 from homeassistant_cli.cli import pass_context
+from homeassistant_cli.config import Configuration
 from homeassistant_cli.helper import format_output, raw_format_output
 import homeassistant_cli.remote as api
 import yaml
@@ -21,23 +23,24 @@ def cli(ctx):
 
 
 @cli.command()
+@no_type_check
 @click.argument(
     'entity', required=True, autocompletion=autocompletion.entities
 )
 @pass_context
-def get(ctx, entity):
+def get(ctx: Configuration, entity):
     """Get/read entity state from Home Assistant."""
     _LOGGING.info(format_output(ctx, api.get_state(ctx, entity)))
 
 
 @cli.command()
+@no_type_check
 @click.argument(
-    'entity', required='true', autocompletion=autocompletion.entities
+    'entity', required=True, autocompletion=autocompletion.entities
 )
 @pass_context
-def delete(ctx, entity):
+def delete(ctx: Configuration, entity):
     """Delete entity from Home Assistant."""
-
     deleted = api.remove_state(ctx, entity)
 
     if deleted:
@@ -46,14 +49,15 @@ def delete(ctx, entity):
         _LOGGING.info("Entity %s not found.", entity)
 
 
-@cli.command()
+@cli.command('list')
 @pass_context
-def list(ctx):
+def listcmd(ctx):
     """List all state from Home Assistant."""
     _LOGGING.info(format_output(ctx, api.get_states(ctx)))
 
 
 @cli.command()
+@no_type_check
 @click.argument(
     'entity', required=True, autocompletion=autocompletion.entities
 )
@@ -75,7 +79,7 @@ def list(ctx):
     show_default=True,
 )
 @pass_context
-def edit(ctx, entity, newstate, attributes, merge, json):
+def edit(ctx: Configuration, entity, newstate, attributes, merge, json):
     """Edit entity state from Home Assistant."""
     if json:
         _LOGGING.debug(
@@ -87,11 +91,11 @@ def edit(ctx, entity, newstate, attributes, merge, json):
         existing_state = api.get_state(ctx, entity)
 
         if existing_state:
-            click.echo("Existing state found for {}".format(entity))
+            _LOGGING.info("Existing state found for %s", entity)
             if merge:
                 wanted_state = existing_state
         else:
-            _LOGGING.info("No existing state found for '{}'".format(entity))
+            _LOGGING.info("No existing state found for '%s'", entity)
 
         if attributes:
             lexer = shlex.shlex(attributes, posix=True)
@@ -117,7 +121,7 @@ def edit(ctx, entity, newstate, attributes, merge, json):
         new = click.edit(existing, extension='.{}'.format(ctx.output))
 
         if new is not None:
-            _LOGGING.info("Updating '{}'".format(entity))
+            _LOGGING.info("Updating '%s'", entity)
             if ctx.output == 'yaml':
                 wanted_state = yaml.load(new)
             if ctx.output == 'json':
@@ -135,15 +139,16 @@ def edit(ctx, entity, newstate, attributes, merge, json):
 
 
 @cli.command()
+@no_type_check
 @click.argument(
     'entities', nargs=-1, required=True, autocompletion=autocompletion.entities
 )
 @pass_context
-def toggle(ctx, entities):
+def toggle(ctx: Configuration, entities):
     """Toggle state for one or more entities in Home Assistant."""
     for entity in entities:
         data = {'entity_id': entity}
-        _LOGGING.info("Toggling {}".format(entity))
+        _LOGGING.info("Toggling %s", entity)
         result = api.call_service(ctx, 'homeassistant', 'toggle', data)
 
         _LOGGING.debug(format_output(ctx, result))

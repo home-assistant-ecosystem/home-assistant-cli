@@ -1,8 +1,7 @@
 """Tests file for Home Assistant CLI (hass-cli)."""
-import requests_mock
-
 import homeassistant_cli.autocompletion as autocompletion
 from homeassistant_cli.config import Configuration
+import requests_mock
 
 VALID_INFO = '''[{
     "attributes": {
@@ -55,17 +54,21 @@ VALID_INFO = '''[{
 '''
 
 
-def test_entity_completion():
-    with requests_mock.Mocker() as m:
-        m.get('http://localhost:8123/api/states',
-              text=VALID_INFO, status_code=200)
+def test_entity_completion() -> None:
+    """Test completion for entities."""
+    with requests_mock.Mocker() as mock:
+        mock.get(
+            'http://localhost:8123/api/states',
+            text=VALID_INFO,
+            status_code=200,
+        )
 
         cfg = Configuration()
 
         result = autocompletion.entities(cfg, "entity get", "")
         assert len(result) == 3
 
-        result = dict(result)
+        resultdict = dict(result)
 
-        assert "group.all_remotes" in result
-        assert result['group.all_remotes'] == 'all remotes'
+        assert "group.all_remotes" in resultdict
+        assert resultdict['group.all_remotes'] == 'all remotes'

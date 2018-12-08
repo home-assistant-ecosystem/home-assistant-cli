@@ -1,8 +1,4 @@
 repos:
--   repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v2.0.0
-    hooks:
-    - id: flake8
 -   repo: https://github.com/ambv/black
     rev: stable
     hooks:
@@ -12,3 +8,7 @@ repos:
     rev: master  # Use the revision sha / tag you want to point at
     hooks:
     -   id: isort
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.0.0
+    hooks:
+    - id: flake8

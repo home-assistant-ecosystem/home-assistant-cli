@@ -9,7 +9,7 @@ from datetime import datetime
 import enum
 import json
 import logging
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, cast
 import urllib.parse
 
 from aiohttp.hdrs import CONTENT_TYPE, METH_DELETE, METH_GET, METH_POST
@@ -36,7 +36,7 @@ class APIStatus(enum.Enum):
 
 
 def restapi(
-    ctx: Configuration, method: str, path: str, data: Dict = None
+    ctx: Configuration, method: str, path: str, data: Optional[Dict] = None
 ) -> requests.Response:
     """Make a call to the Home Assistant REST API."""
     if data is None:
@@ -44,7 +44,7 @@ def restapi(
     else:
         data_str = json.dumps(data, cls=JSONEncoder)
 
-    headers = {CONTENT_TYPE: hass.CONTENT_TYPE_JSON}
+    headers = {CONTENT_TYPE: hass.CONTENT_TYPE_JSON}  # type: Dict[str, Any]
     if ctx.token is not None:
         headers["Authorization"] = "Bearer {}".format(ctx.token)
 
@@ -114,19 +114,21 @@ def validate_api(ctx: Configuration) -> APIStatus:
         return APIStatus.CANNOT_CONNECT
 
 
-def get_info(ctx: Configuration) -> Optional[Dict]:
+def get_info(ctx: Configuration) -> Dict[str, Any]:
     """Get basic info about the Homeassistant instance."""
     try:
         req = restapi(ctx, METH_GET, hass.URL_API_DISCOVERY_INFO)
 
-        return req.json() if req.status_code == 200 else {}  # type: ignore
+        return (
+            cast(Dict[str, Any], req.json()) if req.status_code == 200 else {}
+        )
 
     except (HomeAssistantCliError, ValueError):
         raise HomeAssistantCliError("Unexpected error retriving info")
         # ValueError if req.json() can't parse the json
 
 
-def get_states(ctx: Configuration) -> Optional[Dict]:
+def get_states(ctx: Configuration) -> Dict[str, Any]:
     """Return all states."""
     try:
         req = restapi(ctx, METH_GET, hass.URL_API_STATES)
@@ -136,14 +138,14 @@ def get_states(ctx: Configuration) -> Optional[Dict]:
         )
 
     if req.status_code == 200:
-        return req.json()
-    else:
-        raise HomeAssistantCliError(
-            "Error while getting all states".format(req.text)
-        )
+        return cast(Dict[str, Any], req.json())
+
+    raise HomeAssistantCliError(
+        "Error while getting all states: {}".format(req.text)
+    )
 
 
-def get_config(ctx: Configuration) -> Optional[Dict]:
+def get_config(ctx: Configuration) -> Dict[str, Any]:
     """Return the runing config."""
     try:
         req = restapi(ctx, METH_GET, hass.URL_API_CONFIG)
@@ -153,17 +155,19 @@ def get_config(ctx: Configuration) -> Optional[Dict]:
         )
 
     if req.status_code == 200:
-        return req.json()
-    else:
-        raise HomeAssistantCliError(
-            "Error while getting all config".format(req.text)
-        )
+        return cast(Dict[str, str], req.json())
+
+    raise HomeAssistantCliError(
+        "Error while getting all config: {}".format(req.text)
+    )
 
 
-def get_state(ctx: Configuration, entity_id: str) -> Optional[Dict]:
+def get_state(ctx: Configuration, entity_id: str) -> Optional[Dict[str, Any]]:
     """Get entity state. If ok, return dictionary with state.
+
     If no entity found return None - otherwise excepton raised
-    with details."""
+    with details.
+    """
     try:
         req = restapi(
             ctx, METH_GET, hass.URL_API_STATES_ENTITY.format(entity_id)
@@ -174,19 +178,20 @@ def get_state(ctx: Configuration, entity_id: str) -> Optional[Dict]:
         )
 
     if req.status_code == 200:
-        return req.json()
-    elif req.status_code == 404:
+        return cast(Dict[str, Any], req.json())
+    if req.status_code == 404:
         return None
-    else:
-        raise HomeAssistantCliError(
-            "Error while getting Entity {}: {}".format(entity_id, req.text)
-        )
+
+    raise HomeAssistantCliError(
+        "Error while getting Entity {}: {}".format(entity_id, req.text)
+    )
 
 
 def remove_state(ctx: Configuration, entity_id: str) -> bool:
     """Call API to remove state for entity_id.
-        If success return True, if could not find the entity return False.
-        Otherwise raise exception with details.
+
+    If success return True, if could not find the entity return False.
+    Otherwise raise exception with details.
     """
     try:
         req = restapi(
@@ -205,42 +210,47 @@ def remove_state(ctx: Configuration, entity_id: str) -> bool:
     )
 
 
-def set_state(ctx: Configuration, entity_id: str, data: Dict):
-    """Set/update state for entity id"""
-
+def set_state(
+    ctx: Configuration, entity_id: str, data: Dict
+) -> Dict[str, Any]:
+    """Set/update state for entity id."""
     try:
         req = restapi(
             ctx, METH_POST, hass.URL_API_STATES_ENTITY.format(entity_id), data
         )
-    except HomeAssistantCliError as he:
+    except HomeAssistantCliError as exception:
         raise HomeAssistantCliError(
-            "Error updating state for entity {}: {}".format(entity_id, he)
+            "Error updating state for entity {}: {}".format(
+                entity_id, exception
+            )
         )
 
     if req.status_code not in (200, 201):
         raise HomeAssistantCliError(
-            "Error changing state for entity {}: %d - %s",
-            entity_id,
-            req.status_code,
-            req.text,
+            "Error changing state for entity {}: {} - {}".format(
+                entity_id, req.status_code, req.text
+            )
         )
     else:
-        return req.json()
+        return cast(Dict[str, Any], req.json())
 
 
-def render_template(ctx: Configuration, template: str, variables: Dict):
+def render_template(ctx: Configuration, template: str, variables: Dict) -> str:
     """Render template."""
-
     data = {"template": template, "variables": variables}
 
     try:
         req = restapi(ctx, METH_POST, hass.URL_API_TEMPLATE, data)
-    except HomeAssistantCliError as he:
-        raise HomeAssistantCliError("Error applying template: {}".format(he))
+    except HomeAssistantCliError as exception:
+        raise HomeAssistantCliError(
+            "Error applying template: {}".format(exception)
+        )
 
     if req.status_code not in (200, 201):
         raise HomeAssistantCliError(
-            "Error applying template: %s - %s", req.status_code, req.text
+            "Error applying template: {} - {}".format(
+                req.status_code, req.text
+            )
         )
     else:
         return req.text
@@ -260,7 +270,9 @@ def get_event_listeners(ctx: Configuration) -> Dict:
         return {}
 
 
-def fire_event(ctx: Configuration, event_type: str, data: Dict = None) -> None:
+def fire_event(
+    ctx: Configuration, event_type: str, data: Optional[Dict[str, Any]] = None
+) -> Optional[Dict[str, Any]]:
     """Fire an event at remote API."""
     try:
         req = restapi(
@@ -272,14 +284,19 @@ def fire_event(ctx: Configuration, event_type: str, data: Dict = None) -> None:
                 "Error firing event: %d - %s", req.status_code, req.text
             )
 
-    except HomeAssistantCliError:
-        _LOGGER.exception("Error firing event")
+        return cast(Dict[str, Any], req.json())
+
+    except HomeAssistantCliError as exception:
+        raise HomeAssistantCliError("Error firing event: {}".format(exception))
 
 
 def call_service(
-    ctx: Configuration, domain: str, service: str, service_data: Dict = None
-) -> Optional[Dict]:
-    """ Call a service."""
+    ctx: Configuration,
+    domain: str,
+    service: str,
+    service_data: Optional[Dict] = None,
+) -> Optional[Dict[str, Any]]:
+    """Call a service."""
     try:
         req = restapi(
             ctx,
@@ -289,12 +306,12 @@ def call_service(
         )
     except HomeAssistantCliError:
         raise HomeAssistantCliError(
-            "Error calling service: %d - %s".format(req.status_code, req.text)
+            "Error calling service: {} - {}".format(req.status_code, req.text)
         )
 
     if req.status_code != 200:
         raise HomeAssistantCliError(
-            "Error calling service: %d - %s".format(req.status_code, req.text)
+            "Error calling service: {} - {}".format(req.status_code, req.text)
         )
 
-    return req.json()
+    return cast(Dict[str, Any], req.json())

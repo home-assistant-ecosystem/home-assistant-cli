@@ -1,9 +1,11 @@
 """Location plugin for Home Assistant CLI (hass-cli)."""
 import logging
 import os
+from typing import Any, Dict  # noqa, flake8 issue
 
 import click
 from homeassistant_cli.cli import pass_context
+from homeassistant_cli.config import Configuration
 import homeassistant_cli.remote as api
 from jinja2 import Environment, FileSystemLoader
 import yaml
@@ -11,7 +13,7 @@ import yaml
 _LOGGING = logging.getLogger(__name__)
 
 
-def render(template_path, data, strict=False):
+def render(template_path, data, strict=False) -> str:
     """Render template."""
     env = Environment(
         loader=FileSystemLoader(os.path.dirname(template_path)),
@@ -39,15 +41,14 @@ def render(template_path, data, strict=False):
     help="If should render template locally",
 )
 @pass_context
-def cli(ctx, template, datafile, local):
+def cli(ctx: Configuration, template, datafile, local: bool) -> None:
     """Render templates on server or locally.
 
-     TEMPLATE - jinja2 template file
-     DATAFILE - yaml file with variables to pass to rendering
-
+    TEMPLATE - jinja2 template file
+    DATAFILE - yaml file with variables to pass to rendering
     """
-
-    variables = {}
+    print(type(template))
+    variables = {}  # type: Dict[str, Any]
     if datafile:
         variables = yaml.load(datafile)
 
