@@ -4,6 +4,7 @@ import logging
 import click
 import homeassistant_cli.autocompletion as autocompletion
 from homeassistant_cli.cli import pass_context
+from homeassistant_cli.config import Configuration
 from homeassistant_cli.helper import format_output, req, req_raw
 
 _LOGGING = logging.getLogger(__name__)
@@ -16,11 +17,11 @@ def cli(ctx):
 
 
 @cli.command()
-@click.argument(
+@click.argument(  # type: ignore
     'entity', required=False, autocompletion=autocompletion.entities
 )
 @pass_context
-def state(ctx, entity):
+def state(ctx: Configuration, entity):
     """Get/read state from Home Assistant."""
     _LOGGING.warning("`get` is deprecated, use `entity`, `service` or `event`")
 
@@ -54,7 +55,7 @@ def service(ctx):
 @cli.command()
 @click.argument('entities', nargs=-1)
 @pass_context
-def history(ctx, entities):
+def history(ctx: Configuration, entities):
     """List history from Home Assistant."""
     if not entities:
         click.echo(format_output(ctx, req(ctx, 'get', 'history/period')))

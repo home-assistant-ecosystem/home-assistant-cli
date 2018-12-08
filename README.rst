@@ -1,7 +1,7 @@
 Home Assistant Command-line Interface (``hass-cli``)
 ====================================================
 
-|Chat Status| |License| |PyPI|
+|Build Status| |Chat Status| |License| |PyPI|
 
 The Home Assistant Command-line interface (``hass-cli``) allows one to
 work with a local or a remote `Home Assistant <https://home-assistant.io>`_
@@ -35,7 +35,7 @@ Get state of a entity:
 If you prefer yaml you can do:
 
 .. code:: bash
-  
+
   $ hass-cli -o yaml get state light.guestroom_light
   attributes:
     friendly_name: Guestroom Light
@@ -53,12 +53,12 @@ If you prefer yaml you can do:
 You can edit state via an editor:
 
 .. code:: bash
-  
+
     $ hass-cli edit state light.guestroom_light
 ..
 
 This will open the current state in your favorite editor and any changes you save will
-be used for an update. 
+be used for an update.
 
 You can also explicitly create/edit via the `--json` flag:
 
@@ -102,7 +102,7 @@ Note: For this to work you'll need to have setup the following environment varia
 is secured and not running on localhost:8123:
 
 .. code:: bash
- 
+
    export HASS_SERVER=https://hassio.local:8123
    export HASS_TOKEN=<Bearer token from HASS_SERVER/profile>
 
@@ -141,7 +141,7 @@ help
       toggle      Toggle data from Home Assistant.
 
 
-Clone the git repository and 
+Clone the git repository and
 
 .. code:: bash
 
@@ -167,8 +167,11 @@ after this you should be able to edit the source code and running `hass-cli` dir
 
 .. code:: bash
 
-    $ hass-cli 
+    $ hass-cli
 
+
+.. |Build Status| image:: https://travis-ci.com/home-assistant/home-assistant-cli.svg?branch=dev
+    :target: https://travis-ci.com/home-assistant/home-assistant-cli
 
 .. |Chat Status| image:: https://img.shields.io/discord/330944238910963714.svg
    :target: https://discord.gg/c5DvZ4e
