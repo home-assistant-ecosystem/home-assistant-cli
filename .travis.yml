@@ -35,8 +35,4 @@ cache:
 install: pip install -U tox coveralls
 language: python
 script: travis_wait 30 tox --develop
-deploy:
-  skip_cleanup: true
-  on:
-    branch: dev
-    condition: $TOXENV = lint
+
