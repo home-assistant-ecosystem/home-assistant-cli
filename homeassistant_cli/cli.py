@@ -91,7 +91,7 @@ class HomeAssistantCli(click.MultiCommand):
             )
         except ImportError:
             # todo: print out issue of loading plugins?
-            pass
+            return None
         return cast(Union[Group, Command], mod.cli)
 
 
