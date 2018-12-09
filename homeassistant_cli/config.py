@@ -1,6 +1,6 @@
 """Configuration for Home Assistant CLI (hass-cli)."""
 import sys
-from typing import Optional
+from typing import Any, Optional
 
 import click
 import homeassistant_cli.const as const
@@ -18,6 +18,10 @@ class Configuration:
         self.insecure = False  # type: bool
         self.timeout = const.DEFAULT_TIMEOUT  # type: int
         self.debug = False  # type: bool
+
+    def echo(self, msg: str, *args: Optional[Any]) -> None:
+        """Main content message to stdout."""
+        self.log(msg, *args)
 
     def log(  # pylint: disable=no-self-use
         self, msg: str, *args: Optional[str]
