@@ -2,14 +2,13 @@
 
 import json as json_
 import logging
-import shlex
 from typing import no_type_check
 
 import click
 import homeassistant_cli.autocompletion as autocompletion
 from homeassistant_cli.cli import pass_context
 from homeassistant_cli.config import Configuration
-from homeassistant_cli.helper import format_output, raw_format_output
+import homeassistant_cli.helper as helper
 import homeassistant_cli.remote as api
 import yaml
 
@@ -30,7 +29,7 @@ def cli(ctx):
 @pass_context
 def get(ctx: Configuration, entity):
     """Get/read entity state from Home Assistant."""
-    _LOGGING.info(format_output(ctx, api.get_state(ctx, entity)))
+    _LOGGING.info(helper.format_output(ctx, api.get_state(ctx, entity)))
 
 
 @cli.command()
@@ -53,7 +52,7 @@ def delete(ctx: Configuration, entity):
 @pass_context
 def listcmd(ctx):
     """List all state from Home Assistant."""
-    _LOGGING.info(format_output(ctx, api.get_states(ctx)))
+    _LOGGING.info(helper.format_output(ctx, api.get_states(ctx)))
 
 
 @cli.command()
@@ -98,10 +97,7 @@ def edit(ctx: Configuration, entity, newstate, attributes, merge, json):
             _LOGGING.info("No existing state found for '%s'", entity)
 
         if attributes:
-            lexer = shlex.shlex(attributes, posix=True)
-            lexer.whitespace_split = True
-            lexer.whitespace = ','
-            attributes_dict = dict(pair.split('=', 1) for pair in lexer)
+            attributes_dict = helper.to_attributes(attributes)
 
             newattr = wanted_state.get('attributes', {})
             newattr.update(attributes_dict)
@@ -117,7 +113,7 @@ def edit(ctx: Configuration, entity, newstate, attributes, merge, json):
 
     else:
         existing = api.get_state(ctx, entity)
-        existing = raw_format_output(ctx.output, existing)
+        existing = helper.raw_format_output(ctx.output, existing)
         new = click.edit(existing, extension='.{}'.format(ctx.output))
 
         if new is not None:
@@ -152,35 +148,35 @@ def toggle(ctx: Configuration, entities):
         result = api.call_service(ctx, 'homeassistant', 'toggle', data)
 
         if ctx.verbose:
-            _LOGGING.info(format_output(ctx, result))
+            _LOGGING.info(helper.format_output(ctx, result))
 
         _LOGGING.info("%s entities reported to be toggled", len(result))
 
 
-@cli.command()
+@cli.command('off')
 @no_type_check
 @click.argument(
     'entities', nargs=-1, required=True, autocompletion=autocompletion.entities
 )
 @pass_context
-def off(ctx: Configuration, entities):
+def off_cmd(ctx: Configuration, entities):
     """Turn entity off."""
     for entity in entities:
         data = {'entity_id': entity}
         _LOGGING.info("Toggling %s", entity)
         result = api.call_service(ctx, 'homeassistant', 'turn_off', data)
         if ctx.verbose:
-            _LOGGING.info(format_output(ctx, result))
+            _LOGGING.info(helper.format_output(ctx, result))
         _LOGGING.info("%s entities reported to be turned off", len(result))
 
 
-@cli.command()
+@cli.command('on')
 @no_type_check
 @click.argument(
     'entities', nargs=-1, required=True, autocompletion=autocompletion.entities
 )
 @pass_context
-def on(ctx: Configuration, entities):
+def on_cmd(ctx: Configuration, entities):
     """Turn entity on."""
     for entity in entities:
         data = {'entity_id': entity}
@@ -188,5 +184,5 @@ def on(ctx: Configuration, entities):
         result = api.call_service(ctx, 'homeassistant', 'turn_on', data)
 
         if ctx.verbose:
-            _LOGGING.info(format_output(ctx, result))
+            _LOGGING.info(helper.format_output(ctx, result))
         _LOGGING.info("%s entities reported to be turned on", len(result))

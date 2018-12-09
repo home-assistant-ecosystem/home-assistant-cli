@@ -5,6 +5,7 @@ from typing import Any, Dict, List, Tuple  # NOQA
 from homeassistant_cli import const
 from homeassistant_cli.config import Configuration
 from homeassistant_cli.helper import req
+import homeassistant_cli.remote as api
 from requests.exceptions import HTTPError
 
 
@@ -22,6 +23,40 @@ def _init_ctx(ctx: Configuration) -> None:
         ctx.timeout = int(
             os.environ.get('HASS_TIMEOUT', str(const.DEFAULT_TIMEOUT))
         )
+
+    if not hasattr(ctx, 'insecure'):
+        ctx.insecure = False
+
+
+def services(
+    ctx: Configuration, args: str, incomplete: str
+) -> List[Tuple[str, str]]:
+    """Services."""
+    _init_ctx(ctx)
+    try:
+        response = api.get_services(ctx)
+    except HTTPError:
+        response = {}
+
+    completions = []  # type: List[Tuple[str, str]]
+    if response:
+        for domain in response:
+            domain_name = domain['domain']  # type: ignore
+            servicesdict = domain['services']  # type: ignore
+
+            for service in servicesdict:
+                completions.append(
+                    (
+                        "{}.{}".format(domain_name, service),
+                        servicesdict[service]['description'],  # type: ignore
+                    )
+                )
+
+        completions.sort()
+
+        return [c for c in completions if incomplete in c[0]]
+
+    return completions
 
 
 def entities(

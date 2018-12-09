@@ -19,19 +19,19 @@ DFEAULT_PLUGINS = [
     'raw',
     'template',
     'toggle',
+    'service',
 ]
 DFEAULT_PLUGINS.sort()
 
 
 @pytest.fixture(name="defaultplugins_sorted")
 def defaultplugins_fixture() -> List[str]:
-    """Return the exepcted default list of plugins"""
+    """Return the exepcted default list of plugins."""
     return DFEAULT_PLUGINS
 
 
 def test_commands_match_expected(defaultplugins_sorted) -> None:
     """Test plugin discovery."""
-
     hac = HomeAssistantCli()
 
     ctx = cli.make_context('hass-cli', ['info'])
@@ -40,13 +40,14 @@ def test_commands_match_expected(defaultplugins_sorted) -> None:
 
     cmds.sort()
 
-    assert cmds == defaultplugins_sorted
+    diff = set(cmds).difference(set(defaultplugins_sorted))
+
+    assert not diff
 
 
 @pytest.mark.parametrize("plugin", DFEAULT_PLUGINS)
 def test_commands_loads(plugin) -> None:
     """Test plugin discovery."""
-
     hac = HomeAssistantCli()
 
     ctx = cli.make_context('hass-cli', ['info'])
