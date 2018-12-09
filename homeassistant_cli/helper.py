@@ -3,6 +3,7 @@ import contextlib
 from http.client import HTTPConnection
 import json
 import logging
+import shlex
 from typing import Any, Dict, Generator, cast
 
 import click
@@ -10,6 +11,18 @@ from homeassistant_cli.config import Configuration
 import requests
 from requests.models import Response
 import yaml
+
+
+def to_attributes(entry: str) -> Dict[str, str]:
+    """Convert list of key=value pairs to dictionary."""
+    lexer = shlex.shlex(entry, posix=True)
+    lexer.whitespace_split = True
+    lexer.whitespace = ','
+    attributes_dict = {}  # type: Dict[str, str]
+    attributes_dict = dict(
+        pair.split('=', 1) for pair in lexer  # type: ignore
+    )
+    return attributes_dict
 
 
 def raw_format_output(output: str, data: Dict[str, Any]) -> str:
