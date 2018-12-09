@@ -61,4 +61,4 @@ def cli(ctx: Configuration, template, datafile, local: bool) -> None:
     else:
         output = api.render_template(ctx, templatestr, variables)
 
-    _LOGGING.info(output)
+    ctx.echo(output)

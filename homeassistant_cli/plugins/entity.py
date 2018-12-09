@@ -29,7 +29,7 @@ def cli(ctx):
 @pass_context
 def get(ctx: Configuration, entity):
     """Get/read entity state from Home Assistant."""
-    _LOGGING.info(helper.format_output(ctx, api.get_state(ctx, entity)))
+    ctx.echo(helper.format_output(ctx, api.get_state(ctx, entity)))
 
 
 @cli.command()
@@ -43,16 +43,16 @@ def delete(ctx: Configuration, entity):
     deleted = api.remove_state(ctx, entity)
 
     if deleted:
-        _LOGGING.info("Entity %s deleted.", entity)
+        ctx.echo("Entity %s deleted.", entity)
     else:
-        _LOGGING.info("Entity %s not found.", entity)
+        ctx.echo("Entity %s not found.", entity)
 
 
 @cli.command('list')
 @pass_context
 def listcmd(ctx):
     """List all state from Home Assistant."""
-    _LOGGING.info(helper.format_output(ctx, api.get_states(ctx)))
+    ctx.echo(helper.format_output(ctx, api.get_states(ctx)))
 
 
 @cli.command()
@@ -90,11 +90,11 @@ def edit(ctx: Configuration, entity, newstate, attributes, merge, json):
         existing_state = api.get_state(ctx, entity)
 
         if existing_state:
-            _LOGGING.info("Existing state found for %s", entity)
+            ctx.echo("Existing state found for %s", entity)
             if merge:
                 wanted_state = existing_state
         else:
-            _LOGGING.info("No existing state found for '%s'", entity)
+            ctx.echo("No existing state found for '%s'", entity)
 
         if attributes:
             attributes_dict = helper.to_attributes(attributes)
@@ -117,7 +117,7 @@ def edit(ctx: Configuration, entity, newstate, attributes, merge, json):
         new = click.edit(existing, extension='.{}'.format(ctx.output))
 
         if new is not None:
-            _LOGGING.info("Updating '%s'", entity)
+            ctx.echo("Updating '%s'", entity)
             if ctx.output == 'yaml':
                 wanted_state = yaml.load(new)
             if ctx.output == 'json':
@@ -125,12 +125,12 @@ def edit(ctx: Configuration, entity, newstate, attributes, merge, json):
 
             api.set_state(ctx, entity, wanted_state)
         else:
-            _LOGGING.info("No edits/changes returned from editor.")
+            ctx.echo("No edits/changes returned from editor.")
             return
 
     _LOGGING.debug("wanted: %s", str(wanted_state))
     result = api.set_state(ctx, entity, wanted_state)
-    _LOGGING.info("Entity %s updated succesfully", entity)
+    ctx.echo("Entity %s updated succesfully", entity)
     _LOGGING.debug("Updated to: %s", result)
 
 
@@ -144,13 +144,13 @@ def toggle(ctx: Configuration, entities):
     """Toggle state for one or more entities in Home Assistant."""
     for entity in entities:
         data = {'entity_id': entity}
-        _LOGGING.info("Toggling %s", entity)
+        ctx.echo("Toggling %s", entity)
         result = api.call_service(ctx, 'homeassistant', 'toggle', data)
 
         if ctx.verbose:
-            _LOGGING.info(helper.format_output(ctx, result))
+            ctx.echo(helper.format_output(ctx, result))
 
-        _LOGGING.info("%s entities reported to be toggled", len(result))
+        ctx.echo("%s entities reported to be toggled", len(result))
 
 
 @cli.command('off')
@@ -163,11 +163,11 @@ def off_cmd(ctx: Configuration, entities):
     """Turn entity off."""
     for entity in entities:
         data = {'entity_id': entity}
-        _LOGGING.info("Toggling %s", entity)
+        ctx.echo("Toggling %s", entity)
         result = api.call_service(ctx, 'homeassistant', 'turn_off', data)
         if ctx.verbose:
-            _LOGGING.info(helper.format_output(ctx, result))
-        _LOGGING.info("%s entities reported to be turned off", len(result))
+            ctx.echo(helper.format_output(ctx, result))
+        ctx.echo("%s entities reported to be turned off", len(result))
 
 
 @cli.command('on')
@@ -180,9 +180,9 @@ def on_cmd(ctx: Configuration, entities):
     """Turn entity on."""
     for entity in entities:
         data = {'entity_id': entity}
-        _LOGGING.info("Toggling %s", entity)
+        ctx.echo("Toggling %s", entity)
         result = api.call_service(ctx, 'homeassistant', 'turn_on', data)
 
         if ctx.verbose:
-            _LOGGING.info(helper.format_output(ctx, result))
-        _LOGGING.info("%s entities reported to be turned on", len(result))
+            ctx.echo(helper.format_output(ctx, result))
+        ctx.echo("%s entities reported to be turned on", len(result))

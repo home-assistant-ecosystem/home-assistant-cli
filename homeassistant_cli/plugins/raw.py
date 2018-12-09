@@ -26,13 +26,13 @@ def get(ctx: Configuration, method):
 
     if response.text:
         try:
-            _LOGGING.info(
+            ctx.echo(
                 "%s: %s",
                 response.status_code,
                 format_output(ctx, response.json()),
             )
         except json_.decoder.JSONDecodeError:
-            _LOGGING.info("%s: %s", response.status_code, response.text)
+            ctx.echo("%s: %s", response.status_code, response.text)
     else:
         _LOGGING.warning(
             "%s: <No output returned from GET %s>",
@@ -58,13 +58,13 @@ def post(ctx: Configuration, method, json):
 
     if response.text:
         try:
-            _LOGGING.info(
+            ctx.echo(
                 "%s: %s",
                 response.status_code,
                 format_output(ctx, response.json()),
             )
         except json_.decoder.JSONDecodeError:
-            _LOGGING.info("%s: %s", response.status_code, response.text)
+            ctx.echo("%s: %s", response.status_code, response.text)
     else:
         _LOGGING.warning(
             "%s: <No output returned from POST %s>",

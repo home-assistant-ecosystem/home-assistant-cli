@@ -51,7 +51,7 @@ def list_cmd(ctx: Configuration, servicefilter):
                     domaindata["services"] = servicedata
                     result[domain_name] = domaindata
 
-    _LOGGING.info(format_output(ctx, result))
+    ctx.echo(format_output(ctx, result))
 
 
 @cli.command('call')
@@ -72,6 +72,6 @@ def call(ctx: Configuration, service, arguments):
 
     data = to_attributes(arguments)
 
-    _LOGGING.info(
+    ctx.echo(
         format_output(ctx, api.call_service(ctx, parts[0], parts[1], data))
     )

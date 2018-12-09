@@ -14,4 +14,4 @@ _LOGGING = logging.getLogger(__name__)
 @pass_context
 def cli(ctx: Configuration):
     """Get basic info from Home Assistant."""
-    _LOGGING.info(format_output(ctx, api.get_info(ctx)))
+    ctx.echo(format_output(ctx, api.get_info(ctx)))
