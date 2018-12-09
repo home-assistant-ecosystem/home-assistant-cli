@@ -151,5 +151,42 @@ def toggle(ctx: Configuration, entities):
         _LOGGING.info("Toggling %s", entity)
         result = api.call_service(ctx, 'homeassistant', 'toggle', data)
 
-        _LOGGING.debug(format_output(ctx, result))
+        if ctx.verbose:
+            _LOGGING.info(format_output(ctx, result))
+
         _LOGGING.info("%s entities reported to be toggled", len(result))
+
+
+@cli.command()
+@no_type_check
+@click.argument(
+    'entities', nargs=-1, required=True, autocompletion=autocompletion.entities
+)
+@pass_context
+def off(ctx: Configuration, entities):
+    """Turn entity off."""
+    for entity in entities:
+        data = {'entity_id': entity}
+        _LOGGING.info("Toggling %s", entity)
+        result = api.call_service(ctx, 'homeassistant', 'turn_off', data)
+        if ctx.verbose:
+            _LOGGING.info(format_output(ctx, result))
+        _LOGGING.info("%s entities reported to be turned off", len(result))
+
+
+@cli.command()
+@no_type_check
+@click.argument(
+    'entities', nargs=-1, required=True, autocompletion=autocompletion.entities
+)
+@pass_context
+def on(ctx: Configuration, entities):
+    """Turn entity on."""
+    for entity in entities:
+        data = {'entity_id': entity}
+        _LOGGING.info("Toggling %s", entity)
+        result = api.call_service(ctx, 'homeassistant', 'turn_on', data)
+
+        if ctx.verbose:
+            _LOGGING.info(format_output(ctx, result))
+        _LOGGING.info("%s entities reported to be turned on", len(result))
