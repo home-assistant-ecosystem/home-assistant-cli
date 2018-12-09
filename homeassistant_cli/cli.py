@@ -80,7 +80,7 @@ class HomeAssistantCli(click.MultiCommand):
 
     def get_command(
         self, ctx: Context, cmd_name: str
-    ) -> Union[Group, Command]:
+    ) -> Optional[Union[Group, Command]]:
         """Import the commands of the plugins."""
         try:
             mod = __import__(
