@@ -48,4 +48,4 @@ def fire(ctx: Configuration, event, json):
             click.echo("No edits/changes.")
             return
 
-    _LOGGING.info(raw_format_output(ctx.output, response.json()))
+    ctx.echo(raw_format_output(ctx.output, response.json()))
