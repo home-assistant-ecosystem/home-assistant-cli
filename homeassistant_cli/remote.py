@@ -295,7 +295,7 @@ def call_service(
     domain: str,
     service: str,
     service_data: Optional[Dict] = None,
-) -> Optional[Dict[str, Any]]:
+) -> Dict[str, Any]:
     """Call a service."""
     try:
         req = restapi(
@@ -304,10 +304,8 @@ def call_service(
             hass.URL_API_SERVICES_SERVICE.format(domain, service),
             service_data,
         )
-    except HomeAssistantCliError:
-        raise HomeAssistantCliError(
-            "Error calling service: {} - {}".format(req.status_code, req.text)
-        )
+    except HomeAssistantCliError as ex:
+        raise HomeAssistantCliError("Error calling service: {}".format(ex))
 
     if req.status_code != 200:
         raise HomeAssistantCliError(
@@ -315,3 +313,20 @@ def call_service(
         )
 
     return cast(Dict[str, Any], req.json())
+
+
+def get_services(ctx: Configuration,) -> Dict[str, Any]:
+    """Get list of services."""
+    try:
+        req = restapi(ctx, METH_GET, hass.URL_API_SERVICES)
+    except HomeAssistantCliError as ex:
+        raise HomeAssistantCliError(
+            "Unexpected error getting services: {}".format(ex)
+        )
+
+    if req.status_code == 200:
+        return cast(Dict[str, Any], req.json())
+
+    raise HomeAssistantCliError(
+        "Error while getting all services: {}".format(req.text)
+    )
