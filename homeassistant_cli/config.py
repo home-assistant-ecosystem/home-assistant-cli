@@ -18,6 +18,7 @@ class Configuration:
         self.insecure = False  # type: bool
         self.timeout = const.DEFAULT_TIMEOUT  # type: int
         self.debug = False  # type: bool
+        self.showexceptions = False  # type: bool
 
     def echo(self, msg: str, *args: Optional[Any]) -> None:
         """Put content message to stdout."""
