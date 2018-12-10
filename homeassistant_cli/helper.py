@@ -15,8 +15,11 @@ from tabulate import tabulate
 import yaml
 
 
-def to_attributes(entry: str) -> Dict[str, str]:
+def to_attributes(entry: str) -> Optional[Dict[str, str]]:
     """Convert list of key=value pairs to dictionary."""
+    if not entry:
+        return None
+
     lexer = shlex.shlex(entry, posix=True)
     lexer.whitespace_split = True
     lexer.whitespace = ','

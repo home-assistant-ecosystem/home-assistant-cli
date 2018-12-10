@@ -7,6 +7,11 @@ The Home Assistant Command-line interface (``hass-cli``) allows one to
 work with a local or a remote `Home Assistant <https://home-assistant.io>`_
 instance directly from the command-line.
 
+.. image:: https://asciinema.org/a/216235.png
+      :alt: hass-cli screencast
+      :target: https://asciinema.org/a/216235?autoplay=1&speed=1
+
+
 **Note**: This is still in alpha and under heavy development. Name and structure of
 commands are expected to still change.
 
@@ -18,55 +23,99 @@ Installation
     $ pip install homeassistant-cli
 
 
+To get started you'll need to have or generate a long lasting token format
+on your Home Assistant profile page (i.e. https://localhost:8123/profile).
+
+Then you can use ``--server`` and ``--token`` paremeter on each call,
+or as is recommended setup ``HASS_SERVER`` and ``HASS_TOKEN`` environment variables.
+
+.. code:: bash
+
+    $ export HASS_SERVER=https://hassio.local:8123
+    $ export HASS_TOKEN=<secret>
+
+Once that is enabled and you are using either ``zsh`` or ``bash`` run
+the folowing to enable autocompletion for hass-cli commands.
+
+.. code:: bash
+
+  $  source <(hass-cli completion zsh)
+
+
 Usage
 =====
+
+Note: Below is listed **some** of the features, make sure to use `--help` and autocompletion to learn
+more of the features as they become available.
+
+By default (for now) most commands returns "raw" version of what the Home Assistant API returns.
+For example to get basic info about your Home Assistant server you use ``info``:
+
+.. code:: bash
+
+   $ hass-cli info
+    {
+      "base_url": "http://hassio.local:8123",
+      "location_name": "Fortress of Solitude",
+      "requires_api_password": false,
+      "version": "0.82.1"
+    }
+
+If you prefer yaml you can use `--output=yaml`:
+
+.. code:: bash
+
+    $ hass-cli --output yaml info
+      base_url: https://hassio.local:8123
+      location_name: Wayne Manor
+      requires_api_password: false
+      version: 0.82.1
+
+Listing entities has support for tables:
+
+.. code:: bash
+
+    $ hass-cli --output=table entity list                                                                                                                                            ✘ 2 dev ✭ ✱
+    ENTITY                                                     DESCRIPTION                                     STATE
+    ---------------------------------------------------------  ----------------------------------------------  ---------------------
+    zone.school                                                School                                          zoning
+    zone.home                                                  Andersens                                       zoning
+    sun.sun                                                    Sun                                             below_horizon
+    camera.babymonitor                                         babymonitor                                     idle
+    timer.timer_office_lights                                                                                  idle
+    timer.timer_small_bathroom                                                                                 idle
+    group.kitchen_lights                                       Kitchen Lights                                  off
+    binary_sensor.presence_basement_combined                   Basement Motion Anywhere                        off
+    sensor.yr_symbol                                           yr Symbol                                       4
+    group.basement_lights                                      Basement Lights                                 unknown
+    sensor.packages_delivered                                  Packages Delivered                              1
+    sensor.packages_in_transit                                 Packages In Transit                             1
+    sensor.ring_front_door_last_ding                           Front Door Last Ding                            14:08
+    sensor.ring_front_door_battery                             Front Door Battery                              52
+    ...
+
 
 Get state of a entity:
 
 .. code:: bash
 
-    $ hass-cli get state sensor
-    hass-cli  get state light.guestroom_light                                                                                                                                                                       ◼
-    {
-      "attributes": {
-        "friendly_name": "Guestroom Light",
-        "is_deconz_group": false,
-        "supported_features": 61
-      },
-      "context": {
-      "id": "e257a0f15fe74579b4a693de65ed618b",
-      "user_id": "4c7c32b2934f4deeb346bf8017e2bf28"
-      },
-    "entity_id": "light.guestroom_light",
-    "last_changed": "2018-11-18T21:48:20.279802+00:00",
-    "last_updated": "2018-11-18T21:48:20.279802+00:00",
-    "state": "off"
-    }
-
-
-If you prefer yaml you can do:
-
-.. code:: bash
-
-  $ hass-cli -o yaml get state light.guestroom_light
-  attributes:
-    friendly_name: Guestroom Light
-    is_deconz_group: false
-    supported_features: 61
-  context:
-    id: e257a0f15fe74579b4a693de65ed618b
-    user_id: 4c7c32b2934f4deeb346bf8017e2bf28
-  entity_id: light.guestroom_light
-  last_changed: '2018-11-18T21:48:20.279802+00:00'
-  last_updated: '2018-11-18T21:48:20.279802+00:00'
-  state: 'off'
-..
+    $ hass-cli --output yaml entity get light.guestroom_light                                                                                                                                                                       ◼
+    attributes:
+      friendly_name: Guestroom Light
+      supported_features: 61
+    context:
+      id: 84d52fe306ec4895948b546b492702a4
+      user_id: null
+    entity_id: light.guestroom_light
+    last_changed: '2018-12-10T18:33:51.883238+00:00'
+    last_updated: '2018-12-10T18:33:51.883238+00:00'
+    state: 'off'
 
 You can edit state via an editor:
 
 .. code:: bash
 
-    $ hass-cli edit state light.guestroom_light
+    $ hass-cli entity edit light.guestroom_light
 ..
 
 This will open the current state in your favorite editor and any changes you save will
@@ -76,11 +125,61 @@ You can also explicitly create/edit via the `--json` flag:
 
 .. code:: bash
 
-  $ hass-cli edit state sensor.test --json='{ "state":"off"}'
+  $ hass-cli entity edit sensor.test --json='{ "state":"off"}'
 ..
+
+List posible service with or without a regular expression filter:
+
+.. code:: bash
+
+    hass-cli --output=yaml service list 'home.*toggle'                                                                                                                             ✘ 1 dev ✭ ✱
+    homeassistant:
+      services:
+        toggle:
+          description: Generic service to toggle devices on/off under any domain. Same
+            usage as the light.turn_on, switch.turn_on, etc. services.
+          fields:
+            entity_id:
+              description: The entity_id of the device to toggle on/off.
+              example: light.living_room
+
+
+.. code:: bash
+
+    $ hass-cli service call deconz.device_refresh
+
+With arguments:
+
+.. code:: bash
+
+    $ hass-cli service call homeassistant.toggle --arguments entity_id=light.office_light
+
+
+Open a map for your Home Assistant location:
+
+.. code:: bash
+
+    $ hass-cli map
+
+Render templates server side:
+
+.. code:: bash
+
+    $ hass-cli template motionlight.yaml.j2 motiondata.yaml
+
+Render templates client side:
+
+.. code:: bash
+
+    $ hass-cli template --local lovelace-template.yaml
+
 
 Auto-completion
 ###############
+
+As described above you can use ``source <(hass-cli completion zsh)`` to
+quickly and easy enable auto completion. If you do it from your ``.bashrc`` or ``.zshrc``
+its recommend to use the form below as that does not trigger a run of `hass-cli` itself.
 
 For zsh:
 
@@ -96,11 +195,11 @@ For bash:
   eval "$(_FOO_BAR_COMPLETE=source foo-bar)"
 ..
 
-Once enable there is autocompletion for commands and for certain attributes like entities:
+Once enabled there is autocompletion for commands and for certain attributes like entities:
 
 .. code:: bash
 
-  $ hass-cli get state light.<TAB>                                                                                                                                                                    ⏎ ✱ ◼
+  $ hass-cli entity get light.<TAB>                                                                                                                                                                    ⏎ ✱ ◼
   light.kitchen_light_5          light.office_light             light.basement_light_4         light.basement_light_9         light.dinner_table_light_4     light.winter_garden_light_2    light.kitchen_light_2
   light.kitchen_table_light_1    light.hallroom_light_2         light.basement_light_5         light.basement_light_10        light.dinner_table_wall_light  light.winter_garden_light_4    light.kitchen_table_light_2
   light.kitchen_light_1          light.hallroom_light_1         light.basement_light_6         light.small_bathroom_light     light.dinner_table_light_5     light.winter_garden_light_3    light.kitchen_light_4
@@ -120,7 +219,7 @@ is secured and not running on localhost:8123:
 
 ..
 
-help
+Help
 ####
 
 .. code:: bash
@@ -130,30 +229,35 @@ help
   Command line interface for Home Assistant.
 
   Options:
-    -l, --loglevel LVL        Either CRITICAL, ERROR, WARNING, INFO or DEBUG
-    --version                 Show the version and exit.
-    -s, --server TEXT         The server URL of Home Assistant instance.
-    --token TEXT              The Bearer token for Home Assistant instance.
-    --timeout INTEGER         Timeout for network operations.  [default: 5]
-    -o, --output [json|yaml]  Output format  [default: json]
-    -v, --verbose             Enables verbose mode.
-    --insecure                Ignore SSL Certificates. Allow to connect to
-                              servers with self-signed certificates. Be careful!
-    --debug                   Enables debug mode.
-    --version                 Show the version and exit.
-    --help                    Show this message and exit.
+    -l, --loglevel LVL              Either CRITICAL, ERROR, WARNING, INFO or
+                                    DEBUG
+    --version                       Show the version and exit.
+    -s, --server TEXT               The server URL of Home Assistant instance.
+    --token TEXT                    The Bearer token for Home Assistant
+                                    instance.
+    --timeout INTEGER               Timeout for network operations.  [default:
+                                    5]
+    -o, --output [json|yaml|table]  Output format  [default: json]
+    -v, --verbose                   Enables verbose mode.
+    -x                              Print backtraces when exception occurs.
+    --insecure                      Ignore SSL Certificates. Allow to connect to
+                                    servers with self-signed certificates. Be
+                                    careful!
+    --debug                         Enables debug mode.
+    --version                       Show the version and exit.
+    --help                          Show this message and exit.
 
   Commands:
     completion  Output shell completion code for the specified shell (bash or...
     config      Get configuration from Home Assistant.
-    delete      Delete entities.
     discover    Discovery for the local network.
-    edit        Edit entities.
-    get         List info from Home Assistant.
+    entity      Get info and operate on entities from Home Assistant.
+    event       Interact with events.
     info        Get basic info from Home Assistant.
     map         Print the current location on a map.
     raw         Call the raw API (advanced).
-    toggle      Toggle data from Home Assistant.
+    service     Call and work with services.
+    template    Render templates on server or locally.
 
 
 Clone the git repository and
