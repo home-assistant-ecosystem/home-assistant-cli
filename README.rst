@@ -7,7 +7,19 @@ The Home Assistant Command-line interface (``hass-cli``) allows one to
 work with a local or a remote `Home Assistant <https://home-assistant.io>`_
 instance directly from the command-line.
 
-Examples:
+**Note**: This is still in alpha and under heavy development. Name and structure of
+commands are expected to still change.
+
+Installation
+============
+
+.. code:: bash
+
+    $ pip install homeassistant-cli
+
+
+Usage
+=====
 
 Get state of a entity:
 
