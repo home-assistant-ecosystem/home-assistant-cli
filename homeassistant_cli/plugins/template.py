@@ -47,7 +47,6 @@ def cli(ctx: Configuration, template, datafile, local: bool) -> None:
     TEMPLATE - jinja2 template file
     DATAFILE - yaml file with variables to pass to rendering
     """
-    print(type(template))
     variables = {}  # type: Dict[str, Any]
     if datafile:
         variables = yaml.load(datafile)
