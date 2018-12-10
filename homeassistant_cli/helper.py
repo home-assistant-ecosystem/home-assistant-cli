@@ -4,12 +4,14 @@ from http.client import HTTPConnection
 import json
 import logging
 import shlex
-from typing import Any, Dict, Generator, cast
+from typing import Any, Dict, Generator, List, Optional, cast
 
 import click
 from homeassistant_cli.config import Configuration
+import homeassistant_cli.const as const
 import requests
 from requests.models import Response
+from tabulate import tabulate
 import yaml
 
 
@@ -25,7 +27,9 @@ def to_attributes(entry: str) -> Dict[str, str]:
     return attributes_dict
 
 
-def raw_format_output(output: str, data: Dict[str, Any]) -> str:
+def raw_format_output(
+    output: str, data: Dict[str, Any], columns: Optional[List] = None
+) -> str:
     """Format the raw output."""
     if output == 'json':
         try:
@@ -37,7 +41,23 @@ def raw_format_output(output: str, data: Dict[str, Any]) -> str:
             return cast(str, yaml.safe_dump(data, default_flow_style=False))
         except ValueError:
             return str(data)
-    # todo fix this so gets a jsonpath list to transpose data
+    elif output == 'table':
+        from jsonpath_rw import parse
+
+        if not columns:
+            columns = const.COLUMNS_DEFAULT
+
+        fmt = [(v[0], parse(v[1])) for v in columns]
+        result = []
+        headers = [v[0] for v in fmt]
+        for item in data:
+            row = []
+            for fmtpair in fmt:
+                val = [match.value for match in fmtpair[1].find(item)]
+                row.append(", ".join(map(str, val)))
+
+            result.append(row)
+        return cast(str, tabulate(result, headers=headers))
     else:
         raise ValueError(
             "Output Format was {}, expected either 'json' or 'yaml'".format(
@@ -46,9 +66,11 @@ def raw_format_output(output: str, data: Dict[str, Any]) -> str:
         )
 
 
-def format_output(ctx: Configuration, data: Dict[str, Any]) -> str:
+def format_output(
+    ctx: Configuration, data: Dict[str, Any], columns: Optional[List] = None
+) -> str:
     """Format dict to defined output."""
-    return raw_format_output(ctx.output, data)
+    return raw_format_output(ctx.output, data, columns)
 
 
 def req_raw(
