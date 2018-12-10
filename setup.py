@@ -42,6 +42,7 @@ REQUIRES = [
     'homeassistant',
     'tabulate==0.8.2',
     'idna==2.5',
+    'jsonpath-rw==1.4.0',
 ]
 
 # should be as close to homeassistant dev/master as possible

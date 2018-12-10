@@ -20,7 +20,7 @@ class Configuration:
         self.debug = False  # type: bool
 
     def echo(self, msg: str, *args: Optional[Any]) -> None:
-        """Main content message to stdout."""
+        """Put content message to stdout."""
         self.log(msg, *args)
 
     def log(  # pylint: disable=no-self-use

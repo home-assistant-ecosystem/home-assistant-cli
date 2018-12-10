@@ -8,6 +8,7 @@ import click
 import homeassistant_cli.autocompletion as autocompletion
 from homeassistant_cli.cli import pass_context
 from homeassistant_cli.config import Configuration
+import homeassistant_cli.const as const
 import homeassistant_cli.helper as helper
 import homeassistant_cli.remote as api
 import yaml
@@ -52,7 +53,11 @@ def delete(ctx: Configuration, entity):
 @pass_context
 def listcmd(ctx):
     """List all state from Home Assistant."""
-    ctx.echo(helper.format_output(ctx, api.get_states(ctx)))
+    ctx.echo(
+        helper.format_output(
+            ctx, api.get_states(ctx), columns=const.COLUMNS_ENTITIES
+        )
+    )
 
 
 @cli.command()
@@ -134,6 +139,12 @@ def edit(ctx: Configuration, entity, newstate, attributes, merge, json):
     _LOGGING.debug("Updated to: %s", result)
 
 
+def _report(ctx, result, action):
+    ctx.echo(helper.format_output(ctx, result, columns=const.COLUMNS_ENTITIES))
+    if ctx.verbose:
+        ctx.echo("%s entities reported to be %s", len(result), action)
+
+
 @cli.command()
 @no_type_check
 @click.argument(
@@ -144,16 +155,13 @@ def toggle(ctx: Configuration, entities):
     """Toggle state for one or more entities in Home Assistant."""
     for entity in entities:
         data = {'entity_id': entity}
-        ctx.echo("Toggling %s", entity)
+        _LOGGING.debug("Toggling %s", entity)
         result = api.call_service(ctx, 'homeassistant', 'toggle', data)
 
-        if ctx.verbose:
-            ctx.echo(helper.format_output(ctx, result))
-
-        ctx.echo("%s entities reported to be toggled", len(result))
+        _report(ctx, result, "toggled")
 
 
-@cli.command('off')
+@cli.command('turn_off')
 @no_type_check
 @click.argument(
     'entities', nargs=-1, required=True, autocompletion=autocompletion.entities
@@ -163,14 +171,13 @@ def off_cmd(ctx: Configuration, entities):
     """Turn entity off."""
     for entity in entities:
         data = {'entity_id': entity}
-        ctx.echo("Toggling %s", entity)
+        _LOGGING.debug("Toggling %s", entity)
         result = api.call_service(ctx, 'homeassistant', 'turn_off', data)
-        if ctx.verbose:
-            ctx.echo(helper.format_output(ctx, result))
-        ctx.echo("%s entities reported to be turned off", len(result))
+
+        _report(ctx, result, "turned off")
 
 
-@cli.command('on')
+@cli.command('turn_on')
 @no_type_check
 @click.argument(
     'entities', nargs=-1, required=True, autocompletion=autocompletion.entities
@@ -180,9 +187,7 @@ def on_cmd(ctx: Configuration, entities):
     """Turn entity on."""
     for entity in entities:
         data = {'entity_id': entity}
-        ctx.echo("Toggling %s", entity)
+        _LOGGING.debug("Toggling %s", entity)
         result = api.call_service(ctx, 'homeassistant', 'turn_on', data)
 
-        if ctx.verbose:
-            ctx.echo(helper.format_output(ctx, result))
-        ctx.echo("%s entities reported to be turned on", len(result))
+        _report(ctx, result, "turned on")
