@@ -65,13 +65,18 @@ def list_cmd(ctx: Configuration, servicefilter):
 @pass_context
 def call(ctx: Configuration, service, arguments):
     """Call a service."""
+    _LOGGING.debug("service call <start>")
     parts = service.split(".")
     if len(parts) != 2:
         _LOGGING.error("Service name not following <domain>.<service> format.")
         sys.exit(1)
 
+    _LOGGING.debug("Convert arguments %s to dict", arguments)
     data = to_attributes(arguments)
 
-    ctx.echo(
-        format_output(ctx, api.call_service(ctx, parts[0], parts[1], data))
-    )
+    _LOGGING.debug("service call_service")
+
+    result = api.call_service(ctx, parts[0], parts[1], data)
+
+    _LOGGING.debug("Formatting ouput")
+    ctx.echo(format_output(ctx, result))
