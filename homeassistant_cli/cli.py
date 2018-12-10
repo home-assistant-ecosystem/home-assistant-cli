@@ -29,7 +29,7 @@ def run() -> None:
     over exception handling in Click.
     """
     # a hack to see if exception details should be printed.
-    exceptionflags = ['-v', '--verbose']
+    exceptionflags = ['-x']
     verbose = [c for c in exceptionflags if c in sys.argv]
 
     try:
@@ -118,8 +118,8 @@ def _default_token() -> Optional[str]:
 )
 @click.option(
     '--token',
-    default=_default_token,  # type: ignore
-    help='The Bearer token for Home Assistant instance.',
+    default=_default_token,
+    help='The Bearer token for Home Assistant instance.',  # type: ignore
     envvar='HASS_TOKEN',
 )
 @click.option(
@@ -136,7 +136,20 @@ def _default_token() -> Optional[str]:
     default='json',
     show_default=True,
 )
-@click.option('-v', '--verbose', is_flag=True, help='Enables verbose mode.')
+@click.option(
+    '-v',
+    '--verbose',
+    is_flag=True,
+    default=False,
+    help='Enables verbose mode.',
+)
+@click.option(
+    '-x',
+    'showexceptions',
+    default=False,
+    is_flag=True,
+    help="Print backtraces when exception occurs.",
+)
 @click.option(
     '--insecure',
     is_flag=True,
@@ -162,6 +175,7 @@ def cli(
     timeout: int,
     debug: bool,
     insecure: bool,
+    showexceptions: bool,
 ):
     """Command line interface for Home Assistant."""
     ctx.verbose = verbose
@@ -171,6 +185,7 @@ def cli(
     ctx.output = output
     ctx.debug = debug
     ctx.insecure = insecure
+    ctx.showexceptions = showexceptions
 
     _LOGGER.debug("Using settings: %s", ctx)
 
