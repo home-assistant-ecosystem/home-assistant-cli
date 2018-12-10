@@ -132,7 +132,7 @@ def _default_token() -> Optional[str]:
     '--output',
     '-o',
     help="Output format",
-    type=click.Choice(['json', 'yaml']),
+    type=click.Choice(['json', 'yaml', 'table']),
     default='json',
     show_default=True,
 )
