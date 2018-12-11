@@ -80,3 +80,14 @@ ctags.tmp
 virtualization/vagrant/setup_done
 virtualization/vagrant/.vagrant
 virtualization/vagrant/config
+
+# pytest
+.pytest_cache
+
+# share/man ignore
+share
+
+# ignored to make check_dirty not fail
+travis_wait*
+.mypy_cache
+

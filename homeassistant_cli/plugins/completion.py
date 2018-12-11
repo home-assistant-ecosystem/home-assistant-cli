@@ -11,7 +11,7 @@ def cli(ctx):
     """Output shell completion code for the specified shell (bash or zsh)."""
 
 
-def dump_script(shell):
+def dump_script(shell: str) -> None:
     """Dump the script content."""
     # todo resolve actual script name in case user aliased it
     prog_name = "hass-cli"
