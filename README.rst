@@ -297,6 +297,6 @@ after this you should be able to edit the source code and running `hass-cli` dir
 .. |License| image:: https://img.shields.io/badge/License-Apache%202.0-blue.svg
    :target: https://github.com/home-assistant/home-assistant-cli/blob/master/LICENSE
    :alt: License
-.. |PyPI| image:: https://img.shields.io/pypi/v/home-assistant-cli.svg
+.. |PyPI| image:: https://img.shields.io/pypi/v/homeassistant_cli.svg
    :target: https://pypi.org/project/homeassistant_cli/
    :alt: PyPI release
