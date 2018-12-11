@@ -36,13 +36,14 @@ PACKAGES = find_packages(exclude=['tests', 'tests.*'])
 
 REQUIRES = [
     'requests==2.20.1',
+    'pyyaml>=3.13,<4',
     'netdisco==2.2.0',
     'click==7.0',
     'click-log==0.3.2',
-    'homeassistant',
     'tabulate==0.8.2',
     'idna==2.5',
     'jsonpath-rw==1.4.0',
+    'jinja2>=2.10',
 ]
 
 # should be as close to homeassistant dev/master as possible
