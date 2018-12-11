@@ -15,9 +15,8 @@ import urllib.parse
 from aiohttp.hdrs import CONTENT_TYPE, METH_DELETE, METH_GET, METH_POST
 from homeassistant_cli.config import Configuration
 from homeassistant_cli.exceptions import HomeAssistantCliError
+import homeassistant_cli.hassconst as hass
 import requests
-
-import homeassistant.const as hass
 
 _LOGGER = logging.getLogger(__name__)
 
