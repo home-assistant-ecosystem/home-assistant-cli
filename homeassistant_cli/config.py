@@ -19,6 +19,7 @@ class Configuration:
         self.timeout = const.DEFAULT_TIMEOUT  # type: int
         self.debug = False  # type: bool
         self.showexceptions = False  # type: bool
+        self.session = None  # type: Requests.Session
 
     def echo(self, msg: str, *args: Optional[Any]) -> None:
         """Put content message to stdout."""
