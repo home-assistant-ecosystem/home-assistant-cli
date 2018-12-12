@@ -4,6 +4,7 @@ from typing import Any, Optional
 
 import click
 import homeassistant_cli.const as const
+from requests import Session  # noqa: ignore
 
 
 class Configuration:
@@ -19,7 +20,8 @@ class Configuration:
         self.timeout = const.DEFAULT_TIMEOUT  # type: int
         self.debug = False  # type: bool
         self.showexceptions = False  # type: bool
-        self.session = None  # type: Requests.Session
+        self.session = None  # type: Optional[Session]
+        self.cert = None  # type: Optional[str]
 
     def echo(self, msg: str, *args: Optional[Any]) -> None:
         """Put content message to stdout."""
