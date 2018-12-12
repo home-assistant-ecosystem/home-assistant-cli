@@ -54,6 +54,22 @@ def test_info_json() -> None:
         assert VALID_INFO == json.loads(result.output)
 
 
+def test_info_unauth() -> None:
+    """Test info reads properly with json."""
+    with requests_mock.Mocker() as mock:
+        mock.get(
+            'http://localhost:8123/api/discovery_info',
+            json={},
+            status_code=401,
+        )
+
+        runner = CliRunner()
+        result = runner.invoke(
+            cli.cli, ['--output=json', 'info'], catch_exceptions=True
+        )
+        assert result.exit_code != 0
+
+
 def test_info_yaml() -> None:
     """Test info reads properly with yaml."""
     with requests_mock.Mocker() as mock:
