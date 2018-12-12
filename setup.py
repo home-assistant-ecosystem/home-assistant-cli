@@ -55,7 +55,6 @@ TESTS_REQUIRE = [
     'mypy==0.650',
     'pydocstyle==2.1.1',
     'pylint==2.1.1',
-    'pytest-aiohttp==0.3.0',
     'pytest-cov==2.6.0',
     'pytest-sugar==0.9.2',
     'pytest-timeout==1.3.2',
