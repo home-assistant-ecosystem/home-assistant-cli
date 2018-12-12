@@ -48,30 +48,24 @@ def restapi(
     else:
         data_str = json.dumps(data, cls=JSONEncoder)
 
-    headers = {CONTENT_TYPE: hass.CONTENT_TYPE_JSON}  # type: Dict[str, Any]
-    if ctx.token is not None:
-        headers["Authorization"] = "Bearer {}".format(ctx.token)
+    if not ctx.session:
+        ctx.session = requests.Session()
+        headers = {
+            CONTENT_TYPE: hass.CONTENT_TYPE_JSON
+        }  # type: Dict[str, Any]
+
+        if ctx.token is not None:
+            headers["Authorization"] = "Bearer {}".format(ctx.token)
+        ctx.session.headers.update(headers)
+        ctx.session.verify = not ctx.insecure
 
     url = urllib.parse.urljoin(ctx.server, path)
 
     try:
         if method == METH_GET:
-            return requests.get(
-                url,
-                params=data_str,
-                timeout=ctx.timeout,
-                headers=headers,
-                verify=not ctx.insecure,
-            )
+            return requests.get(url, params=data_str)
 
-        return requests.request(
-            method,
-            url,
-            data=data_str,
-            timeout=ctx.timeout,
-            headers=headers,
-            verify=not ctx.insecure,
-        )
+        return requests.request(method, url, data=data_str)
 
     except requests.exceptions.ConnectionError:
         raise HomeAssistantCliError("Error connecting to {}".format(url))
