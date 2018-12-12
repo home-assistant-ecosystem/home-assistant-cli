@@ -12,13 +12,18 @@ import logging
 from typing import Any, Dict, Optional, cast
 import urllib.parse
 
-from aiohttp.hdrs import CONTENT_TYPE, METH_DELETE, METH_GET, METH_POST
 from homeassistant_cli.config import Configuration
 from homeassistant_cli.exceptions import HomeAssistantCliError
 import homeassistant_cli.hassconst as hass
 import requests
 
 _LOGGER = logging.getLogger(__name__)
+
+# copied from aiohttp.hdrs
+CONTENT_TYPE = 'Content-Type'
+METH_DELETE = 'DELETE'
+METH_GET = 'GET'
+METH_POST = 'POST'
 
 
 class APIStatus(enum.Enum):
