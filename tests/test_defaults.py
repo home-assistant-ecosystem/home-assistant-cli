@@ -5,6 +5,7 @@ from unittest import mock
 
 import homeassistant_cli.cli as cli
 import pytest
+import requests_mock
 
 HASSIO_SERVER_FALLBACK = "http://hassio/homeassistant"
 HASS_SERVER = "http://localhost:8123"
@@ -49,16 +50,31 @@ def test_defaults(
 
     try:
         mockenv.start()
-        ctx = cli.cli.make_context('hass-cli', ['--timeout', '1', 'info'])
-        with ctx:
-            try:
+        with requests_mock.mock() as mockhttp:
+            expserver = "{}/api/discovery_info".format(expected_server)
+            mockhttp.get(
+                expserver, json={"name": "mock response"}, status_code=200
+            )
+            ctx = cli.cli.make_context('hass-cli', ['--timeout', '1', 'info'])
+            with ctx:
                 cli.cli.invoke(ctx)
-            except Exception:  # pylint: disable=broad-except
-                pass
 
-        cfg = ctx.obj
+            cfg = ctx.obj
 
-        assert cfg.server == expected_server
-        assert cfg.token == expected_token
+            assert cfg.server == expected_server
+            assert cfg.token == expected_token
+
+            assert mockhttp.call_count == 1
+
+            assert mockhttp.request_history[0].url.startswith(expected_server)
+
+            if expected_token:
+                auth = mockhttp.request_history[0].headers["Authorization"]
+                assert auth == "Bearer " + expected_token
+            else:
+                assert (
+                    "Authorization" not in mockhttp.request_history[0].headers
+                )
+
     finally:
         mockenv.stop()

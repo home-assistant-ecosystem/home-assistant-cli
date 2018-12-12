@@ -50,13 +50,6 @@ def restapi(
 
     if not ctx.session:
         ctx.session = requests.Session()
-        headers = {
-            CONTENT_TYPE: hass.CONTENT_TYPE_JSON
-        }  # type: Dict[str, Any]
-
-        if ctx.token is not None:
-            headers["Authorization"] = "Bearer {}".format(ctx.token)
-        ctx.session.headers.update(headers)
         ctx.session.verify = not ctx.insecure
         if ctx.cert:
             ctx.session.cert = ctx.cert
@@ -67,13 +60,18 @@ def restapi(
             ctx.session.cert,
         )
 
-    url = urllib.parse.urljoin(ctx.server, path)
+    headers = {CONTENT_TYPE: hass.CONTENT_TYPE_JSON}  # type: Dict[str, Any]
+
+    if ctx.token:
+        headers["Authorization"] = "Bearer {}".format(ctx.token)
+
+    url = urllib.parse.urljoin(ctx.server + path, "")
 
     try:
         if method == METH_GET:
-            return requests.get(url, params=data_str)
+            return requests.get(url, params=data_str, headers=headers)
 
-        return requests.request(method, url, data=data_str)
+        return requests.request(method, url, data=data_str, headers=headers)
 
     except requests.exceptions.ConnectionError:
         raise HomeAssistantCliError("Error connecting to {}".format(url))
@@ -124,6 +122,8 @@ def get_info(ctx: Configuration) -> Dict[str, Any]:
     """Get basic info about the Homeassistant instance."""
     try:
         req = restapi(ctx, METH_GET, hass.URL_API_DISCOVERY_INFO)
+
+        req.raise_for_status()
 
         return (
             cast(Dict[str, Any], req.json()) if req.status_code == 200 else {}
