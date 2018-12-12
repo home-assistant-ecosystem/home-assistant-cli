@@ -83,7 +83,6 @@ def state(ctx: Configuration, entity, newstate, attributes, merge, json):
                 raise ValueError("No new or existing state provided.")
             wanted_state['state'] = existing_state['state']
 
-        print("wanted:", str(wanted_state))
         newjson = raw_format_output('json', wanted_state)
 
         response = req_raw(ctx, 'post', 'states/{}'.format(entity), newjson)
