@@ -1,4 +1,4 @@
 include README.rst
-include LICENSE
+include LICENSE.md
 graft homeassistant_cli
 recursive-exclude * *.py[co]
