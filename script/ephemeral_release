@@ -1,0 +1,15 @@
+#!/bin/sh
+# Builds distribution and pushes to transfer.sh
+# resulting in a ephemaral build
+
+
+cd "$(dirname "$0")/.."
+
+rm -rf dist
+python3 setup.py sdist bdist_wheel
+
+MARKER=${1:-LATEST}
+
+set -x
+ls dist/*.tar.gz | sed -e "s|\(\(.*\).tar.gz\)|curl --uploadfile \1 https://transfer.sh/\2-$MARKER.tar.gz|g"
+set +x

@@ -3,6 +3,22 @@ addons:
   apt:
     packages:
       - libudev-dev
+
+python:
+  - "3.5.3"
+  - "3.6"
+  - "3.7"
+  - "3.8-dev"
+
+env:
+  - TOXENV=lint
+  - TOXENV=pylint
+  - TOXENV=typing
+  - TOXENV=cov
+  - TOXENV=py36
+  - TOXENV=py37
+  - TOXENV=py38
+
 matrix:
   fast_finish: true
   include:
@@ -34,5 +50,15 @@ cache:
     - $HOME/.cache/pip
 install: pip install -U tox coveralls
 language: python
-script: travis_wait 30 tox --develop
+stages:
+    - test
+    - name: transferupload
+      if: env(TOXENV) = py37 AND type IN (push, pull_request)
+jobs:
+  include:
+    - stage: test
+      script: travis_wait 30 tox --develop
+    - stage: transferupload
+      script: script/ephemeral_release
+
 
