@@ -2,7 +2,7 @@
 import logging
 import os
 import sys
-from typing import List, Optional, Union, cast
+from typing import List, Optional, Union, cast, no_type_check
 
 import click
 from click.core import Command, Context, Group
@@ -106,6 +106,7 @@ def _default_token() -> Optional[str]:
     return os.environ.get('HASS_TOKEN', os.environ.get('HASSIO_TOKEN', None))
 
 
+@no_type_check
 @click.command(cls=HomeAssistantCli, context_settings=CONTEXT_SETTINGS)
 @click_log.simple_verbosity_option(logging.getLogger(), "--loglevel", "-l")
 @click.version_option(const.__version__)
@@ -119,7 +120,7 @@ def _default_token() -> Optional[str]:
 @click.option(
     '--token',
     default=_default_token,
-    help='The Bearer token for Home Assistant instance.',  # type: ignore
+    help='The Bearer token for Home Assistant instance.',
     envvar='HASS_TOKEN',
 )
 @click.option(
@@ -151,6 +152,12 @@ def _default_token() -> Optional[str]:
     help="Print backtraces when exception occurs.",
 )
 @click.option(
+    '--cert',
+    default=None,
+    envvar="HASS_CERT",
+    help=('Path to client certificate file (.pem) to use when connecting.'),
+)
+@click.option(
     '--insecure',
     is_flag=True,
     default=False,
@@ -176,6 +183,7 @@ def cli(
     debug: bool,
     insecure: bool,
     showexceptions: bool,
+    cert: str,
 ):
     """Command line interface for Home Assistant."""
     ctx.verbose = verbose
@@ -186,6 +194,7 @@ def cli(
     ctx.debug = debug
     ctx.insecure = insecure
     ctx.showexceptions = showexceptions
+    ctx.cert = cert
 
     _LOGGER.debug("Using settings: %s", ctx)
 
