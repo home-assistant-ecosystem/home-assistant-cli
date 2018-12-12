@@ -58,6 +58,14 @@ def restapi(
             headers["Authorization"] = "Bearer {}".format(ctx.token)
         ctx.session.headers.update(headers)
         ctx.session.verify = not ctx.insecure
+        if ctx.cert:
+            ctx.session.cert = ctx.cert
+
+        _LOGGER.debug(
+            "Session: verify(%s), cert(%s)",
+            ctx.session.verify,
+            ctx.session.cert,
+        )
 
     url = urllib.parse.urljoin(ctx.server, path)
 
