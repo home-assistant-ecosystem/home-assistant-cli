@@ -1,0 +1,21 @@
+#!/bin/sh
+# Builds distribution and pushes to transfer.sh
+# resulting in a ephemaral build.
+# use for sharing intermediate results.
+#
+# run without argument uploads with
+# <distname>-<timestamp>-<username>
+# i.e. https://transfer.sh/155RJt/homeassistant-cli-0.3.0.dev0-20181213223955-max.tar.gz
+#
+# If pass an argument, i.e. ephemeral_release PR-24 you get
+# https://transfer.sh/155RJt/homeassistant-cli-0.3.0.dev0-PR-24.tar.gz
+
+
+cd "$(dirname "$0")/.."
+
+rm -rf dist
+python3 setup.py sdist bdist_wheel
+
+echo Uploading to transfer.sh...
+MARKER=${1:-`date +%Y%m%d%H%M%S`-$USER}
+ls dist/*.tar.gz | sed -e "s|\(dist/\(.*\).tar.gz\)|curl --upload-file \1 https://transfer.sh/\2-$MARKER.tar.gz|g" | xargs -L 1 -I'{}' bash -c "{}"
