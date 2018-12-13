@@ -1,6 +1,6 @@
 """Tests file for Home Assistant CLI (hass-cli)."""
 import homeassistant_cli.autocompletion as autocompletion
-from homeassistant_cli.config import Configuration
+import homeassistant_cli.cli as cli
 import requests_mock
 
 VALID_INFO = '''[{
@@ -63,7 +63,7 @@ def test_entity_completion() -> None:
             status_code=200,
         )
 
-        cfg = Configuration()
+        cfg = cli.cli.make_context('hass-cli', ['entity', 'get'])
 
         result = autocompletion.entities(cfg, "entity get", "")
         assert len(result) == 3

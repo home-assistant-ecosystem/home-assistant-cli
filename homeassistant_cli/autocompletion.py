@@ -27,6 +27,12 @@ def _init_ctx(ctx: Configuration) -> None:
     if not hasattr(ctx, 'insecure'):
         ctx.insecure = False
 
+    if not hasattr(ctx, 'session'):
+        ctx.session = None
+
+    if not hasattr(ctx, 'cert'):
+        ctx.cert = None
+
 
 def services(
     ctx: Configuration, args: str, incomplete: str
@@ -65,7 +71,7 @@ def entities(
     """Entities."""
     _init_ctx(ctx)
     try:
-        response = req(ctx, 'get', 'states')  # type: Dict[str, Any]
+        response = api.get_states(ctx)
     except HTTPError:
         response = {}
 
