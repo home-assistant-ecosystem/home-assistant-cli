@@ -124,6 +124,12 @@ def _default_token() -> Optional[str]:
     envvar='HASS_TOKEN',
 )
 @click.option(
+    '--password',
+    default=None,
+    help='The API password for Home Assistant instance.',
+    envvar='HASS_PASSWORD',
+)
+@click.option(
     '--timeout',
     help='Timeout for network operations.',
     default=const.DEFAULT_TIMEOUT,
@@ -178,6 +184,7 @@ def cli(
     verbose: bool,
     server: str,
     token: Optional[str],
+    password: Optional[str],
     output: str,
     timeout: int,
     debug: bool,
@@ -189,6 +196,7 @@ def cli(
     ctx.verbose = verbose
     ctx.server = server
     ctx.token = token
+    ctx.password = password
     ctx.timeout = timeout
     ctx.output = output
     ctx.debug = debug

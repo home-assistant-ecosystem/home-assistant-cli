@@ -64,6 +64,8 @@ def restapi(
 
     if ctx.token:
         headers["Authorization"] = "Bearer {}".format(ctx.token)
+    if ctx.password:
+        headers["x-ha-access"] = ctx.password
 
     url = urllib.parse.urljoin(ctx.server + path, "")
 
