@@ -16,6 +16,7 @@ class Configuration:
         self.server = const.DEFAULT_SERVER  # type: str
         self.output = const.DEFAULT_OUTPUT  # type: str
         self.token = None  # type: Optional[str]
+        self.password = None  # type: Optional[str]
         self.insecure = False  # type: bool
         self.timeout = const.DEFAULT_TIMEOUT  # type: int
         self.debug = False  # type: bool
@@ -45,6 +46,7 @@ class Configuration:
         view = {
             "server": self.server,
             "access-token": 'yes' if self.token is not None else 'no',
+            "api-password": 'yes' if self.password is not None else 'no',
             "insecure": self.insecure,
             "output": self.output,
             "verbose": self.verbose,

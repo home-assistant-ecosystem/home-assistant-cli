@@ -13,14 +13,15 @@ HASS_SERVER = "http://localhost:8123"
 
 @no_type_check
 @pytest.mark.parametrize(
-    "description,env,expected_server,expected_token",
+    "description,env,expected_server,expected_token,expected_password",
     [
-        ("No env set, all should be defaults", {}, HASS_SERVER, None),
+        ("No env set, all should be defaults", {}, HASS_SERVER, None, None),
         (
             "If only HASSIO_TOKEN, use default hassio",
             {'HASSIO_TOKEN': 'supersecret'},
             HASSIO_SERVER_FALLBACK,
             "supersecret",
+            None,
         ),
         (
             "Honor HASS_SERVER together with HASSIO_TOKEN",
@@ -30,13 +31,22 @@ HASS_SERVER = "http://localhost:8123"
             },
             "http://localhost:999999",
             "supersecret",
+            None,
         ),
         (
             "HASS_TOKEN should win over HASIO_TOKEN",
             {'HASSIO_TOKEN': 'supersecret', 'HASS_TOKEN': 'I Win!'},
             HASS_SERVER,
             'I Win!',
+            None,
         ),
+        (
+            "HASS_PASSWORD should be honored",
+            {'HASS_PASSWORD': 'supersecret'},
+            HASS_SERVER,
+            None,
+            'supersecret',
+        )
     ],
 )
 def test_defaults(
@@ -44,8 +54,9 @@ def test_defaults(
     env: Dict[str, str],
     expected_server: str,
     expected_token: Optional[str],
+    expected_password: Optional[str],
 ) -> None:
-    """Test defaults applied correctly for server and token."""
+    """Test defaults applied correctly for server, token and password."""
     mockenv = mock.patch.dict(os.environ, env)
 
     try:
@@ -71,9 +82,15 @@ def test_defaults(
             if expected_token:
                 auth = mockhttp.request_history[0].headers["Authorization"]
                 assert auth == "Bearer " + expected_token
+            elif expected_password:
+                password = mockhttp.request_history[0].headers["x-ha-access"]
+                assert password == expected_password
             else:
                 assert (
                     "Authorization" not in mockhttp.request_history[0].headers
+                )
+                assert (
+                    "x-ha-access" not in mockhttp.request_history[0].headers
                 )
 
     finally:

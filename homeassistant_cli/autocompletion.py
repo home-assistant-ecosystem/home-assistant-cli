@@ -18,6 +18,9 @@ def _init_ctx(ctx: Configuration) -> None:
     if not hasattr(ctx, 'token'):
         ctx.token = os.environ.get('HASS_TOKEN', None)
 
+    if not hasattr(ctx, 'password'):
+        ctx.password = os.environ.get('HASS_PASSWORD', None)
+
     if not hasattr(ctx, 'timeout'):
         ctx.timeout = int(
             os.environ.get('HASS_TIMEOUT', str(const.DEFAULT_TIMEOUT))
