@@ -134,6 +134,48 @@ def get_info(ctx: Configuration) -> Dict[str, Any]:
         # ValueError if req.json() can't parse the json
 
 
+def get_events(ctx: Configuration) -> Dict[str, Any]:
+    """Return all events."""
+    try:
+        req = restapi(ctx, METH_GET, hass.URL_API_EVENTS)
+    except HomeAssistantCliError as ex:
+        raise HomeAssistantCliError(
+            "Unexpected error getting events: {}".format(ex)
+        )
+
+    if req.status_code == 200:
+        return cast(Dict[str, Any], req.json())
+
+    raise HomeAssistantCliError(
+        "Error while getting all events: {}".format(req.text)
+    )
+
+
+def get_history(
+    ctx: Configuration, entity: Optional[str] = None
+) -> Dict[str, Any]:
+    """Return History."""
+    try:
+        method = hass.URL_API_HISTORY
+        if entity:
+            method = "{}?filter_entity_id={}".format(
+                hass.URL_API_HISTORY, entity
+            )
+
+        req = restapi(ctx, METH_GET, method)
+    except HomeAssistantCliError as ex:
+        raise HomeAssistantCliError(
+            "Unexpected error getting history: {}".format(ex)
+        )
+
+    if req.status_code == 200:
+        return cast(Dict[str, Any], req.json())
+
+    raise HomeAssistantCliError(
+        "Error while getting all events: {}".format(req.text)
+    )
+
+
 def get_states(ctx: Configuration) -> Dict[str, Any]:
     """Return all states."""
     try:
@@ -149,6 +191,19 @@ def get_states(ctx: Configuration) -> Dict[str, Any]:
     raise HomeAssistantCliError(
         "Error while getting all states: {}".format(req.text)
     )
+
+
+def get_raw_error_log(ctx: Configuration) -> str:
+    """Return the error log."""
+    try:
+        req = restapi(ctx, METH_GET, hass.URL_API_ERROR_LOG)
+        req.raise_for_status()
+    except HomeAssistantCliError as ex:
+        raise HomeAssistantCliError(
+            "Unexpected error getting error log: {}".format(ex)
+        )
+
+    return req.text
 
 
 def get_config(ctx: Configuration) -> Dict[str, Any]:
