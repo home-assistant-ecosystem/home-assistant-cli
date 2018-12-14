@@ -201,18 +201,4 @@ def on_cmd(ctx: Configuration, entities):
 @pass_context
 def history(ctx: Configuration, entity: str):
     """List history from Home Assistant."""
-    if not entity:
-        click.echo(
-            helper.format_output(ctx, helper.req(ctx, 'get', 'history/period'))
-        )
-    else:
-        click.echo(
-            helper.format_output(
-                ctx,
-                helper.req(
-                    ctx,
-                    'get',
-                    'history/period?filter_entity_id={}'.format(entity),
-                ),
-            )
-        )
+    click.echo(helper.format_output(ctx, api.get_history(ctx, entity)))

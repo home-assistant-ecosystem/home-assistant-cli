@@ -8,7 +8,6 @@ import pytest
 DFEAULT_PLUGINS = [
     'completion',
     'config',
-    'delete',
     'discover',
     'entity',
     'event',

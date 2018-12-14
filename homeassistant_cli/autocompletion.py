@@ -4,7 +4,6 @@ from typing import Any, Dict, List, Tuple  # NOQA
 
 from homeassistant_cli import const
 from homeassistant_cli.config import Configuration
-from homeassistant_cli.helper import req
 import homeassistant_cli.remote as api
 from requests.exceptions import HTTPError
 
@@ -99,7 +98,7 @@ def events(
     """Events."""
     _init_ctx(ctx)
     try:
-        response = req(ctx, 'get', 'events')
+        response = api.get_events(ctx)
     except HTTPError:
         response = {}
 

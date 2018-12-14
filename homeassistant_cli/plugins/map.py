@@ -4,7 +4,7 @@ import webbrowser
 import click
 from homeassistant_cli.cli import pass_context
 from homeassistant_cli.config import Configuration
-from homeassistant_cli.helper import req
+import homeassistant_cli.remote as api
 
 OSM_URL = 'https://www.openstreetmap.org'
 ZOOM = 17
@@ -14,7 +14,7 @@ ZOOM = 17
 @pass_context
 def cli(ctx: Configuration) -> None:
     """Print the current location on a map."""
-    response = req(ctx, 'get', 'config')
+    response = api.get_config(ctx)
 
     if response:
         url = '{0}/?mlat={2}&mlon={3}#map={1}/{2}/{3}'.format(
