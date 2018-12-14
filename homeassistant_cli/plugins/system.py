@@ -3,7 +3,7 @@ import logging
 
 import click
 from homeassistant_cli.cli import pass_context
-from homeassistant_cli.helper import req_raw
+import homeassistant_cli.remote as api
 
 _LOGGING = logging.getLogger(__name__)
 
@@ -18,4 +18,4 @@ def cli(ctx):
 @pass_context
 def log(ctx):
     """Get errors from Home Assistant."""
-    click.echo(req_raw(ctx, 'get', 'error_log').text)
+    click.echo(api.get_raw_error_log(ctx))

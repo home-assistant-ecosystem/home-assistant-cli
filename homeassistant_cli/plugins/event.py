@@ -6,7 +6,8 @@ import click
 import homeassistant_cli.autocompletion as autocompletion
 from homeassistant_cli.cli import pass_context
 from homeassistant_cli.config import Configuration
-from homeassistant_cli.helper import raw_format_output, req_raw
+from homeassistant_cli.helper import raw_format_output
+import homeassistant_cli.remote as api
 import yaml
 
 _LOGGING = logging.getLogger(__name__)
@@ -32,20 +33,22 @@ def fire(ctx: Configuration, event, json):
     """Fire event in Home Assistant."""
     if json:
         click.echo("Fire {}".format(event))
-        response = req_raw(ctx, 'post', 'events/{}'.format(event), json)
-        response.raise_for_status()
+        response = api.fire_event(ctx, event, json)
     else:
         existing = raw_format_output(ctx.output, {})
         new = click.edit(existing, extension='.{}'.format(ctx.output))
 
-        if new is not None:
+        if new:
             click.echo("Fire {}".format(event))
             if ctx.output == 'yaml':
-                new = json_.dumps(yaml.load(new))
-            response = req_raw(ctx, 'post', 'events/{}'.format(event), new)
-            response.raise_for_status()
+                data = yaml.load(new)
+            else:
+                data = json_.loads(new)
+
+            response = api.fire_event(ctx, event, data)
         else:
             click.echo("No edits/changes.")
             return
 
-    ctx.echo(raw_format_output(ctx.output, response.json()))
+    if response:
+        ctx.echo(raw_format_output(ctx.output, response))
