@@ -6,11 +6,8 @@ import logging
 import shlex
 from typing import Any, Dict, Generator, List, Optional, cast
 
-import click
 from homeassistant_cli.config import Configuration
 import homeassistant_cli.const as const
-import requests
-from requests.models import Response
 from tabulate import tabulate
 import yaml
 
@@ -74,55 +71,6 @@ def format_output(
 ) -> str:
     """Format dict to defined output."""
     return raw_format_output(ctx.output, data, columns)
-
-
-def req_raw(
-    ctx: Configuration, method: str, endpoint: str, *args: Any
-) -> Response:
-    """Use REST API to get details."""
-    url = '{}/api/{}'.format(ctx.server, endpoint)
-    headers = {
-        'Authorization': 'Bearer {}'.format(ctx.token),
-        'content-type': 'application/json',
-    }
-
-    if method == 'get':
-        response = requests.get(url, headers=headers, timeout=ctx.timeout)
-        return response
-
-    if method == 'post':
-        if args and args[0]:
-            payload = json.loads(  # pylint: disable=no-value-for-parameter
-                *args
-            )
-            response = requests.post(
-                url, headers=headers, json=payload, timeout=ctx.timeout
-            )
-        else:
-            response = requests.post(url, headers=headers, timeout=ctx.timeout)
-
-        return response
-
-    if method == 'delete':
-        response = requests.delete(url, headers=headers, timeout=ctx.timeout)
-        return response
-
-    raise ValueError("Unsupported method " + method)
-
-
-def req(
-    ctx: Configuration, method: str, endpoint: str, *args: Any
-) -> Dict[str, Any]:
-    """Create a request."""
-    resp = req_raw(ctx, method, endpoint, *args)
-
-    if resp:
-        resp.raise_for_status()
-        return cast(Dict[str, Any], resp.json())
-
-    click.echo("Got empty response from server")
-
-    return {}
 
 
 def debug_requests_on() -> None:
