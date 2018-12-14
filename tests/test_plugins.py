@@ -10,16 +10,14 @@ DFEAULT_PLUGINS = [
     'config',
     'delete',
     'discover',
-    'edit',
     'entity',
     'event',
-    'get',
     'info',
     'map',
     'raw',
-    'template',
-    'toggle',
     'service',
+    'system',
+    'template',
 ]
 DFEAULT_PLUGINS.sort()
 

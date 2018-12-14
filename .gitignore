@@ -4,6 +4,7 @@
 
 # Hide vscode
 .vscode
+*.code-workspace
 
 # Hide some OS X stuff
 .DS_Store

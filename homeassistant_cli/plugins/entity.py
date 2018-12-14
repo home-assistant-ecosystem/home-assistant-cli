@@ -191,3 +191,28 @@ def on_cmd(ctx: Configuration, entities):
         result = api.call_service(ctx, 'homeassistant', 'turn_on', data)
 
         _report(ctx, result, "turned on")
+
+
+@cli.command()
+@no_type_check
+@click.argument(
+    'entity', required=False, autocompletion=autocompletion.entities
+)
+@pass_context
+def history(ctx: Configuration, entity: str):
+    """List history from Home Assistant."""
+    if not entity:
+        click.echo(
+            helper.format_output(ctx, helper.req(ctx, 'get', 'history/period'))
+        )
+    else:
+        click.echo(
+            helper.format_output(
+                ctx,
+                helper.req(
+                    ctx,
+                    'get',
+                    'history/period?filter_entity_id={}'.format(entity),
+                ),
+            )
+        )
