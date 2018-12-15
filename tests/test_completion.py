@@ -3,63 +3,13 @@ import homeassistant_cli.autocompletion as autocompletion
 import homeassistant_cli.cli as cli
 import requests_mock
 
-VALID_INFO = '''[{
-    "attributes": {
-      "auto": true,
-      "entity_id": [
-        "remote.tv"
-      ],
-      "friendly_name": "all remotes",
-      "hidden": true,
-      "order": 16
-    },
-    "context": {
-      "id": "4c511277c55647eb8e7e4acf10fcd617",
-      "user_id": null
-    },
-    "entity_id": "group.all_remotes",
-    "last_changed": "2018-12-04T10:13:05.914548+00:00",
-    "last_updated": "2018-12-04T10:13:05.914548+00:00",
-    "state": "on"
-  },
-  {
-    "attributes": {
-      "event_data": 1002,
-      "event_received": "2018-12-05 13:17:51.905847"
-    },
-    "context": {
-      "id": "b0e24511a0fd4eb69ab5afeac0082993",
-      "user_id": "2b0f58a02c35408c86e9e34f1d6e141d"
-    },
-    "entity_id": "sensor.one",
-    "last_changed": "2018-12-05T12:17:52.434229+00:00",
-    "last_updated": "2018-12-05T12:17:52.434229+00:00",
-    "state": "small_bathroom_switch"
-  },
-  {
-    "attributes": {
-      "message": "Login attempt or request with",
-      "title": "Login attempt failed"
-    },
-    "context": {
-      "id": "61869ff42b61450980a5a394ee7b71bf",
-      "user_id": null
-    },
-    "entity_id": "persistent_notification.httplogin",
-    "last_changed": "2018-12-01T18:26:19.453513+00:00",
-    "last_updated": "2018-12-01T18:26:19.453513+00:00",
-    "state": "notifying"
-  }
-]
-'''
 
-
-def test_entity_completion() -> None:
+def test_entity_completion(basic_entities_text) -> None:
     """Test completion for entities."""
     with requests_mock.Mocker() as mock:
         mock.get(
             'http://localhost:8123/api/states',
-            text=VALID_INFO,
+            text=basic_entities_text,
             status_code=200,
         )
 
@@ -70,5 +20,48 @@ def test_entity_completion() -> None:
 
         resultdict = dict(result)
 
-        assert "group.all_remotes" in resultdict
-        assert resultdict['group.all_remotes'] == 'all remotes'
+        assert "sensor.one" in resultdict
+        assert resultdict['sensor.one'] == 'friendly long name'
+
+
+def test_service_completion(default_services_text) -> None:
+    """Test completion for services."""
+    with requests_mock.Mocker() as mock:
+        mock.get(
+            'http://localhost:8123/api/services',
+            text=default_services_text,
+            status_code=200,
+        )
+
+        cfg = cli.cli.make_context('hass-cli', ['service', 'get'])
+
+        result = autocompletion.services(cfg, "service get", "")
+        assert len(result) == 121
+
+        resultdict = dict(result)
+
+        assert "automation.reload" in resultdict
+        assert (
+            resultdict["automation.reload"]
+            == "Reload the automation configuration."
+        )
+
+
+def test_event_completion(default_events_text) -> None:
+    """Test completion for events."""
+    with requests_mock.Mocker() as mock:
+        mock.get(
+            'http://localhost:8123/api/events',
+            text=default_events_text,
+            status_code=200,
+        )
+
+        cfg = cli.cli.make_context('hass-cli', ['service', 'get'])
+
+        result = autocompletion.events(cfg, "events get", "")
+        assert len(result) == 11
+
+        resultdict = dict(result)
+
+        assert "component_loaded" in resultdict
+        assert resultdict["component_loaded"] == ""
