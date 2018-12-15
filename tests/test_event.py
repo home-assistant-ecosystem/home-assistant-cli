@@ -122,10 +122,6 @@ def test_entity_list():
 
 def test_entity_get() -> None:
     """Test basic get of entity."""
-    import click_log.core as logcore
-
-    logcore.basic_config()
-
     with requests_mock.Mocker() as mock:
         mock.get(
             re.compile("http://localhost:8123/api/states"),
@@ -147,10 +143,6 @@ def test_entity_get() -> None:
 
 def test_entity_edit():
     """Test basic edit of state."""
-    import click_log.core as logcore
-
-    logcore.basic_config()
-
     with requests_mock.Mocker() as mock:
         get = mock.get(
             re.compile("http://localhost:8123/api/states"),
