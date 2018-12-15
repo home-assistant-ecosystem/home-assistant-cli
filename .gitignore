@@ -70,6 +70,8 @@ pyvenv.cfg
 pip-selfcheck.json
 venv
 .venv
+.Python
+include 
 
 # vimmy stuff
 *.swp
