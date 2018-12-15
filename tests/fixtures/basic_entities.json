@@ -1,0 +1,46 @@
+[{
+    "attributes": {
+      "auto": true,
+      "entity_id": [
+        "remote.tv"
+      ],
+      "friendly_name": "friendly long name",
+      "hidden": true,
+      "order": 16
+    },
+    "context": {
+      "id": "4c511277c55647eb8e7e4acf10fcd617",
+      "user_id": null
+    },
+    "entity_id": "sensor.one",
+    "last_changed": "2018-12-04T10:13:05.914548+00:00",
+    "last_updated": "2018-12-04T10:13:05.914548+00:00",
+    "state": "on"
+  },
+  {
+    "attributes": {
+      "event_data": 1002,
+      "event_received": "2018-12-05 13:17:51.905847"
+    },
+    "context": {
+      "id": "b0e24511a0fd4eb69ab5afeac0082993",
+      "user_id": "2b0f58a02c35408c86e9e34f1d6e141d"
+    },
+    "entity_id": "sensor.two",
+    "last_changed": "2018-12-05T12:17:52.434229+00:00",
+    "last_updated": "2018-12-05T12:17:52.434229+00:00",
+    "state": "off"
+  },
+  {
+    "attributes": {
+    },
+    "context": {
+      "id": "b0e24511a0fd4eb69ab5afeac0082993",
+      "user_id": "2b0f58a02c35408c86e9e34f1d6e141d"
+    },
+    "entity_id": "sensor.three",
+    "last_changed": "2018-12-05T12:17:52.434229+00:00",
+    "last_updated": "2018-12-05T12:17:52.434229+00:00",
+    "state": "off"
+  }
+]

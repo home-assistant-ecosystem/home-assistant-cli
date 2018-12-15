@@ -1,0 +1,46 @@
+[
+  {
+    "event": "homeassistant_close",
+    "listener_count": 3
+  },
+  {
+    "event": "call_service",
+    "listener_count": 1
+  },
+  {
+    "event": "*",
+    "listener_count": 3
+  },
+  {
+    "event": "homeassistant_stop",
+    "listener_count": 13
+  },
+  {
+    "event": "time_changed",
+    "listener_count": 18
+  },
+  {
+    "event": "component_loaded",
+    "listener_count": 2
+  },
+  {
+    "event": "platform_discovered",
+    "listener_count": 12
+  },
+  {
+    "event": "state_changed",
+    "listener_count": 113
+  },
+  {
+    "event": "timer.finished",
+    "listener_count": 7
+  },
+  {
+    "event": "service_registered",
+    "listener_count": 1
+  },
+  {
+    "event": "service_removed",
+    "listener_count": 1
+  }
+]
