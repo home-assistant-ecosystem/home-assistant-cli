@@ -17,6 +17,25 @@ def cli(ctx):
     """Call the raw API (advanced)."""
 
 
+def _report(ctx, cmd, method, response) -> None:
+
+    response.raise_for_status()
+
+    if response.ok:
+        try:
+            ctx.echo(format_output(ctx, response.json()))
+        except json_.decoder.JSONDecodeError:
+            _LOGGING.debug("Response could not be parsed as json.")
+            ctx.echo(response.text)
+    else:
+        _LOGGING.warning(
+            "%s: <No output returned from %s %s>",
+            response.status_code,
+            cmd,
+            method,
+        )
+
+
 @cli.command()
 @click.argument('method')
 @pass_context
@@ -24,21 +43,7 @@ def get(ctx: Configuration, method):
     """Do a GET request against api/<method>."""
     response = api.restapi(ctx, 'get', method)
 
-    if response.text:
-        try:
-            ctx.echo(
-                "%s: %s",
-                response.status_code,
-                format_output(ctx, response.json()),
-            )
-        except json_.decoder.JSONDecodeError:
-            ctx.echo("%s: %s", response.status_code, response.text)
-    else:
-        _LOGGING.warning(
-            "%s: <No output returned from GET %s>",
-            response.status_code,
-            method,
-        )
+    _report(ctx, "GET", method, response)
 
 
 @cli.command()
@@ -52,22 +57,6 @@ def post(ctx: Configuration, method, json):
     else:
         data = {}
 
-    response = api.restapi(ctx, 'get', data)
+    response = api.restapi(ctx, 'post', method, data)
 
-    response.raise_for_status()
-
-    if response.text:
-        try:
-            ctx.echo(
-                "%s: %s",
-                response.status_code,
-                format_output(ctx, response.json()),
-            )
-        except json_.decoder.JSONDecodeError:
-            ctx.echo("%s: %s", response.status_code, response.text)
-    else:
-        _LOGGING.warning(
-            "%s: <No output returned from POST %s>",
-            response.status_code,
-            method,
-        )
+    _report(ctx, "GET", method, response)

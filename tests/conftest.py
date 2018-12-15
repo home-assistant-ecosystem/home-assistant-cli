@@ -12,10 +12,14 @@ mydata      - Dict with the content parsed from json
 import json
 import os
 
+import click_log.core as logcore
 import pkg_resources
 import pytest
 
 FIXTURES_PATH = pkg_resources.resource_filename(__name__, 'fixtures/')
+
+
+logcore.basic_config()
 
 
 def generate_fixture(content):
