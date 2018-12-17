@@ -12,7 +12,7 @@ import logging
 from typing import Any, Dict, Optional, cast
 import urllib.parse
 
-from homeassistant_cli.config import Configuration
+from homeassistant_cli.config import Configuration, resolve_server
 from homeassistant_cli.exceptions import HomeAssistantCliError
 import homeassistant_cli.hassconst as hass
 import requests
@@ -67,7 +67,7 @@ def restapi(
     if ctx.password:
         headers["x-ha-access"] = ctx.password
 
-    url = urllib.parse.urljoin(ctx.server + path, "")
+    url = urllib.parse.urljoin(resolve_server(ctx) + path, "")
 
     try:
         if method == METH_GET:

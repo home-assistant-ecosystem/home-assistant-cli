@@ -13,12 +13,21 @@ HASS_SERVER = "http://localhost:8123"
 
 @no_type_check
 @pytest.mark.parametrize(
-    "description,env,expected_server,expected_token,expected_password",
+    "description,env,expected_server,expected_resolved_server,\
+    expected_token,expected_password",
     [
-        ("No env set, all should be defaults", {}, HASS_SERVER, None, None),
+        (
+            "No env set, all should be defaults",
+            {},
+            'auto',
+            HASS_SERVER,
+            None,
+            None,
+        ),
         (
             "If only HASSIO_TOKEN, use default hassio",
             {'HASSIO_TOKEN': 'supersecret'},
+            'auto',
             HASSIO_SERVER_FALLBACK,
             "supersecret",
             None,
@@ -30,12 +39,14 @@ HASS_SERVER = "http://localhost:8123"
                 'HASS_SERVER': 'http://localhost:999999',
             },
             "http://localhost:999999",
+            "http://localhost:999999",
             "supersecret",
             None,
         ),
         (
             "HASS_TOKEN should win over HASIO_TOKEN",
             {'HASSIO_TOKEN': 'supersecret', 'HASS_TOKEN': 'I Win!'},
+            'auto',
             HASS_SERVER,
             'I Win!',
             None,
@@ -43,15 +54,17 @@ HASS_SERVER = "http://localhost:8123"
         (
             "HASS_PASSWORD should be honored",
             {'HASS_PASSWORD': 'supersecret'},
+            'auto',
             HASS_SERVER,
             None,
             'supersecret',
-        )
+        ),
     ],
 )
 def test_defaults(
     description: str,
     env: Dict[str, str],
+    expected_resolved_server,
     expected_server: str,
     expected_token: Optional[str],
     expected_password: Optional[str],
@@ -62,7 +75,9 @@ def test_defaults(
     try:
         mockenv.start()
         with requests_mock.mock() as mockhttp:
-            expserver = "{}/api/discovery_info".format(expected_server)
+            expserver = "{}/api/discovery_info".format(
+                expected_resolved_server
+            )
             mockhttp.get(
                 expserver, json={"name": "mock response"}, status_code=200
             )
@@ -73,11 +88,14 @@ def test_defaults(
             cfg = ctx.obj
 
             assert cfg.server == expected_server
+            assert cfg.resolve_server() == expected_resolved_server
             assert cfg.token == expected_token
 
             assert mockhttp.call_count == 1
 
-            assert mockhttp.request_history[0].url.startswith(expected_server)
+            assert mockhttp.request_history[0].url.startswith(
+                expected_resolved_server
+            )
 
             if expected_token:
                 auth = mockhttp.request_history[0].headers["Authorization"]
@@ -89,9 +107,7 @@ def test_defaults(
                 assert (
                     "Authorization" not in mockhttp.request_history[0].headers
                 )
-                assert (
-                    "x-ha-access" not in mockhttp.request_history[0].headers
-                )
+                assert "x-ha-access" not in mockhttp.request_history[0].headers
 
     finally:
         mockenv.stop()

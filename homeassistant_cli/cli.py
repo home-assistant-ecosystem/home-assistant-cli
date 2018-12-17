@@ -95,13 +95,6 @@ class HomeAssistantCli(click.MultiCommand):
         return cast(Union[Group, Command], mod.cli)
 
 
-def _default_server() -> str:
-    if "HASSIO_TOKEN" in os.environ and "HASS_TOKEN" not in os.environ:
-        return const.DEFAULT_HASSIO_SERVER
-
-    return const.DEFAULT_SERVER
-
-
 def _default_token() -> Optional[str]:
     return os.environ.get('HASS_TOKEN', os.environ.get('HASSIO_TOKEN', None))
 
@@ -113,8 +106,9 @@ def _default_token() -> Optional[str]:
 @click.option(
     '--server',
     '-s',
-    help='The server URL of Home Assistant instance.',
-    default=_default_server,
+    help='The server URL or `auto` for automatic detection',
+    default="auto",
+    show_default=True,
     envvar='HASS_SERVER',
 )
 @click.option(
