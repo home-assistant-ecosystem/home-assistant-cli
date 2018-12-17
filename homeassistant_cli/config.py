@@ -89,8 +89,8 @@ def resolve_server(ctx: Any) -> str:  # noqa: F821
                 if not ctx.resolved_server and "pytest" in sys.modules:
                     ctx.resolved_server = const.DEFAULT_SERVER
                 else:
-                    autodetected = _locate_ha()
-                    if not autodetected:
+                    ctx.resolved_server = _locate_ha()
+                    if not ctx.resolved_server:
                         sys.exit(3)
         else:
             ctx.resolved_server = ctx.server
