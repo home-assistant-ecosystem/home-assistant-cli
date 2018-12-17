@@ -5,6 +5,7 @@ __version__ = '0.3.0.dev0'
 
 REQUIRED_PYTHON_VER = (3, 5, 3)
 
+AUTO_SERVER = 'auto'
 DEFAULT_SERVER = 'http://localhost:8123'
 DEFAULT_HASSIO_SERVER = 'http://hassio/homeassistant'
 DEFAULT_TIMEOUT = 5
