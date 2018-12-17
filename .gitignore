@@ -19,6 +19,7 @@ Icon
 
 # pytest
 .cache
+htmlcov 
 
 # GitHub Proposed Python stuff:
 *.py[cod]

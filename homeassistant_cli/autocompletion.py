@@ -35,6 +35,11 @@ def _init_ctx(ctx: Configuration) -> None:
     if not hasattr(ctx, 'cert'):
         ctx.cert = None
 
+    if not hasattr(ctx, 'resolved_server'):
+        ctx.resolved_server = os.environ.get(
+            'HASS_SERVER', const.DEFAULT_SERVER
+        )
+
 
 def services(
     ctx: Configuration, args: str, incomplete: str
