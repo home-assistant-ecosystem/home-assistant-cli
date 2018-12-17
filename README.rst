@@ -18,10 +18,17 @@ commands are expected to still change.
 Installation
 ============
 
+To use latest release:
+
 .. code:: bash
 
     $ pip install homeassistant-cli
 
+To use latest pre-release from ``dev`` branch:
+
+.. code:: bash
+
+   $ pip install  pip3 install git+https://github.com/home-assistant/home-assistant-cli@dev
 
 To get started you'll need to have or generate a long lasting token format
 on your Home Assistant profile page (i.e. https://localhost:8123/profile).
