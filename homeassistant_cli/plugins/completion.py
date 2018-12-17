@@ -17,7 +17,17 @@ def dump_script(shell: str) -> None:
     prog_name = "hass-cli"
     cvar = '_%s_COMPLETE' % (prog_name.replace('-', '_')).upper()
 
-    click.echo(get_completion_script(prog_name, cvar, shell))
+    script = get_completion_script(prog_name, cvar, shell)
+
+    if shell == 'zsh':
+        # replace the default `unsorted` with an expression that will show the
+        import re
+
+        script = re.sub(
+            r" unsorted ", ' ${HASS_SERVER:-"Home Assistant"} ', script
+        )
+
+    click.echo(script)
 
 
 @cli.command()
