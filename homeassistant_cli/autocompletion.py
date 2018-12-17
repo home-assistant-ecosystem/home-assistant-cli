@@ -3,7 +3,7 @@ import os
 from typing import Any, Dict, List, Tuple  # NOQA
 
 from homeassistant_cli import const
-from homeassistant_cli.config import Configuration
+from homeassistant_cli.config import Configuration, resolve_server
 import homeassistant_cli.remote as api
 from requests.exceptions import HTTPError
 
@@ -13,7 +13,7 @@ def _init_ctx(ctx: Configuration) -> None:
     # ctx is incomplete thus need to 'hack' around it
     # see bug https://github.com/pallets/click/issues/942
     if not hasattr(ctx, 'server'):
-        ctx.server = os.environ.get('HASS_SERVER', const.DEFAULT_SERVER)
+        ctx.server = os.environ.get('HASS_SERVER', const.AUTO_SERVER)
 
     if not hasattr(ctx, 'token'):
         ctx.token = os.environ.get('HASS_TOKEN', None)
@@ -36,9 +36,7 @@ def _init_ctx(ctx: Configuration) -> None:
         ctx.cert = None
 
     if not hasattr(ctx, 'resolved_server'):
-        ctx.resolved_server = os.environ.get(
-            'HASS_SERVER', const.DEFAULT_SERVER
-        )
+        ctx.resolved_server = resolve_server(ctx)
 
 
 def services(
