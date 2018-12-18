@@ -2,7 +2,8 @@
 
 import json as json_
 import logging
-from typing import no_type_check
+import re
+from typing import Dict, List, Pattern, no_type_check  # noqa
 
 import click
 import homeassistant_cli.autocompletion as autocompletion
@@ -30,7 +31,11 @@ def cli(ctx):
 @pass_context
 def get(ctx: Configuration, entity):
     """Get/read entity state from Home Assistant."""
-    ctx.echo(helper.format_output(ctx, api.get_state(ctx, entity)))
+    ctx.echo(
+        helper.format_output(
+            ctx, api.get_state(ctx, entity), const.COLUMNS_ENTITIES
+        )
+    )
 
 
 @cli.command()
@@ -50,14 +55,23 @@ def delete(ctx: Configuration, entity):
 
 
 @cli.command('list')
+@click.argument('entityfilter', default=".*", required=False)
 @pass_context
-def listcmd(ctx):
+def listcmd(ctx, entityfilter):
     """List all state from Home Assistant."""
-    ctx.echo(
-        helper.format_output(
-            ctx, api.get_states(ctx), columns=const.COLUMNS_ENTITIES
-        )
-    )
+    states = api.get_states(ctx)
+
+    result = []  # type: List[Dict]
+    if entityfilter == ".*":
+        result = states
+    else:
+        entityfilterre = re.compile(entityfilter)  # type: Pattern
+
+        for entity in states:
+            if entityfilterre.search(entity['entity_id']):
+                result.append(entity)
+
+    ctx.echo(helper.format_output(ctx, result, columns=const.COLUMNS_ENTITIES))
 
 
 @cli.command()
@@ -201,4 +215,10 @@ def on_cmd(ctx: Configuration, entities):
 @pass_context
 def history(ctx: Configuration, entity: str):
     """List history from Home Assistant."""
-    click.echo(helper.format_output(ctx, api.get_history(ctx, entity)))
+    click.echo(
+        helper.format_output(
+            ctx,
+            api.get_history(ctx, entity)[0],
+            columns=const.COLUMNS_ENTITIES,
+        )
+    )

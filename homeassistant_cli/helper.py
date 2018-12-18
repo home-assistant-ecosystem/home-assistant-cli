@@ -4,7 +4,7 @@ from http.client import HTTPConnection
 import json
 import logging
 import shlex
-from typing import Any, Dict, Generator, List, Optional, cast
+from typing import Any, Dict, Generator, List, Optional, Union, cast
 
 from homeassistant_cli.config import Configuration
 import homeassistant_cli.const as const
@@ -28,7 +28,9 @@ def to_attributes(entry: str) -> Optional[Dict[str, str]]:
 
 
 def raw_format_output(
-    output: str, data: Dict[str, Any], columns: Optional[List] = None
+    output: str,
+    data: Union[List[Dict[str, Any]], Dict[str, Any]],
+    columns: Optional[List] = None,
 ) -> str:
     """Format the raw output."""
     if output == 'json':
@@ -67,7 +69,9 @@ def raw_format_output(
 
 
 def format_output(
-    ctx: Configuration, data: Dict[str, Any], columns: Optional[List] = None
+    ctx: Configuration,
+    data: Union[List[Dict[str, Any]], Dict[str, Any]],
+    columns: Optional[List] = None,
 ) -> str:
     """Format dict to defined output."""
     return raw_format_output(ctx.output, data, columns)

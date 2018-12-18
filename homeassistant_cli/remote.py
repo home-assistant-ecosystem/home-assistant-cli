@@ -9,7 +9,7 @@ from datetime import datetime
 import enum
 import json
 import logging
-from typing import Any, Dict, Optional, cast
+from typing import Any, Dict, List, Optional, cast
 import urllib.parse
 
 from homeassistant_cli.config import Configuration, resolve_server
@@ -178,7 +178,7 @@ def get_history(
     )
 
 
-def get_states(ctx: Configuration) -> Dict[str, Any]:
+def get_states(ctx: Configuration) -> List[Dict[str, Any]]:
     """Return all states."""
     try:
         req = restapi(ctx, METH_GET, hass.URL_API_STATES)
@@ -188,7 +188,8 @@ def get_states(ctx: Configuration) -> Dict[str, Any]:
         )
 
     if req.status_code == 200:
-        return cast(Dict[str, Any], req.json())
+        data = req.json()  # type: List[Dict[str, Any]]
+        return data
 
     raise HomeAssistantCliError(
         "Error while getting all states: {}".format(req.text)

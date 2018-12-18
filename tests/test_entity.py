@@ -104,3 +104,28 @@ def test_entity_edit(basic_entities_text, basic_entities) -> None:
         assert get.call_count == 1
         assert post.call_count == 1
         assert post.request_history[0].json()['state'] == 'myspecialstate'
+
+
+def test_entity_filter(default_entities) -> None:
+    """Test entities can be listed with filter."""
+    with requests_mock.Mocker() as mock:
+        mock.get(
+            "http://localhost:8123/api/states",
+            json=default_entities,
+            status_code=200,
+        )
+
+        runner = CliRunner()
+        result = runner.invoke(
+            cli.cli, ["entity", "list", "bathroom"], catch_exceptions=False
+        )
+        assert result.exit_code == 0
+        data = json.loads(result.output)
+        assert len(data) == 3
+
+        ids = [d['entity_id'] for d in data]
+
+        assert len(ids) == 3
+        assert "timer.timer_small_bathroom" in ids
+        assert "group.small_bathroom_motionview" in ids
+        assert "light.small_bathroom_light" in ids
