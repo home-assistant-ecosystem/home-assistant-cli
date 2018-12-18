@@ -1,0 +1,694 @@
+[
+  {
+    "attributes": {
+      "azimuth": 342.38,
+      "elevation": -65.59,
+      "friendly_name": "Sun",
+      "next_dawn": "2018-12-19T06:38:32+00:00",
+      "next_dusk": "2018-12-19T16:20:13+00:00",
+      "next_midnight": "2018-12-18T23:29:38+00:00",
+      "next_noon": "2018-12-19T11:29:23+00:00",
+      "next_rising": "2018-12-19T07:14:02+00:00",
+      "next_setting": "2018-12-19T15:44:43+00:00"
+    },
+    "context": {
+      "id": "1aa8b8ca7e2e45ca9f9a93ccdcdfa4e7",
+      "user_id": null
+    },
+    "entity_id": "sun.sun",
+    "last_changed": "2018-12-18T15:44:23.012263+00:00",
+    "last_updated": "2018-12-18T22:58:30.010420+00:00",
+    "state": "below_horizon"
+  },
+  {
+    "attributes": {
+      "friendly_name": "School",
+      "hidden": true,
+      "icon": "mdi:school",
+      "latitude": 47.011023,
+      "longitude": 6.858151,
+      "radius": 50.0
+    },
+    "context": {
+      "id": "debb96b0d8e24c4a96212c9bc2edea1c",
+      "user_id": null
+    },
+    "entity_id": "zone.school",
+    "last_changed": "2018-12-18T14:02:14.299171+00:00",
+    "last_updated": "2018-12-18T14:02:14.299171+00:00",
+    "state": "zoning"
+  },
+  {
+    "attributes": {
+      "friendly_name": "Unnamed zone",
+      "hidden": true,
+      "icon": "mdi:home",
+      "latitude": 47.006476,
+      "longitude": 6.861699,
+      "radius": 50.0
+    },
+    "context": {
+      "id": "8f768bc29bb441ca8237c3db952b2bad",
+      "user_id": null
+    },
+    "entity_id": "zone.unnamed_zone",
+    "last_changed": "2018-12-18T14:02:14.299868+00:00",
+    "last_updated": "2018-12-18T14:02:14.299868+00:00",
+    "state": "zoning"
+  },
+  {
+    "attributes": {
+      "entity_id": [
+        "light.kitchen_light_1",
+        "light.kitchen_light_2",
+        "light.kitchen_light_3",
+        "light.kitchen_light_4",
+        "light.kitchen_light_5",
+        "light.kitchen_light_6"
+      ],
+      "friendly_name": "Kitchen Lights",
+      "order": 0
+    },
+    "context": {
+      "id": "4aa3551d07b54f0ca6bef3c27e37c522",
+      "user_id": null
+    },
+    "entity_id": "group.kitchen_lights",
+    "last_changed": "2018-12-18T22:06:34.225732+00:00",
+    "last_updated": "2018-12-18T22:06:34.225732+00:00",
+    "state": "on"
+  },
+  {
+    "attributes": {
+      "friendly_name": "Flag to test",
+      "icon": "mdi:motion"
+    },
+    "context": {
+      "id": "36e903d454db49218ac61a2922eb5089",
+      "user_id": null
+    },
+    "entity_id": "input_boolean.test_motion",
+    "last_changed": "2018-12-18T14:02:19.868832+00:00",
+    "last_updated": "2018-12-18T14:02:19.868832+00:00",
+    "state": "off"
+  },
+  {
+    "attributes": {
+      "duration": "0:15:00",
+      "remaining": "0:00:00"
+    },
+    "context": {
+      "id": "4b29669eaec04f63905d63e5b47f6905",
+      "user_id": null
+    },
+    "entity_id": "timer.timer_small_bathroom",
+    "last_changed": "2018-12-18T19:48:31.011517+00:00",
+    "last_updated": "2018-12-18T19:48:31.011517+00:00",
+    "state": "idle"
+  },
+  {
+    "attributes": {
+      "duration": "0:15:00",
+      "remaining": "0:15:00"
+    },
+    "context": {
+      "id": "287036f5ec674aa09dd9d8c6862221b3",
+      "user_id": null
+    },
+    "entity_id": "timer.timer_office_lights",
+    "last_changed": "2018-12-18T14:02:19.876167+00:00",
+    "last_updated": "2018-12-18T14:02:19.876167+00:00",
+    "state": "idle"
+  },
+  {
+    "attributes": {
+      "duration": "0:15:00",
+      "remaining": "0:00:00"
+    },
+    "context": {
+      "id": "a737c5dd9b8549a2bcbe8b4d086ed0c9",
+      "user_id": null
+    },
+    "entity_id": "timer.timer_basement",
+    "last_changed": "2018-12-18T22:37:52.011460+00:00",
+    "last_updated": "2018-12-18T22:37:52.011460+00:00",
+    "state": "idle"
+  },
+  {
+    "attributes": {
+      "duration": "0:15:00",
+      "remaining": "0:00:00"
+    },
+    "context": {
+      "id": "d7d87d908bd344179874c42287af8e5d",
+      "user_id": null
+    },
+    "entity_id": "timer.timer_winter_garden",
+    "last_changed": "2018-12-18T19:58:39.008777+00:00",
+    "last_updated": "2018-12-18T19:58:39.008777+00:00",
+    "state": "idle"
+  },
+  {
+    "attributes": {
+      "duration": "0:15:00",
+      "remaining": "0:00:00"
+    },
+    "context": {
+      "id": "cf0b226a445d439cbf1757b4d7affc6a",
+      "user_id": null
+    },
+    "entity_id": "timer.timer_hallway",
+    "last_changed": "2018-12-18T22:50:24.006583+00:00",
+    "last_updated": "2018-12-18T22:50:24.006583+00:00",
+    "state": "idle"
+  },
+  {
+    "attributes": {
+      "duration": "0:15:00",
+      "remaining": "0:15:00"
+    },
+    "context": {
+      "id": "0cab71b04d41484caadc2a542142168e",
+      "user_id": null
+    },
+    "entity_id": "timer.timer_kitchen",
+    "last_changed": "2018-12-18T22:06:34.147971+00:00",
+    "last_updated": "2018-12-18T22:06:34.147971+00:00",
+    "state": "active"
+  },
+  {
+    "attributes": {
+      "duration": "0:15:00",
+      "remaining": "0:15:00"
+    },
+    "context": {
+      "id": "a059faa2b851457f92c7d43972739233",
+      "user_id": null
+    },
+    "entity_id": "timer.timer_dinner_table",
+    "last_changed": "2018-12-18T14:03:35.771700+00:00",
+    "last_updated": "2018-12-18T14:03:35.771700+00:00",
+    "state": "active"
+  },
+  {
+    "attributes": {
+      "attribution": "Weather forecast from met.no, delivered by the Norwegian Meteorological Institute.",
+      "entity_picture": "https://api.met.no/weatherapi/weathericon/1.1/?symbol=4;content_type=image/png",
+      "friendly_name": "yr Symbol"
+    },
+    "context": {
+      "id": "0aba76ed4b61458a9841324dcbb909c9",
+      "user_id": null
+    },
+    "entity_id": "sensor.yr_symbol",
+    "last_changed": "2018-12-18T15:02:20.884137+00:00",
+    "last_updated": "2018-12-18T15:02:20.884137+00:00",
+    "state": "4"
+  },
+  {
+    "attributes": {
+      "friendly_name": "Basement Motion Anywhere"
+    },
+    "context": {
+      "id": "17e7e13fb9aa44748fbcf1ca8b38c60c",
+      "user_id": null
+    },
+    "entity_id": "binary_sensor.presence_basement_combined",
+    "last_changed": "2018-12-18T22:23:05.949232+00:00",
+    "last_updated": "2018-12-18T22:23:05.949232+00:00",
+    "state": "off"
+  },
+  {
+    "attributes": {
+      "friendly_name": "Dinner table Bright"
+    },
+    "context": {
+      "id": "db18bbed4f614533b18f16be07d89de8",
+      "user_id": null
+    },
+    "entity_id": "scene.dinner_table_bright",
+    "last_changed": "2018-12-18T14:02:19.942400+00:00",
+    "last_updated": "2018-12-18T14:02:19.942400+00:00",
+    "state": "scening"
+  },
+  {
+    "attributes": {
+      "friendly_name": "Dinner table Dimmed"
+    },
+    "context": {
+      "id": "6f6ffd7de8cc4f6680f1b74054962f61",
+      "user_id": null
+    },
+    "entity_id": "scene.dinner_table_dimmed",
+    "last_changed": "2018-12-18T14:02:19.944701+00:00",
+    "last_updated": "2018-12-18T14:02:19.944701+00:00",
+    "state": "scening"
+  },
+  {
+    "attributes": {
+      "entity_id": [
+        "light.basement_light_1",
+        "light.basement_light_2",
+        "light.basement_light_3",
+        "light.basement_light_4",
+        "light.basement_light_5",
+        "light.basement_light_6",
+        "light.basement_light_7",
+        "light.basement_light_8",
+        "light.basement_light_9",
+        "light.basement_light_10",
+        "light.basement_light_stairs"
+      ],
+      "friendly_name": "Basement Lights",
+      "order": 1
+    },
+    "context": {
+      "id": "56ebb925e75841f6b5d1a34a33e2cba0",
+      "user_id": null
+    },
+    "entity_id": "group.basement_lights",
+    "last_changed": "2018-12-18T22:37:52.490972+00:00",
+    "last_updated": "2018-12-18T22:37:52.490972+00:00",
+    "state": "off"
+  },
+  {
+    "attributes": {
+      "entity_id": [
+        "light.dinner_table_light_1",
+        "light.dinner_table_light_2",
+        "light.dinner_table_light_3",
+        "light.dinner_table_light_4",
+        "light.dinner_table_light_5",
+        "light.dinner_table_light_6"
+      ],
+      "friendly_name": "Dinner Table Lights",
+      "order": 2
+    },
+    "context": {
+      "id": "9e0e67e606c742c097871c91c204d3cd",
+      "user_id": null
+    },
+    "entity_id": "group.dinner_table_lights",
+    "last_changed": "2018-12-18T14:02:28.743753+00:00",
+    "last_updated": "2018-12-18T14:02:28.743753+00:00",
+    "state": "on"
+  },
+  {
+    "attributes": {
+      "entity_id": [
+        "light.winter_garden_light_1",
+        "light.winter_garden_light_2",
+        "light.winter_garden_light_3",
+        "light.winter_garden_light_4",
+        "light.winter_garden_light_5"
+      ],
+      "friendly_name": "Winter Garden Lights",
+      "order": 3
+    },
+    "context": {
+      "id": "83536d299e254afd8b6da2425ea70226",
+      "user_id": null
+    },
+    "entity_id": "group.winter_garden_lights",
+    "last_changed": "2018-12-18T19:58:39.231240+00:00",
+    "last_updated": "2018-12-18T19:58:39.231240+00:00",
+    "state": "off"
+  },
+  {
+    "attributes": {
+      "entity_id": [
+        "light.hallway_light_1",
+        "light.hallway_light_2",
+        "light.hallway_light_3",
+        "light.hallway_light_4",
+        "light.hallway_light_5"
+      ],
+      "friendly_name": "Hallway Lights",
+      "order": 4
+    },
+    "context": {
+      "id": "3d254734f971401a8e6ed29dd319fdbd",
+      "user_id": null
+    },
+    "entity_id": "group.hallway_lights",
+    "last_changed": "2018-12-18T14:02:20.033363+00:00",
+    "last_updated": "2018-12-18T14:02:20.033363+00:00",
+    "state": "unknown"
+  },
+  {
+    "attributes": {
+      "entity_id": [
+        "binary_sensor.presence_winter_garden",
+        "timer.timer_winter_garden",
+        "group.winter_garden_lights"
+      ],
+      "friendly_name": "winter garden",
+      "order": 5
+    },
+    "context": {
+      "id": "344d4bd18fe5402da58760db61b0c880",
+      "user_id": null
+    },
+    "entity_id": "group.winter_garden_motionview",
+    "last_changed": "2018-12-18T19:58:39.251782+00:00",
+    "last_updated": "2018-12-18T19:58:39.251782+00:00",
+    "state": "off"
+  },
+  {
+    "attributes": {
+      "entity_id": [
+        "binary_sensor.presence_small_bathroom",
+        "timer.timer_small_bathroom",
+        "light.small_bathroom_light"
+      ],
+      "friendly_name": "small bathroom",
+      "order": 6
+    },
+    "context": {
+      "id": "0c2e0021f06749329a0f54b9faff589a",
+      "user_id": null
+    },
+    "entity_id": "group.small_bathroom_motionview",
+    "last_changed": "2018-12-18T21:00:09.573499+00:00",
+    "last_updated": "2018-12-18T21:00:09.573499+00:00",
+    "state": "on"
+  },
+  {
+    "attributes": {
+      "entity_id": [
+        "input_boolean.test_motion",
+        "timer.timer_office_lights",
+        "light.office_light"
+      ],
+      "friendly_name": "office lights",
+      "order": 7
+    },
+    "context": {
+      "id": "30889cab566f431c9edb487511de5cdc",
+      "user_id": null
+    },
+    "entity_id": "group.office_lights_motionview",
+    "last_changed": "2018-12-18T16:27:35.722235+00:00",
+    "last_updated": "2018-12-18T16:27:35.722235+00:00",
+    "state": "on"
+  },
+  {
+    "attributes": {
+      "entity_id": [
+        "binary_sensor.presence_basement_combined",
+        "timer.timer_basement",
+        "group.basement_lights"
+      ],
+      "friendly_name": "basement",
+      "order": 8
+    },
+    "context": {
+      "id": "658e61b35f97402093e4ea89beed58ca",
+      "user_id": null
+    },
+    "entity_id": "group.basement_motionview",
+    "last_changed": "2018-12-18T22:37:52.510621+00:00",
+    "last_updated": "2018-12-18T22:37:52.510621+00:00",
+    "state": "off"
+  },
+  {
+    "attributes": {
+      "entity_id": [
+        "binary_sensor.presence_hallway",
+        "timer.timer_hallway",
+        "group.hallway_lights"
+      ],
+      "friendly_name": "hallway",
+      "order": 9
+    },
+    "context": {
+      "id": "dcb0150012514aecbe7f5fe1aa9d5a16",
+      "user_id": null
+    },
+    "entity_id": "group.hallway_motionview",
+    "last_changed": "2018-12-18T22:35:45.991232+00:00",
+    "last_updated": "2018-12-18T22:35:45.991232+00:00",
+    "state": "off"
+  },
+  {
+    "attributes": {
+      "entity_id": [
+        "binary_sensor.presence_kitchen",
+        "timer.timer_kitchen",
+        "group.kitchen_lights"
+      ],
+      "friendly_name": "kitchen",
+      "order": 10
+    },
+    "context": {
+      "id": "afa1715ade6541608eea07e40b61a498",
+      "user_id": null
+    },
+    "entity_id": "group.kitchen_motionview",
+    "last_changed": "2018-12-18T22:06:34.120687+00:00",
+    "last_updated": "2018-12-18T22:06:34.120687+00:00",
+    "state": "on"
+  },
+  {
+    "attributes": {
+      "entity_id": [
+        "binary_sensor.presence_dinner_table",
+        "timer.timer_dinner_table",
+        "group.dinner_table_lights"
+      ],
+      "friendly_name": "dinner table",
+      "order": 11
+    },
+    "context": {
+      "id": "7d6d413228cd4a1aa1b23ee468aa9963",
+      "user_id": null
+    },
+    "entity_id": "group.dinner_table_motionview",
+    "last_changed": "2018-12-18T14:02:29.245690+00:00",
+    "last_updated": "2018-12-18T14:02:29.245690+00:00",
+    "state": "on"
+  },
+  {
+    "attributes": {
+      "Delivered": 29,
+      "Expired": 1,
+      "InTransit": 2,
+      "OutForDelivery": 1,
+      "attribution": "Information provided by AfterShip",
+      "friendly_name": "aftership",
+      "icon": "mdi:package-variant-closed",
+      "unit_of_measurement": "packages"
+    },
+    "context": {
+      "id": "3e437ab5be514a3583aacf5f7583f8ae",
+      "user_id": null
+    },
+    "entity_id": "sensor.aftership",
+    "last_changed": "2018-12-18T14:02:27.579862+00:00",
+    "last_updated": "2018-12-18T14:02:27.579862+00:00",
+    "state": "4"
+  },
+  {
+    "attributes": {
+      "friendly_name": "Turn off basement lights at end of timer",
+      "last_triggered": "2018-12-18T22:37:52.381699+00:00"
+    },
+    "context": {
+      "id": "3aec6c4d38744650a678936deb07fb51",
+      "user_id": null
+    },
+    "entity_id": "automation.turn_off_basement_lights_at_end_of_timer",
+    "last_changed": "2018-12-18T14:02:53.021580+00:00",
+    "last_updated": "2018-12-18T22:37:52.382204+00:00",
+    "state": "on"
+  },
+  {
+    "attributes": {
+      "friendly_name": "Turn on hallway when there is movement",
+      "last_triggered": "2018-12-18T22:35:23.614914+00:00"
+    },
+    "context": {
+      "id": "bfb5dd223da8426da3bf1e47c71b32ed",
+      "user_id": null
+    },
+    "entity_id": "automation.turn_on_hallway_when_there_is_movement",
+    "last_changed": "2018-12-18T14:02:53.044372+00:00",
+    "last_updated": "2018-12-18T22:35:23.615491+00:00",
+    "state": "on"
+  },
+  {
+    "attributes": {
+      "friendly_name": "Turn off hallway lights at end of timer",
+      "last_triggered": "2018-12-18T22:50:24.056345+00:00"
+    },
+    "context": {
+      "id": "be3a93679fac421aa7ee49f9c29fc507",
+      "user_id": null
+    },
+    "entity_id": "automation.turn_off_hallway_lights_at_end_of_timer",
+    "last_changed": "2018-12-18T14:02:53.049397+00:00",
+    "last_updated": "2018-12-18T22:50:24.056994+00:00",
+    "state": "on"
+  },
+  {
+    "attributes": {
+      "friendly_name": "Turn on kitchen when there is movement",
+      "last_triggered": "2018-12-18T22:47:57.261986+00:00"
+    },
+    "context": {
+      "id": "4b46d82b228740c892f3c5273e8b320c",
+      "user_id": null
+    },
+    "entity_id": "automation.turn_on_kitchen_when_there_is_movement",
+    "last_changed": "2018-12-18T14:02:53.062443+00:00",
+    "last_updated": "2018-12-18T22:47:57.262561+00:00",
+    "state": "on"
+  },
+  {
+    "attributes": {
+      "friendly_name": "Turn on winter garden when there is movement",
+      "last_triggered": "2018-12-18T19:43:39.012591+00:00"
+    },
+    "context": {
+      "id": "341993015c5e4acba2e6a40019c0ed77",
+      "user_id": null
+    },
+    "entity_id": "automation.turn_on_winter_garden_when_there_is_movement",
+    "last_changed": "2018-12-18T14:02:53.067628+00:00",
+    "last_updated": "2018-12-18T19:43:39.013194+00:00",
+    "state": "on"
+  },
+  {
+    "attributes": {
+      "friendly_name": "Turn off kitchen lights at end of timer",
+      "last_triggered": "2018-12-18T22:04:10.897212+00:00"
+    },
+    "context": {
+      "id": "07f9cc9a49f64c84a05f3e5579dec923",
+      "user_id": null
+    },
+    "entity_id": "automation.turn_off_kitchen_lights_at_end_of_timer",
+    "last_changed": "2018-12-18T14:02:53.092096+00:00",
+    "last_updated": "2018-12-18T22:04:10.897616+00:00",
+    "state": "on"
+  },
+  {
+    "attributes": {
+      "friendly_name": "Hallway Light 2",
+      "is_deconz_group": false,
+      "supported_features": 41
+    },
+    "context": {
+      "id": "612782c5951f42fc83dcb9a4ddf91996",
+      "user_id": null
+    },
+    "entity_id": "light.hallroom_light_2",
+    "last_changed": "2018-12-18T17:57:31.691709+00:00",
+    "last_updated": "2018-12-18T17:57:31.691709+00:00",
+    "state": "off"
+  },
+  {
+    "attributes": {
+      "friendly_name": "Hallway Light 1",
+      "is_deconz_group": false,
+      "supported_features": 41
+    },
+    "context": {
+      "id": "d7246c6bf11a453e83926bb0383bc0bc",
+      "user_id": null
+    },
+    "entity_id": "light.hallroom_light_1",
+    "last_changed": "2018-12-18T17:57:31.781389+00:00",
+    "last_updated": "2018-12-18T17:57:31.781389+00:00",
+    "state": "off"
+  },
+  {
+    "attributes": {
+      "friendly_name": "Basement Light 1",
+      "is_deconz_group": false,
+      "max_mireds": 500,
+      "min_mireds": 153,
+      "supported_features": 43
+    },
+    "context": {
+      "id": "c5de2f982cef47e6a866c5aa6cdcf6e5",
+      "user_id": null
+    },
+    "entity_id": "light.basement_light_1",
+    "last_changed": "2018-12-18T22:37:52.088528+00:00",
+    "last_updated": "2018-12-18T22:37:52.088528+00:00",
+    "state": "off"
+  },
+  {
+    "attributes": {
+      "friendly_name": "Basement Light Stairs",
+      "is_deconz_group": false,
+      "max_mireds": 500,
+      "min_mireds": 153,
+      "supported_features": 43
+    },
+    "context": {
+      "id": "c5de2f982cef47e6a866c5aa6cdcf6e5",
+      "user_id": null
+    },
+    "entity_id": "light.basement_light_stairs",
+    "last_changed": "2018-12-18T22:37:52.115905+00:00",
+    "last_updated": "2018-12-18T22:37:52.115905+00:00",
+    "state": "off"
+  },
+  {
+    "attributes": {
+      "brightness": 122,
+      "color_temp": 366,
+      "friendly_name": "Dinner table Light 1",
+      "is_deconz_group": false,
+      "max_mireds": 500,
+      "min_mireds": 153,
+      "supported_features": 43
+    },
+    "context": {
+      "id": "b01d42017c5b401789843bda65419ffd",
+      "user_id": null
+    },
+    "entity_id": "light.dinner_table_light_1",
+    "last_changed": "2018-12-18T14:02:27.987936+00:00",
+    "last_updated": "2018-12-18T18:02:09.065835+00:00",
+    "state": "on"
+  },
+  {
+    "attributes": {
+      "friendly_name": "Basement Light 3",
+      "is_deconz_group": false,
+      "max_mireds": 500,
+      "min_mireds": 153,
+      "supported_features": 43
+    },
+    "context": {
+      "id": "c5de2f982cef47e6a866c5aa6cdcf6e5",
+      "user_id": null
+    },
+    "entity_id": "light.basement_light_3",
+    "last_changed": "2018-12-18T22:37:52.163524+00:00",
+    "last_updated": "2018-12-18T22:37:52.163524+00:00",
+    "state": "off"
+  },
+  {
+    "attributes": {
+      "brightness": 211,
+      "color_temp": 454,
+      "friendly_name": "Small Bathroom Light",
+      "is_deconz_group": false,
+      "max_mireds": 500,
+      "min_mireds": 153,
+      "supported_features": 43
+    },
+    "context": {
+      "id": "5bdccd8faa944249a2553ff82ddf8750",
+      "user_id": null
+    },
+    "entity_id": "light.small_bathroom_light",
+    "last_changed": "2018-12-18T21:00:09.555823+00:00",
+    "last_updated": "2018-12-18T21:00:09.555823+00:00",
+    "state": "on"
+  }
+]

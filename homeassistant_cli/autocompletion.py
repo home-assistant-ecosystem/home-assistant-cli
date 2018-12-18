@@ -78,18 +78,14 @@ def entities(
     try:
         response = api.get_states(ctx)
     except HTTPError:
-        response = {}
+        response = []
 
     completions = []  # type List[Tuple[str, str]]
 
     if response:
         for entity in response:
-            friendly_name = entity['attributes'].get(  # type: ignore
-                'friendly_name', ''
-            )
-            completions.append(
-                (entity['entity_id'], friendly_name)  # type: ignore
-            )
+            friendly_name = entity['attributes'].get('friendly_name', '')
+            completions.append((entity['entity_id'], friendly_name))
 
         completions.sort()
 

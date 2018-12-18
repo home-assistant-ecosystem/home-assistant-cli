@@ -16,5 +16,6 @@ COLUMNS_ENTITIES = [
     ('ENTITY', 'entity_id'),
     ('DESCRIPTION', 'attributes.friendly_name'),
     ('STATE', 'state'),
+    ('CHANGED', 'last_changed'),
 ]
 COLUMNS_SERVICES = [('DOMAIN', 'domain'), ("SERVICE", "domain.services[*]")]
