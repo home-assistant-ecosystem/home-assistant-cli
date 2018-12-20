@@ -2,7 +2,7 @@
 import logging
 import os
 import sys
-from typing import List, Optional, Union, cast, no_type_check
+from typing import List, Optional, Union, cast
 
 import click
 from click.core import Command, Context, Group
@@ -99,7 +99,6 @@ def _default_token() -> Optional[str]:
     return os.environ.get('HASS_TOKEN', os.environ.get('HASSIO_TOKEN', None))
 
 
-@no_type_check
 @click.command(cls=HomeAssistantCli, context_settings=CONTEXT_SETTINGS)
 @click_log.simple_verbosity_option(logging.getLogger(), "--loglevel", "-l")
 @click.version_option(const.__version__)
@@ -115,7 +114,7 @@ def _default_token() -> Optional[str]:
     '--token',
     default=_default_token,
     help='The Bearer token for Home Assistant instance.',
-    envvar='HASS_TOKEN',
+    envvar='HASS_TOKEN',  # type: ignore
 )
 @click.option(
     '--password',

@@ -155,7 +155,7 @@ def get_events(ctx: Configuration) -> Dict[str, Any]:
 
 def get_history(
     ctx: Configuration, entity: Optional[str] = None
-) -> Dict[str, Any]:
+) -> List[Dict[str, Any]]:
     """Return History."""
     try:
         method = hass.URL_API_HISTORY
@@ -171,7 +171,7 @@ def get_history(
         )
 
     if req.status_code == 200:
-        return cast(Dict[str, Any], req.json())
+        return cast(List[Dict[str, Any]], req.json())
 
     raise HomeAssistantCliError(
         "Error while getting all events: {}".format(req.text)

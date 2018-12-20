@@ -1,6 +1,6 @@
 """Tests file for Home Assistant CLI (hass-cli)."""
 import os
-from typing import Dict, Optional, no_type_check
+from typing import Dict, Optional
 from unittest import mock
 
 import homeassistant_cli.cli as cli
@@ -11,7 +11,6 @@ HASSIO_SERVER_FALLBACK = "http://hassio/homeassistant"
 HASS_SERVER = "http://localhost:8123"
 
 
-@no_type_check
 @pytest.mark.parametrize(
     "description,env,expected_server,expected_resolved_server,\
     expected_token,expected_password",
@@ -82,7 +81,7 @@ def test_defaults(
                 expserver, json={"name": "mock response"}, status_code=200
             )
             ctx = cli.cli.make_context('hass-cli', ['--timeout', '1', 'info'])
-            with ctx:
+            with ctx:  # type: ignore
                 cli.cli.invoke(ctx)
 
             cfg = ctx.obj

@@ -3,7 +3,7 @@
 import logging
 import re as reg
 import sys
-from typing import Any, Dict, Pattern, no_type_check  # noqa: F401
+from typing import Any, Dict, Pattern  # noqa: F401
 
 import click
 import homeassistant_cli.autocompletion as autocompletion
@@ -55,8 +55,7 @@ def list_cmd(ctx: Configuration, servicefilter):
 
 
 @cli.command('call')
-@no_type_check
-@click.argument(
+@click.argument(  # type: ignore
     'service', required=True, autocompletion=autocompletion.services
 )
 @click.option(
