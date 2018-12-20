@@ -3,7 +3,7 @@
 import json as json_
 import logging
 import re
-from typing import Dict, List, Pattern, no_type_check  # noqa
+from typing import Any, Dict, List, Pattern  # noqa
 
 import click
 import homeassistant_cli.autocompletion as autocompletion
@@ -24,23 +24,22 @@ def cli(ctx):
 
 
 @cli.command()
-@no_type_check
-@click.argument(
+@click.argument(  # type: ignore
     'entity', required=True, autocompletion=autocompletion.entities
 )
 @pass_context
 def get(ctx: Configuration, entity):
     """Get/read entity state from Home Assistant."""
-    ctx.echo(
-        helper.format_output(
-            ctx, api.get_state(ctx, entity), const.COLUMNS_ENTITIES
-        )
-    )
+    state = api.get_state(ctx, entity)
+
+    if state:
+        ctx.echo(helper.format_output(ctx, state, const.COLUMNS_ENTITIES))
+    else:
+        _LOGGING.error("Entity with id: '%s' not found.", entity)
 
 
 @cli.command()
-@no_type_check
-@click.argument(
+@click.argument(  # type: ignore
     'entity', required=True, autocompletion=autocompletion.entities
 )
 @pass_context
@@ -75,8 +74,7 @@ def listcmd(ctx, entityfilter):
 
 
 @cli.command()
-@no_type_check
-@click.argument(
+@click.argument(  # type: ignore
     'entity', required=True, autocompletion=autocompletion.entities
 )
 @click.argument('newstate', required=False)
@@ -132,8 +130,12 @@ def edit(ctx: Configuration, entity, newstate, attributes, merge, json):
 
     else:
         existing = api.get_state(ctx, entity)
-        existing = helper.raw_format_output(ctx.output, existing)
-        new = click.edit(existing, extension='.{}'.format(ctx.output))
+        if existing:
+            existingraw = helper.raw_format_output(ctx.output, existing)
+        else:
+            existingraw = helper.raw_format_output(ctx.output, {})
+
+        new = click.edit(existingraw, extension='.{}'.format(ctx.output))
 
         if new is not None:
             ctx.echo("Updating '%s'", entity)
@@ -153,15 +155,14 @@ def edit(ctx: Configuration, entity, newstate, attributes, merge, json):
     _LOGGING.debug("Updated to: %s", result)
 
 
-def _report(ctx, result, action):
+def _report(ctx: Configuration, result: Dict[str, Any], action: str):
     ctx.echo(helper.format_output(ctx, result, columns=const.COLUMNS_ENTITIES))
     if ctx.verbose:
         ctx.echo("%s entities reported to be %s", len(result), action)
 
 
 @cli.command()
-@no_type_check
-@click.argument(
+@click.argument(  # type: ignore
     'entities', nargs=-1, required=True, autocompletion=autocompletion.entities
 )
 @pass_context
@@ -176,8 +177,7 @@ def toggle(ctx: Configuration, entities):
 
 
 @cli.command('turn_off')
-@no_type_check
-@click.argument(
+@click.argument(  # type: ignore
     'entities', nargs=-1, required=True, autocompletion=autocompletion.entities
 )
 @pass_context
@@ -192,8 +192,7 @@ def off_cmd(ctx: Configuration, entities):
 
 
 @cli.command('turn_on')
-@no_type_check
-@click.argument(
+@click.argument(  # type: ignore
     'entities', nargs=-1, required=True, autocompletion=autocompletion.entities
 )
 @pass_context
@@ -208,8 +207,7 @@ def on_cmd(ctx: Configuration, entities):
 
 
 @cli.command()
-@no_type_check
-@click.argument(
+@click.argument(  # type: ignore
     'entity', required=False, autocompletion=autocompletion.entities
 )
 @pass_context

@@ -40,7 +40,7 @@ def _init_ctx(ctx: Configuration) -> None:
 
 
 def services(
-    ctx: Configuration, args: str, incomplete: str
+    ctx: Configuration, args: List, incomplete: str
 ) -> List[Tuple[str, str]]:
     """Services."""
     _init_ctx(ctx)
@@ -71,7 +71,7 @@ def services(
 
 
 def entities(
-    ctx: Configuration, args: str, incomplete: str
+    ctx: Configuration, args: List, incomplete: str
 ) -> List[Tuple[str, str]]:
     """Entities."""
     _init_ctx(ctx)
@@ -95,7 +95,7 @@ def entities(
 
 
 def events(
-    ctx: Configuration, args: str, incomplete: str
+    ctx: Configuration, args: List, incomplete: str
 ) -> List[Tuple[str, str]]:
     """Events."""
     _init_ctx(ctx)
