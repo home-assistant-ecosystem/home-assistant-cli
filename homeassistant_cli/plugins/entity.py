@@ -69,8 +69,15 @@ def listcmd(ctx, entityfilter):
         for entity in states:
             if entityfilterre.search(entity['entity_id']):
                 result.append(entity)
-
-    ctx.echo(helper.format_output(ctx, result, columns=const.COLUMNS_ENTITIES))
+    ctx.echo(
+        helper.format_output(
+            ctx,
+            result,
+            columns=ctx.columns if ctx.columns else const.COLUMNS_ENTITIES,
+            no_headers=ctx.no_headers,
+            table_format=ctx.table_format,
+        )
+    )
 
 
 @cli.command()
@@ -156,7 +163,15 @@ def edit(ctx: Configuration, entity, newstate, attributes, merge, json):
 
 
 def _report(ctx: Configuration, result: Dict[str, Any], action: str):
-    ctx.echo(helper.format_output(ctx, result, columns=const.COLUMNS_ENTITIES))
+    ctx.echo(
+        helper.format_output(
+            ctx,
+            result,
+            columns=ctx.columns if ctx.columns else const.COLUMNS_ENTITIES,
+            no_headers=ctx.no_headers,
+            table_format=ctx.table_format,
+        )
+    )
     if ctx.verbose:
         ctx.echo("%s entities reported to be %s", len(result), action)
 
@@ -217,6 +232,8 @@ def history(ctx: Configuration, entity: str):
         helper.format_output(
             ctx,
             api.get_history(ctx, entity)[0],
-            columns=const.COLUMNS_ENTITIES,
+            columns=ctx.columns if ctx.columns else const.COLUMNS_ENTITIES,
+            no_headers=ctx.no_headers,
+            table_format=ctx.table_format,
         )
     )

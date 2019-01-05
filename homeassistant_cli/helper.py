@@ -4,7 +4,7 @@ from http.client import HTTPConnection
 import json
 import logging
 import shlex
-from typing import Any, Dict, Generator, List, Optional, Union, cast
+from typing import Any, Dict, Generator, List, Optional, Tuple, Union, cast
 
 from homeassistant_cli.config import Configuration
 import homeassistant_cli.const as const
@@ -27,10 +27,27 @@ def to_attributes(entry: str) -> Optional[Dict[str, str]]:
     return attributes_dict
 
 
+def to_tuples(entry: str) -> Optional[List[Tuple[str, str]]]:
+    """Convert list of key=value pairs to list of tuples."""
+    if not entry:
+        return None
+
+    lexer = shlex.shlex(entry, posix=True)
+    lexer.whitespace_split = True
+    lexer.whitespace = ','
+    attributes_list = []  # type: List[Tuple[str,str]]
+    attributes_list = list(
+        tuple(pair.split('=', 1)) for pair in lexer  # type: ignore
+    )
+    return attributes_list
+
+
 def raw_format_output(
     output: str,
     data: Union[List[Dict[str, Any]], Dict[str, Any]],
     columns: Optional[List] = None,
+    no_headers: bool = False,
+    table_format: str = 'plain',
 ) -> str:
     """Format the raw output."""
     if output == 'json':
@@ -51,7 +68,10 @@ def raw_format_output(
 
         fmt = [(v[0], parse(v[1])) for v in columns]
         result = []
-        headers = [v[0] for v in fmt]
+        if no_headers:
+            headers = []  # type: List[str]
+        else:
+            headers = [v[0] for v in fmt]
         for item in data:
             row = []
             for fmtpair in fmt:
@@ -59,7 +79,10 @@ def raw_format_output(
                 row.append(", ".join(map(str, val)))
 
             result.append(row)
-        return cast(str, tabulate(result, headers=headers))
+
+        return cast(
+            str, tabulate(result, headers=headers, tablefmt=table_format)
+        )
     else:
         raise ValueError(
             "Output Format was {}, expected either 'json' or 'yaml'".format(
@@ -72,9 +95,13 @@ def format_output(
     ctx: Configuration,
     data: Union[List[Dict[str, Any]], Dict[str, Any]],
     columns: Optional[List] = None,
+    no_headers: bool = False,
+    table_format: str = 'plain',
 ) -> str:
     """Format dict to defined output."""
-    return raw_format_output(ctx.output, data, columns)
+    return raw_format_output(
+        ctx.output, data, columns, no_headers, table_format
+    )
 
 
 def debug_requests_on() -> None:

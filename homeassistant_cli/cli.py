@@ -7,9 +7,10 @@ from typing import List, Optional, Union, cast
 import click
 from click.core import Command, Context, Group
 import click_log
+import homeassistant_cli.autocompletion as autocompletion
 from homeassistant_cli.config import Configuration
 import homeassistant_cli.const as const
-from homeassistant_cli.helper import debug_requests_on
+from homeassistant_cli.helper import debug_requests_on, to_tuples
 
 click_log.basic_config()
 
@@ -114,10 +115,10 @@ def _default_token() -> Optional[str]:
     '--token',
     default=_default_token,
     help='The Bearer token for Home Assistant instance.',
-    envvar='HASS_TOKEN',  # type: ignore
+    envvar='HASS_TOKEN',
 )
 @click.option(
-    '--password',
+    '--password',  # type: ignore
     default=None,
     help='The API password for Home Assistant instance.',
     envvar='HASS_PASSWORD',
@@ -170,6 +171,26 @@ def _default_token() -> Optional[str]:
 @click.option(
     '--debug', is_flag=True, default=False, help='Enables debug mode.'
 )
+@click.option(
+    '--columns',
+    default=None,
+    help=(
+        'Custom columns key=value list.'
+        ' Example: ENTITY=entity_name, NAME=attributes.friendly_name'
+    ),
+)
+@click.option(
+    '--no-headers',
+    default=False,
+    is_flag=True,
+    help=('When printing tables don\'t use headers (default: print headers)'),
+)
+@click.option(
+    '--table-format',
+    default='plain',
+    help=('Which table format to use.'),
+    autocompletion=autocompletion.table_formats,
+)
 @click.version_option()
 @pass_context
 def cli(
@@ -184,6 +205,9 @@ def cli(
     insecure: bool,
     showexceptions: bool,
     cert: str,
+    columns: str,
+    no_headers: bool,
+    table_format: str,
 ):
     """Command line interface for Home Assistant."""
     ctx.verbose = verbose
@@ -196,6 +220,9 @@ def cli(
     ctx.insecure = insecure
     ctx.showexceptions = showexceptions
     ctx.cert = cert
+    ctx.columns = to_tuples(columns)
+    ctx.no_headers = no_headers
+    ctx.table_format = table_format
 
     _LOGGER.debug("Using settings: %s", ctx)
 

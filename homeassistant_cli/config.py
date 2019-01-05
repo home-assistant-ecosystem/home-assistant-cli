@@ -2,7 +2,7 @@
 import logging
 import os
 import sys
-from typing import Any, Dict, Optional, cast  # noqa: F401
+from typing import Any, Dict, List, Optional, Tuple, cast  # noqa: F401
 
 import click
 import homeassistant_cli.const as const
@@ -118,6 +118,9 @@ class Configuration:
         self.showexceptions = False  # type: bool
         self.session = None  # type: Optional[Session]
         self.cert = None  # type: Optional[str]
+        self.columns = None  # type: Optional[List[Tuple[str, str]]]
+        self.no_headers = False
+        self.table_format = 'plain'
 
     def echo(self, msg: str, *args: Optional[Any]) -> None:
         """Put content message to stdout."""

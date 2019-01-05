@@ -115,3 +115,40 @@ def events(
         return [c for c in completions if incomplete in c[0]]
 
     return completions
+
+
+def table_formats(
+    ctx: Configuration, args: List, incomplete: str
+) -> List[Tuple[str, str]]:
+    """Table Formats."""
+    _init_ctx(ctx)
+
+    completions = [
+        ("plain", "Plain tables, no pseudo-graphics to draw lines"),
+        ("simple", "Simple table with --- as header/footer (default)"),
+        ("github", "Github flavored Markdown table"),
+        ("grid", "Formatted as Emacs 'table.el' package"),
+        ("fancy_grid", "Draws a fancy grid using box-drawing characters"),
+        ("pipe", "PHP Markdown Extra"),
+        ("orgtbl", "org-mode table"),
+        ("jira", "Atlassian Jira Markup"),
+        ("presto", "Formatted as PrestoDB cli"),
+        ("psql", "Formatted as Postgres psql cli"),
+        ("rst", "reStructuredText"),
+        ("mediawiki", "Media Wiki as used in Wikpedia"),
+        ("moinmoin", "MoinMain Wiki"),
+        ("youtrack", "Youtrack format"),
+        ("html", "HTML Markup"),
+        ("latex", "LaTeX markup, replacing special characters"),
+        ("latex_raw", "LaTeX markup, no replacing of special characters"),
+        (
+            "latex_booktabs",
+            "LaTex markup using spacing and style from `booktabs",
+        ),
+        ("textile", "Textile"),
+        ("tsv", "Tab Separated Values"),
+    ]
+
+    completions.sort()
+
+    return [c for c in completions if incomplete in c[0]]
