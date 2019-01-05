@@ -47,6 +47,70 @@ def test_entity_list(basic_entities_text) -> None:
         assert len(data) == 3
 
 
+def output_formats(cmd, data, output) -> None:
+    """Test output formats."""
+    with requests_mock.Mocker() as mock:
+        mock.get(
+            "http://localhost:8123/api/states", text=data, status_code=200
+        )
+
+        runner = CliRunner()
+        result = runner.invoke(cli.cli, cmd, catch_exceptions=False)
+        print()
+        print(result.output)
+        assert result.exit_code == 0
+        assert result.output == output
+
+
+def test_entity_list_table(
+    basic_entities_text, basic_entities_table_text
+) -> None:
+    """Test table."""
+    output_formats(
+        ["--output=table", "entity", "list"],
+        basic_entities_text,
+        basic_entities_table_text,
+    )
+
+
+def test_entity_list_tblformat(
+    basic_entities_text, basic_entities_table_format_text
+) -> None:
+    """Test table format."""
+    output_formats(
+        ["--output=table", "--table-format=html", "entity", "list"],
+        basic_entities_text,
+        basic_entities_table_format_text,
+    )
+
+
+def test_entity_list_table_columns(
+    basic_entities_text, basic_entities_table_columns_text
+) -> None:
+    """Test table columns."""
+    output_formats(
+        [
+            "--output=table",
+            "--columns=entity=attributes.friendly_name,state=state",
+            "entity",
+            "list",
+        ],
+        basic_entities_text,
+        basic_entities_table_columns_text,
+    )
+
+
+def test_entity_list_no_header(
+    basic_entities_text, basic_entities_table_no_header_text
+) -> None:
+    """Test table no header."""
+    output_formats(
+        ["--output=table", "--no-headers", "entity", "list"],
+        basic_entities_text,
+        basic_entities_table_no_header_text,
+    )
+
+
 def test_entity_get(basic_entities_text, basic_entities) -> None:
     """Test entity get."""
     with requests_mock.Mocker() as mock:
