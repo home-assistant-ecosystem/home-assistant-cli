@@ -12,10 +12,10 @@ from tabulate import tabulate
 import yaml
 
 
-def to_attributes(entry: str) -> Optional[Dict[str, str]]:
+def to_attributes(entry: str) -> Dict[str, str]:
     """Convert list of key=value pairs to dictionary."""
     if not entry:
-        return None
+        return {}
 
     lexer = shlex.shlex(entry, posix=True)
     lexer.whitespace_split = True
@@ -27,10 +27,10 @@ def to_attributes(entry: str) -> Optional[Dict[str, str]]:
     return attributes_dict
 
 
-def to_tuples(entry: str) -> Optional[List[Tuple[str, str]]]:
+def to_tuples(entry: str) -> List[Tuple[str, str]]:
     """Convert list of key=value pairs to list of tuples."""
     if not entry:
-        return None
+        return []
 
     lexer = shlex.shlex(entry, posix=True)
     lexer.whitespace_split = True
@@ -66,7 +66,7 @@ def raw_format_output(
         if not columns:
             columns = const.COLUMNS_DEFAULT
 
-        fmt = [(v[0], parse(v[1])) for v in columns]
+        fmt = [(v[0], parse(v[1] if len(v) > 1 else v[0])) for v in columns]
         result = []
         if no_headers:
             headers = []  # type: List[str]
