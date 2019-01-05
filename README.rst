@@ -82,7 +82,7 @@ Listing entities has support for tables:
 
 .. code:: bash
 
-    $ hass-cli --output=table entity list                                                                                                                                            ✘ 2 dev ✭ ✱
+    $ hass-cli --output=table entity list
     ENTITY                                                     DESCRIPTION                                     STATE
     ---------------------------------------------------------  ----------------------------------------------  ---------------------
     zone.school                                                School                                          zoning
@@ -101,6 +101,27 @@ Listing entities has support for tables:
     sensor.ring_front_door_battery                             Front Door Battery                              52
     ...
 
+
+You can use ``--no-headers`` to suppress the header.
+
+``--table-format`` let you select which table format you want. Default is ``simple`` but
+you can use any of the formats supported by https://pypi.org/project/tabulate/:
+``plain``, ``simple``, ``github``, ``grid``, ``fancy_grid``, ``pipe``, ``orgtbl``, ``rst``, ``mediawiki``, ``html``, ``latex``, ``latex_raw``, ``latex_booktabs`` or ``tsv``
+
+Finally, you can also via ``--columns`` control which data you want shown.
+Each column has a name and a jsonpath. The default setup for entities are:
+
+``--columns=ENTITY=entity_id,DESCRIPTION=attributes.friendly_name,STATE=state,CHANGED=last_changed``
+
+If you for example just wanted the name and all attributes you could do:
+
+.. code:: bash
+
+   hass-cli --output=table --columns=ENTITY="entity_id,ATTRIBUTES=attributes[*]" entity list zone
+   ENTITY             ATTRIBUTES
+   zone.school        {'friendly_name': 'School', 'hidden': True, 'icon': 'mdi:school', 'latitude': 7.011023, 'longitude': 16.858151, 'radius': 50.0}
+   zone.unnamed_zone  {'friendly_name': 'Unnamed zone', 'hidden': True, 'icon': 'mdi:home', 'latitude': 37.006476, 'longitude': 2.861699, 'radius': 50.0}
+   zone.home          {'friendly_name': 'Andersens', 'hidden': True, 'icon': 'mdi:home', 'latitude': 27.006476, 'longitude': 7.861699, 'radius': 100}
 
 Get state of a entity:
 
@@ -139,7 +160,7 @@ List posible service with or without a regular expression filter:
 
 .. code:: bash
 
-    hass-cli --output=yaml service list 'home.*toggle'                                                                                                                             ✘ 1 dev ✭ ✱
+    $ hass-cli --output=yaml service list 'home.*toggle'                                                                                                                             ✘ 1 dev ✭ ✱
     homeassistant:
       services:
         toggle:
@@ -231,41 +252,54 @@ Help
 
 .. code:: bash
 
-    Usage: hass-cli [OPTIONS] COMMAND [ARGS]...
+   Usage: hass-cli [OPTIONS] COMMAND [ARGS]...
 
-  Command line interface for Home Assistant.
+     Command line interface for Home Assistant.
 
-  Options:
-    -l, --loglevel LVL              Either CRITICAL, ERROR, WARNING, INFO or
-                                    DEBUG
-    --version                       Show the version and exit.
-    -s, --server TEXT               The server URL of Home Assistant instance.
-    --token TEXT                    The Bearer token for Home Assistant
-                                    instance.
-    --timeout INTEGER               Timeout for network operations.  [default:
-                                    5]
-    -o, --output [json|yaml|table]  Output format  [default: json]
-    -v, --verbose                   Enables verbose mode.
-    -x                              Print backtraces when exception occurs.
-    --insecure                      Ignore SSL Certificates. Allow to connect to
-                                    servers with self-signed certificates. Be
-                                    careful!
-    --debug                         Enables debug mode.
-    --version                       Show the version and exit.
-    --help                          Show this message and exit.
+   Options:
+     -l, --loglevel LVL              Either CRITICAL, ERROR, WARNING, INFO or
+                                     DEBUG
+     --version                       Show the version and exit.
+     -s, --server TEXT               The server URL or `auto` for automatic
+                                     detection  [default: auto]
+     --token TEXT                    The Bearer token for Home Assistant
+                                     instance.
+     --password TEXT                 The API password for Home Assistant
+                                     instance.
+     --timeout INTEGER               Timeout for network operations.  [default:
+                                     5]
+     -o, --output [json|yaml|table]  Output format  [default: json]
+     -v, --verbose                   Enables verbose mode.
+     -x                              Print backtraces when exception occurs.
+     --cert TEXT                     Path to client certificate file (.pem) to
+                                     use when connecting.
+     --insecure                      Ignore SSL Certificates. Allow to connect to
+                                     servers with self-signed certificates. Be
+                                     careful!
+     --debug                         Enables debug mode.
+     --columns TEXT                  Custom columns key=value list. Example:
+                                     ENTITY=entity_name,
+                                     NAME=attributes.friendly_name
+     --no-headers                    When printing tables don't use headers
+                                     (default: print headers)
+     --table-format TEXT             Which table format to use.
+     --version                       Show the version and exit.
+     --help                          Show this message and exit.
 
-  Commands:
-    completion  Output shell completion code for the specified shell (bash or...
-    config      Get configuration from Home Assistant.
-    discover    Discovery for the local network.
-    entity      Get info and operate on entities from Home Assistant.
-    event       Interact with events.
-    info        Get basic info from Home Assistant.
-    map         Print the current location on a map.
-    raw         Call the raw API (advanced).
-    service     Call and work with services.
-    template    Render templates on server or locally.
+   Commands:
+     completion  Output shell completion code for the specified shell (bash or...
+     config      Get configuration from Home Assistant.
+     discover    Discovery for the local network.
+     entity      Get info and operate on entities from Home Assistant.
+     event       Interact with events.
+     info        Get basic info from Home Assistant.
+     map         Print the current location on a map.
+     raw         Call the raw API (advanced).
+     service     Call and work with services.
+     system      System details and operations for Home Assistant.
+     template    Render templates on server or locally.
 
+   
 
 Clone the git repository and
 
