@@ -25,5 +25,3 @@ then
   echo "On '$CURRENT_BRANCH' - You have to be on the master or rc branch to release."
   exit 1
 fi
-
-`
