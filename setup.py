@@ -36,7 +36,7 @@ PACKAGES = find_packages(exclude=['tests', 'tests.*'])
 
 REQUIRES = [
     'requests==2.20.1',
-    'pyyaml>=3.13,<4',
+    'pyyaml>=4.2b1',
     'netdisco==2.2.0',
     'click==7.0',
     'click-log==0.3.2',
