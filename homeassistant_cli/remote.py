@@ -1,9 +1,8 @@
 """
-Basic api to access remote instance of Home Assistant.
+Basic API to access remote instance of Home Assistant.
 
 If a connection error occurs while communicating with the API a
 HomeAssistantCliError will be raised.
-
 """
 from datetime import datetime
 import enum
@@ -19,7 +18,7 @@ import requests
 
 _LOGGER = logging.getLogger(__name__)
 
-# copied from aiohttp.hdrs
+# Copied from aiohttp.hdrs
 CONTENT_TYPE = 'Content-Type'
 METH_DELETE = 'DELETE'
 METH_GET = 'GET'
@@ -121,7 +120,7 @@ def validate_api(ctx: Configuration) -> APIStatus:
 
 
 def get_info(ctx: Configuration) -> Dict[str, Any]:
-    """Get basic info about the Homeassistant instance."""
+    """Get basic info about the Home Assistant instance."""
     try:
         req = restapi(ctx, METH_GET, hass.URL_API_DISCOVERY_INFO)
 
@@ -132,7 +131,7 @@ def get_info(ctx: Configuration) -> Dict[str, Any]:
         )
 
     except (HomeAssistantCliError, ValueError):
-        raise HomeAssistantCliError("Unexpected error retriving info")
+        raise HomeAssistantCliError("Unexpected error retrieving infomation")
         # ValueError if req.json() can't parse the json
 
 
@@ -210,19 +209,19 @@ def get_raw_error_log(ctx: Configuration) -> str:
 
 
 def get_config(ctx: Configuration) -> Dict[str, Any]:
-    """Return the runing config."""
+    """Return the running configuration."""
     try:
         req = restapi(ctx, METH_GET, hass.URL_API_CONFIG)
     except HomeAssistantCliError as ex:
         raise HomeAssistantCliError(
-            "Unexpected error getting config: {}".format(ex)
+            "Unexpected error getting configuration: {}".format(ex)
         )
 
     if req.status_code == 200:
         return cast(Dict[str, str], req.json())
 
     raise HomeAssistantCliError(
-        "Error while getting all config: {}".format(req.text)
+        "Error while getting all configuration: {}".format(req.text)
     )
 
 

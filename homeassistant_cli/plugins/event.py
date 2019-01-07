@@ -1,4 +1,4 @@
-"""Edit plugin for Home Assistant CLI (hass-cli)."""
+"""Event plugin for Home Assistant CLI (hass-cli)."""
 import json as json_
 import logging
 

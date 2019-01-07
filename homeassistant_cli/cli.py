@@ -1,4 +1,4 @@
-"""Configuration plugin for Home Assistant CLI (hass-cli)."""
+"""Home Assistant CLI (hass-cli)."""
 import logging
 import os
 import sys
@@ -26,22 +26,21 @@ pass_context = click.make_pass_decorator(  # pylint: disable=invalid-name
 def run() -> None:
     """Run entry point.
 
-    Wraps click for full control
-    over exception handling in Click.
+    Wraps click for full control over exception handling in Click.
     """
-    # a hack to see if exception details should be printed.
+    # A hack to see if exception details should be printed.
     exceptionflags = ['-x']
     verbose = [c for c in exceptionflags if c in sys.argv]
 
     try:
-        # could use cli.invoke here to use the just created context
+        # Could use cli.invoke here to use the just created context
         # but then shell completion will not work. Thus calling
         # standalone mode to keep that working.
         result = cli.main(standalone_mode=False)
         if isinstance(result, int):
             sys.exit(result)
 
-    # exception handling below is done to use logger
+    # Exception handling below is done to use logger
     # and mimick as close as possible what click would
     # do normally in its main()
     except click.ClickException as ex:
@@ -56,7 +55,7 @@ def run() -> None:
         else:
             _LOGGER.error("%s: %s", type(ex).__name__, ex)
             _LOGGER.info(
-                "Run with %s to see full exception info.",
+                "Run with %s to see full exception infomation.",
                 " or ".join(exceptionflags),
             )
         sys.exit(1)
@@ -155,7 +154,7 @@ def _default_token() -> Optional[str]:
     '--cert',
     default=None,
     envvar="HASS_CERT",
-    help=('Path to client certificate file (.pem) to use when connecting.'),
+    help="Path to client certificate file (.pem) to use when connecting.",
 )
 @click.option(
     '--insecure',
@@ -163,8 +162,7 @@ def _default_token() -> Optional[str]:
     default=False,
     help=(
         'Ignore SSL Certificates.'
-        ' Allow to connect to servers with'
-        ' self-signed certificates.'
+        ' Allow to connect to servers with self-signed certificates.'
         ' Be careful!'
     ),
 )
@@ -183,12 +181,12 @@ def _default_token() -> Optional[str]:
     '--no-headers',
     default=False,
     is_flag=True,
-    help=('When printing tables don\'t use headers (default: print headers)'),
+    help="When printing tables don\'t use headers (default: print headers)",
 )
 @click.option(
     '--table-format',
     default='plain',
-    help=('Which table format to use.'),
+    help="Which table format to use.",
     autocompletion=autocompletion.table_formats,
 )
 @click.version_option()

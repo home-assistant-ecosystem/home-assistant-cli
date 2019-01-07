@@ -1,5 +1,4 @@
-"""Location plugin for Home Assistant CLI (hass-cli)."""
-
+"""Service plugin for Home Assistant CLI (hass-cli)."""
 import logging
 import re as reg
 import sys

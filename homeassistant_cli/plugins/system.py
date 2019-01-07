@@ -1,4 +1,4 @@
-"""Location plugin for Home Assistant CLI (hass-cli)."""
+"""System plugin for Home Assistant CLI (hass-cli)."""
 import logging
 
 import click
