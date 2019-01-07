@@ -9,14 +9,14 @@ import homeassistant_cli.remote as api
 
 @click.group('config')
 @pass_context
-def cli(ctx: Configuration):
+def cli(ctx):
     """Get configuration from a Home Assistant instance."""
 
 
 @cli.command()
 @pass_context
 def full(ctx: Configuration):
-    """Get the full d from Home Assistant."""
+    """Get the full configuration from Home Assistant."""
     click.echo(format_output(ctx, api.get_config(ctx)))
 
 
@@ -29,8 +29,7 @@ def components(ctx: Configuration):
 
 @cli.command()
 @pass_context
-def dirs(ctx: Configuration):
-    """Get directories from Home Assistant."""
-    config = api.get_config(ctx)
-    click.echo(format_output(ctx, config['config_dir']))
-    click.echo(format_output(ctx, config['whitelist_external_dirs']))
+def whitelist_dirs(ctx: Configuration):
+    """Get the whitelisted directories from Home Assistant."""
+    click.echo(format_output(
+        ctx, api.get_config(ctx)['whitelist_external_dirs']))
