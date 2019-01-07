@@ -34,7 +34,7 @@ def test_info_without_server_running() -> None:
     )
     assert result.exit_code == 1
     assert isinstance(result.exception, HomeAssistantCliError)
-    assert str(result.exception) == "Unexpected error retriving info"
+    assert str(result.exception) == "Unexpected error retrieving information"
 
 
 def test_info_json() -> None:
