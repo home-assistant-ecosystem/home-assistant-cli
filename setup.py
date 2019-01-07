@@ -46,7 +46,7 @@ REQUIRES = [
     'jinja2>=2.10',
 ]
 
-# should be as close to homeassistant dev/master as possible
+# Should be as close to Home Assistant dev/master as possible
 TESTS_REQUIRE = [
     'coveralls==1.2.0',
     'flake8-docstrings==1.3.0',
@@ -61,13 +61,12 @@ TESTS_REQUIRE = [
     'pytest==4.0.0',
     'requests_mock==1.5.2',
     "black==18.9b0;python_version>'3.6'",
-    'wheel==0.32.3',  # otherwise setup.py bdist_wheel does not work
+    'wheel==0.32.3',  # Otherwise setup.py bdist_wheel does not work
 ]
 
 MIN_PY_VERSION = '.'.join(map(str, hass_cli_const.REQUIRED_PYTHON_VER))
 
-# allow you to run pip3 install .[test] to get
-# test dependencies included.
+# Allow you to run pip3 install .[test] to get test dependencies included
 EXTRAS_REQUIRE = {'test': TESTS_REQUIRE}
 
 setup(
