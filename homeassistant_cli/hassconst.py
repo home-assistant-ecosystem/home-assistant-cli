@@ -2,7 +2,7 @@
 """Constants used by Home Assistant components.
 
 Copy of recent homeassistant.const to make hass-cli run
-without installing homeassistant itself.
+without installing Home Assistant itself.
 """
 
 # Format for platforms
