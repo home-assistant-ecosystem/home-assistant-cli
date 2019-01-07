@@ -1,5 +1,4 @@
-"""Location plugin for Home Assistant CLI (hass-cli)."""
-
+"""Entity plugin for Home Assistant CLI (hass-cli)."""
 import json as json_
 import logging
 import re
