@@ -131,7 +131,7 @@ def get_info(ctx: Configuration) -> Dict[str, Any]:
         )
 
     except (HomeAssistantCliError, ValueError):
-        raise HomeAssistantCliError("Unexpected error retrieving infomation")
+        raise HomeAssistantCliError("Unexpected error retrieving information")
         # ValueError if req.json() can't parse the json
 
 
