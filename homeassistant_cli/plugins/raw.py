@@ -3,6 +3,7 @@ import json as json_
 import logging
 
 import click
+import homeassistant_cli.autocompletion as autocompletion
 from homeassistant_cli.cli import pass_context
 from homeassistant_cli.config import Configuration
 from homeassistant_cli.helper import format_output
@@ -37,7 +38,9 @@ def _report(ctx, cmd, method, response) -> None:
 
 
 @cli.command()
-@click.argument('method')
+@click.argument(  # type: ignore
+    'method', autocompletion=autocompletion.api_methods
+)
 @pass_context
 def get(ctx: Configuration, method):
     """Do a GET request against api/<method>."""
@@ -47,7 +50,9 @@ def get(ctx: Configuration, method):
 
 
 @cli.command()
-@click.argument('method')
+@click.argument(  # type: ignore
+    'method', autocompletion=autocompletion.api_methods
+)
 @click.option('--json')
 @pass_context
 def post(ctx: Configuration, method, json):

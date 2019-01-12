@@ -14,8 +14,9 @@ def test_entity_completion(basic_entities_text) -> None:
         )
 
         cfg = cli.cli.make_context('hass-cli', ['entity', 'get'])
-
-        result = autocompletion.entities(cfg, "entity get", "")
+        result = autocompletion.entities(  # type: ignore
+            cfg, ["entity", "get"], ""
+        )
         assert len(result) == 3
 
         resultdict = dict(result)
@@ -35,16 +36,16 @@ def test_service_completion(default_services_text) -> None:
 
         cfg = cli.cli.make_context('hass-cli', ['service', 'get'])
 
-        result = autocompletion.services(cfg, "service get", "")
+        result = autocompletion.services(  # type: ignore
+            cfg, ["service", "get"], ""
+        )
         assert len(result) == 121
 
         resultdict = dict(result)
 
         assert "automation.reload" in resultdict
-        assert (
-            resultdict["automation.reload"]
-            == "Reload the automation configuration."
-        )
+        val = resultdict["automation.reload"]
+        assert val == "Reload the automation configuration."
 
 
 def test_event_completion(default_events_text) -> None:
@@ -58,7 +59,9 @@ def test_event_completion(default_events_text) -> None:
 
         cfg = cli.cli.make_context('hass-cli', ['service', 'get'])
 
-        result = autocompletion.events(cfg, "events get", "")
+        result = autocompletion.events(  # type: ignore
+            cfg, ["events", "get"], ""
+        )
         assert len(result) == 11
 
         resultdict = dict(result)
