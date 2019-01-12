@@ -10,6 +10,7 @@ import homeassistant_cli.remote as api
 @pass_context
 def cli(ctx):
     """Get configuration from a Home Assistant instance."""
+    ctx.auto_output('table')
 
 
 COLUMNS_DETAILS = [

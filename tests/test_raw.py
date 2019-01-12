@@ -19,7 +19,9 @@ def test_raw_get() -> None:
 
         runner = CliRunner()
         result = runner.invoke(
-            cli.cli, ["raw", "get", "/api/anything"], catch_exceptions=False
+            cli.cli,
+            ["--output=json", "raw", "get", "/api/anything"],
+            catch_exceptions=False,
         )
         assert result.exit_code == 0
         data = json.loads(result.output)
@@ -37,7 +39,9 @@ def test_raw_post() -> None:
 
         runner = CliRunner()
         result = runner.invoke(
-            cli.cli, ["raw", "post", "/api/anything"], catch_exceptions=False
+            cli.cli,
+            ["--output=json", "raw", "post", "/api/anything"],
+            catch_exceptions=False,
         )
         assert result.exit_code == 0
         data = json.loads(result.output)

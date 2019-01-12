@@ -20,6 +20,7 @@ _LOGGING = logging.getLogger(__name__)
 @pass_context
 def cli(ctx):
     """Get info and operate on entities from Home Assistant."""
+    ctx.auto_output("table")
 
 
 @cli.command()

@@ -112,7 +112,9 @@ def test_entity_list():
 
         runner = CliRunner()
         result = runner.invoke(
-            cli.cli, ["entity", "list"], catch_exceptions=False
+            cli.cli,
+            ["--output=json", "entity", "list"],
+            catch_exceptions=False,
         )
         assert result.exit_code == 0
         data = json.loads(result.output)
@@ -132,7 +134,7 @@ def test_entity_get() -> None:
         runner = CliRunner()
         result = runner.invoke(
             cli.cli,
-            ["entity", "get", "group.all_remotes"],
+            ["--output=json", "entity", "get", "group.all_remotes"],
             catch_exceptions=False,
         )
         assert result.exit_code == 0
