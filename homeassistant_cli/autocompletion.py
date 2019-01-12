@@ -2,7 +2,7 @@
 import os
 from typing import Any, Dict, List, Tuple  # NOQA
 
-from homeassistant_cli import const
+from homeassistant_cli import const, hassconst
 from homeassistant_cli.config import Configuration, resolve_server
 import homeassistant_cli.remote as api
 from requests.exceptions import HTTPError
@@ -148,6 +148,24 @@ def table_formats(
         ("textile", "Textile"),
         ("tsv", "Tab Separated Values"),
     ]
+
+    completions.sort()
+
+    return [c for c in completions if incomplete in c[0]]
+
+
+def api_methods(
+    ctx: Configuration, args: List, incomplete: str
+) -> List[Tuple[str, str]]:
+    """Auto completion for methods."""
+    _init_ctx(ctx)
+
+    from inspect import getmembers
+
+    completions = []
+    for name, value in getmembers(hassconst):
+        if name.startswith('URL_API_'):
+            completions.append((value, name[len('URL_API_') :]))
 
     completions.sort()
 
