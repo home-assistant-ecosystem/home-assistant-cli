@@ -14,8 +14,9 @@ _LOGGING = logging.getLogger(__name__)
 
 @click.group('raw')
 @pass_context
-def cli(ctx):
+def cli(ctx: Configuration):
     """Call the raw API (advanced)."""
+    ctx.auto_output("data")
 
 
 def _report(ctx, cmd, method, response) -> None:

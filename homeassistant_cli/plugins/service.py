@@ -25,6 +25,7 @@ def cli(ctx):
 @pass_context
 def list_cmd(ctx: Configuration, servicefilter):
     """Get list of services."""
+    ctx.auto_output('table')
     services = api.get_services(ctx)
 
     result = {}  # type: Dict[str,Any]
@@ -63,6 +64,7 @@ def list_cmd(ctx: Configuration, servicefilter):
 @pass_context
 def call(ctx: Configuration, service, arguments):
     """Call a service."""
+    ctx.auto_output('data')
     _LOGGING.debug("service call <start>")
     parts = service.split(".")
     if len(parts) != 2:

@@ -155,3 +155,12 @@ class Configuration:
     def resolve_server(self) -> str:
         """Return resolved server (after resolving if needed)."""
         return resolve_server(self)
+
+    def auto_output(self, auto_output: str) -> str:
+        """Configure output format."""
+        if self.output == "auto":
+            if auto_output == 'data':
+                auto_output = const.DEFAULT_DATAOUTPUT
+            _LOGGING.debug("Setting auto-output to: %s", auto_output)
+            self.output = auto_output
+        return self.output

@@ -131,9 +131,9 @@ def _default_token() -> Optional[str]:
 @click.option(
     '--output',
     '-o',
-    help="Output format",
-    type=click.Choice(['json', 'yaml', 'table']),
-    default='json',
+    help="Output format.",
+    type=click.Choice(['json', 'yaml', 'table', 'auto']),
+    default='auto',
     show_default=True,
 )
 @click.option(

@@ -11,6 +11,8 @@ DEFAULT_HASSIO_SERVER = 'http://hassio/homeassistant'
 DEFAULT_TIMEOUT = 5
 DEFAULT_OUTPUT = 'json'  # TODO: Have default be human table relevant output
 
+DEFAULT_DATAOUTPUT = 'yaml'
+
 COLUMNS_DEFAULT = [('ALL', '*')]
 COLUMNS_ENTITIES = [
     ('ENTITY', 'entity_id'),

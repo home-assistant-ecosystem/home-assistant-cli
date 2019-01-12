@@ -11,6 +11,8 @@ import homeassistant_cli.const as const
 from tabulate import tabulate
 import yaml
 
+_LOGGING = logging.getLogger(__name__)
+
 
 def to_attributes(entry: str) -> Dict[str, str]:
     """Convert list of key=value pairs to dictionary."""
@@ -50,6 +52,10 @@ def raw_format_output(
     table_format: str = 'plain',
 ) -> str:
     """Format the raw output."""
+    if output == 'auto':
+        _LOGGING.debug("Output `auto` thus using %s", const.DEFAULT_DATAOUTPUT)
+        output = const.DEFAULT_DATAOUTPUT
+
     if output == 'json':
         try:
             return json.dumps(data, indent=2, sort_keys=False)

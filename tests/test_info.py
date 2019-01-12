@@ -51,7 +51,7 @@ def test_info_json() -> None:
             cli.cli, ['--output=json', 'info'], catch_exceptions=False
         )
         assert result.exit_code == 0
-        assert VALID_INFO == json.loads(result.output)
+        assert [VALID_INFO] == json.loads(result.output)
 
 
 def test_info_unauth() -> None:
@@ -84,4 +84,4 @@ def test_info_yaml() -> None:
             cli.cli, ['--output=yaml', 'info'], catch_exceptions=False
         )
         assert result.exit_code == 0
-        assert VALID_INFO == yaml.load(result.output)
+        assert [VALID_INFO] == yaml.load(result.output)

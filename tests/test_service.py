@@ -19,7 +19,9 @@ def test_service_list(default_services) -> None:
 
         runner = CliRunner()
         result = runner.invoke(
-            cli.cli, ["service", "list"], catch_exceptions=False
+            cli.cli,
+            ["--output=json", "service", "list"],
+            catch_exceptions=False,
         )
         assert result.exit_code == 0
         data = json.loads(result.output)
@@ -38,7 +40,7 @@ def test_service_filter(default_services) -> None:
         runner = CliRunner()
         result = runner.invoke(
             cli.cli,
-            ["service", "list", "homeassistant\\.turn.*"],
+            ["--output=json", "service", "list", "homeassistant\\.turn.*"],
             catch_exceptions=False,
         )
         assert result.exit_code == 0
@@ -59,7 +61,7 @@ def test_service_completion(default_services) -> None:
         cfg = Configuration()
 
         result = autocompletion.services(
-            cfg, "service call", "homeassistant.turn"
+            cfg, ["service", "call"], "homeassistant.turn"
         )
         assert len(result) == 2
 
@@ -81,7 +83,7 @@ def test_service_call(default_services) -> None:
         runner = CliRunner()
         result = runner.invoke(
             cli.cli,
-            ["service", "call", "homeassistant.restart"],
+            ["--output=json", "service", "call", "homeassistant.restart"],
             catch_exceptions=False,
         )
 

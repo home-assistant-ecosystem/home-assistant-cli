@@ -39,7 +39,9 @@ def test_entity_list(basic_entities_text) -> None:
 
         runner = CliRunner()
         result = runner.invoke(
-            cli.cli, ["entity", "list"], catch_exceptions=False
+            cli.cli,
+            ["--output=json", "entity", "list"],
+            catch_exceptions=False,
         )
         assert result.exit_code == 0
         data = json.loads(result.output)
@@ -70,6 +72,15 @@ def test_entity_list_table(
         ["--output=table", "entity", "list"],
         basic_entities_text,
         basic_entities_table_text,
+    )
+
+
+def test_entity_default_list_table(
+    basic_entities_text, basic_entities_table_text
+) -> None:
+    """Test table."""
+    output_formats(
+        ["entity", "list"], basic_entities_text, basic_entities_table_text
     )
 
 
@@ -125,7 +136,9 @@ def test_entity_get(basic_entities_text, basic_entities) -> None:
 
         runner = CliRunner()
         result = runner.invoke(
-            cli.cli, ["entity", "get", "sensor.one"], catch_exceptions=False
+            cli.cli,
+            ["--output=json", "entity", "get", "sensor.one"],
+            catch_exceptions=False,
         )
         assert result.exit_code == 0
 
@@ -159,7 +172,13 @@ def test_entity_edit(basic_entities_text, basic_entities) -> None:
         runner = CliRunner()
         result = runner.invoke(
             cli.cli,
-            ["entity", "edit", "sensor.one", "myspecialstate"],
+            [
+                "--output=json",
+                "entity",
+                "edit",
+                "sensor.one",
+                "myspecialstate",
+            ],
             catch_exceptions=False,
         )
 
@@ -181,7 +200,9 @@ def test_entity_filter(default_entities) -> None:
 
         runner = CliRunner()
         result = runner.invoke(
-            cli.cli, ["entity", "list", "bathroom"], catch_exceptions=False
+            cli.cli,
+            ["--output=json", "entity", "list", "bathroom"],
+            catch_exceptions=False,
         )
         assert result.exit_code == 0
         data = json.loads(result.output)
