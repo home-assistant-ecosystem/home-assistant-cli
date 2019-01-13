@@ -45,7 +45,7 @@ def test_raw_post() -> None:
 
 
 def test_apimethod_completion(default_services) -> None:
-    """Test completion for raw api methods."""
+    """Test completion for raw API methods."""
     cfg = Configuration()
 
     result = autocompletion.api_methods(cfg, ["raw", "get"], "/api/disc")

@@ -17,7 +17,7 @@ VALID_INFO = {
 
 
 def ordered(obj: Any):
-    """Sort object recursively. Useful for comparing json/yaml dicts."""
+    """Sort object recursively. Useful for comparing JSON/YAML dicts."""
     if isinstance(obj, dict):
         return sorted((k, ordered(v)) for k, v in obj.items())
     if isinstance(obj, list):
@@ -38,7 +38,7 @@ def test_info_without_server_running() -> None:
 
 
 def test_info_json() -> None:
-    """Test info reads properly with json."""
+    """Test info reads properly with JSON."""
     with requests_mock.Mocker() as mock:
         mock.get(
             'http://localhost:8123/api/discovery_info',
@@ -55,7 +55,7 @@ def test_info_json() -> None:
 
 
 def test_info_unauth() -> None:
-    """Test info reads properly with json."""
+    """Test info reads properly with JSON."""
     with requests_mock.Mocker() as mock:
         mock.get(
             'http://localhost:8123/api/discovery_info',
@@ -71,7 +71,7 @@ def test_info_unauth() -> None:
 
 
 def test_info_yaml() -> None:
-    """Test info reads properly with yaml."""
+    """Test info reads properly with YAML."""
     with requests_mock.Mocker() as mock:
         mock.get(
             'http://localhost:8123/api/discovery_info',
