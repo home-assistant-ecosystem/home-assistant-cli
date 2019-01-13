@@ -68,3 +68,18 @@ def whitelist_dirs(ctx: Configuration):
             table_format=ctx.table_format,
         )
     )
+
+
+@cli.command()
+@pass_context
+def release(ctx: Configuration):
+    """Get the release of Home Assistant."""
+    click.echo(
+        format_output(
+            ctx,
+            [api.get_config(ctx)['version']],
+            columns=ctx.columns if ctx.columns else [('VERSION', '$')],
+            no_headers=ctx.no_headers,
+            table_format=ctx.table_format,
+        )
+    )
