@@ -176,6 +176,15 @@ def _report(ctx: Configuration, result: Dict[str, Any], action: str):
         ctx.echo("%s entities reported to be %s", len(result), action)
 
 
+def _homeassistant_cmd(ctx: Configuration, entities, cmd, action):
+    """Run command on home assistant."""
+    data = {'entity_id': entities}
+    _LOGGING.debug("%s on %s", cmd, entities)
+    result = api.call_service(ctx, 'homeassistant', cmd, data)
+
+    _report(ctx, result, action)
+
+
 @cli.command()
 @click.argument(  # type: ignore
     'entities', nargs=-1, required=True, autocompletion=autocompletion.entities
@@ -183,12 +192,7 @@ def _report(ctx: Configuration, result: Dict[str, Any], action: str):
 @pass_context
 def toggle(ctx: Configuration, entities):
     """Toggle state for one or more entities in Home Assistant."""
-    for entity in entities:
-        data = {'entity_id': entity}
-        _LOGGING.debug("Toggling %s", entity)
-        result = api.call_service(ctx, 'homeassistant', 'toggle', data)
-
-        _report(ctx, result, "toggled")
+    _homeassistant_cmd(ctx, entities, 'toggle', "toggled")
 
 
 @cli.command('turn_off')
@@ -198,12 +202,7 @@ def toggle(ctx: Configuration, entities):
 @pass_context
 def off_cmd(ctx: Configuration, entities):
     """Turn entity off."""
-    for entity in entities:
-        data = {'entity_id': entity}
-        _LOGGING.debug("Toggling %s", entity)
-        result = api.call_service(ctx, 'homeassistant', 'turn_off', data)
-
-        _report(ctx, result, "turned off")
+    _homeassistant_cmd(ctx, entities, 'turn_off', "turned off")
 
 
 @cli.command('turn_on')
@@ -213,12 +212,7 @@ def off_cmd(ctx: Configuration, entities):
 @pass_context
 def on_cmd(ctx: Configuration, entities):
     """Turn entity on."""
-    for entity in entities:
-        data = {'entity_id': entity}
-        _LOGGING.debug("Toggling %s", entity)
-        result = api.call_service(ctx, 'homeassistant', 'turn_on', data)
-
-        _report(ctx, result, "turned on")
+    _homeassistant_cmd(ctx, entities, 'turn_on', "turned on")
 
 
 @cli.command()
