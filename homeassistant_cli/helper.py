@@ -86,6 +86,7 @@ def raw_format_output(
 
             result.append(row)
 
+        # result.sort(key=lambda row: row[3])
         return cast(
             str, tabulate(result, headers=headers, tablefmt=table_format)
         )
