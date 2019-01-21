@@ -4,12 +4,14 @@ Basic API to access remote instance of Home Assistant.
 If a connection error occurs while communicating with the API a
 HomeAssistantCliError will be raised.
 """
+import collections
 from datetime import datetime
 import enum
 import json
 import logging
 from typing import Any, Dict, List, Optional, cast
 import urllib.parse
+from urllib.parse import urlencode
 
 from homeassistant_cli.config import Configuration, resolve_server
 from homeassistant_cli.exceptions import HomeAssistantCliError
@@ -153,15 +155,27 @@ def get_events(ctx: Configuration) -> Dict[str, Any]:
 
 
 def get_history(
-    ctx: Configuration, entity: Optional[str] = None
+    ctx: Configuration,
+    entity: Optional[str] = None,
+    start_time: Optional[datetime] = None,
+    end_time: Optional[datetime] = None,
 ) -> List[Dict[str, Any]]:
     """Return History."""
     try:
-        method = hass.URL_API_HISTORY
+        if start_time:
+            method = hass.URL_API_HISTORY_PERIOD.format(start_time.isoformat())
+        else:
+            method = hass.URL_API_HISTORY
+
+        params = collections.OrderedDict()  # type: Dict[str, str]
+
         if entity:
-            method = "{}?filter_entity_id={}".format(
-                hass.URL_API_HISTORY, entity
-            )
+            params["filter_entity_id"] = entity
+        if end_time:
+            params["end_time"] = end_time.isoformat()
+
+        if params:
+            method = "{}?{}".format(method, urlencode(params))
 
         req = restapi(ctx, METH_GET, method)
     except HomeAssistantCliError as ex:

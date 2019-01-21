@@ -219,15 +219,73 @@ def on_cmd(ctx: Configuration, entities):
 @click.argument(  # type: ignore
     'entity', required=False, autocompletion=autocompletion.entities
 )
+@click.option(
+    '--since',
+    required=False,
+    default="1d",
+    help="Start of the period to get history from. A timestamp or relative\
+    expression relative to now. Defaults to 1 day.",
+)
+@click.option(
+    '--end',
+    required=False,
+    default="now",
+    help="End of the period to query history from. A timestamp or relative\
+    expression relative to now. Defaults to now.",
+)
 @pass_context
-def history(ctx: Configuration, entity: str):
-    """List history from Home Assistant."""
+def history(ctx: Configuration, entity: str, since: str, end: str):
+    """Get history from Home Assistant, all or per entity.
+
+    You can use `--since` and `--end` to narrow or expand the time period.
+
+    Both options accepts a full timestamp i.e. `2016-02-06T22:15:00+00:00`
+    or a relative expression i.e. `3m` for three minutes, `5d` for 5 days.
+    Even `3 minutes` or `5 days` will work.
+    See https://dateparser.readthedocs.io/en/latest/#features for examples.
+    """
+    import dateparser
+
+    settings = {
+        'DATE_ORDER': 'DMY',
+        'TIMEZONE': 'UTC',
+        'RETURN_AS_TIMEZONE_AWARE': True,
+    }
+
+    start_time = dateparser.parse(since, settings=settings)
+
+    end_time = dateparser.parse(end, settings=settings)
+
+    delta = end_time - start_time
+
+    if ctx.verbose:
+        click.echo(
+            'Querying from {}:{} to {}:{} a span of {}'.format(
+                since, start_time.isoformat(), end, end_time.isoformat(), delta
+            )
+        )
+
+    data = api.get_history(ctx, entity, start_time, end_time)
+
+    result = []  # type: List[Dict[str, Any]]
+    entitycount = 0
+    for item in data:
+        result.extend(item)  # type: ignore
+        entitycount = entitycount + 1
+
     click.echo(
         helper.format_output(
             ctx,
-            api.get_history(ctx, entity)[0],
+            result,
             columns=ctx.columns if ctx.columns else const.COLUMNS_ENTITIES,
             no_headers=ctx.no_headers,
             table_format=ctx.table_format,
         )
     )
+
+    if ctx.verbose:
+        click.echo(
+            'History with {} rows from {} entities found.'.format(
+                len(result), entitycount
+            )
+        )
