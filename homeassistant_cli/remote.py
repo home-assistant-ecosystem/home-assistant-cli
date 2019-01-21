@@ -156,7 +156,7 @@ def get_events(ctx: Configuration) -> Dict[str, Any]:
 
 def get_history(
     ctx: Configuration,
-    entity: Optional[str] = None,
+    entities: Optional[List] = None,
     start_time: Optional[datetime] = None,
     end_time: Optional[datetime] = None,
 ) -> List[Dict[str, Any]]:
@@ -169,8 +169,8 @@ def get_history(
 
         params = collections.OrderedDict()  # type: Dict[str, str]
 
-        if entity:
-            params["filter_entity_id"] = entity
+        if entities:
+            params["filter_entity_id"] = ",".join(entities)
         if end_time:
             params["end_time"] = end_time.isoformat()
 
