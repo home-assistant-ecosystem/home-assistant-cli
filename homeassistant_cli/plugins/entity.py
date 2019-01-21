@@ -217,7 +217,7 @@ def on_cmd(ctx: Configuration, entities):
 
 @cli.command()
 @click.argument(  # type: ignore
-    'entity', required=False, autocompletion=autocompletion.entities
+    'entities', nargs=-1, required=True, autocompletion=autocompletion.entities
 )
 @click.option(
     '--since',
@@ -234,7 +234,7 @@ def on_cmd(ctx: Configuration, entities):
     expression relative to now. Defaults to now.",
 )
 @pass_context
-def history(ctx: Configuration, entity: str, since: str, end: str):
+def history(ctx: Configuration, entities: List, since: str, end: str):
     """Get history from Home Assistant, all or per entity.
 
     You can use `--since` and `--end` to narrow or expand the time period.
@@ -265,7 +265,7 @@ def history(ctx: Configuration, entity: str, since: str, end: str):
             )
         )
 
-    data = api.get_history(ctx, entity, start_time, end_time)
+    data = api.get_history(ctx, list(entities), start_time, end_time)
 
     result = []  # type: List[Dict[str, Any]]
     entitycount = 0
