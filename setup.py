@@ -1,9 +1,13 @@
 #!/usr/bin/env python3
 """Setup script for Home Assistant CLI."""
 from datetime import datetime as dt
+import os
 
 import homeassistant_cli.const as hass_cli_const
 from setuptools import find_packages, setup
+
+print("CWD:" + os.getcwd())
+
 
 PROJECT_NAME = 'Home Assistant CLI'
 PROJECT_PACKAGE_NAME = 'homeassistant-cli'
