@@ -140,7 +140,8 @@ def test_entity_get() -> None:
         assert result.exit_code == 0
 
         data = json.loads(result.output)
-        assert data["entity_id"] == "group.all_remotes"
+        assert len(data) == 1
+        assert data[0]["entity_id"] == "group.all_remotes"
 
 
 def test_entity_edit():

@@ -35,7 +35,7 @@ def fire(ctx: Configuration, event, json):
         click.echo("Fire {}".format(event))
         response = api.fire_event(ctx, event, json)
     else:
-        existing = raw_format_output(ctx.output, {})
+        existing = raw_format_output(ctx.output, {})  # type: ignore
         new = click.edit(existing, extension='.{}'.format(ctx.output))
 
         if new:
@@ -51,4 +51,4 @@ def fire(ctx: Configuration, event, json):
             return
 
     if response:
-        ctx.echo(raw_format_output(ctx.output, response))
+        ctx.echo(raw_format_output(ctx.output, response))  # type: ignore

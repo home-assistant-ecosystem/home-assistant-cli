@@ -35,8 +35,6 @@ def full(ctx: Configuration):
             ctx,
             [api.get_config(ctx)],
             columns=ctx.columns if ctx.columns else COLUMNS_DETAILS,
-            no_headers=ctx.no_headers,
-            table_format=ctx.table_format,
         )
     )
 
@@ -50,8 +48,6 @@ def components(ctx: Configuration):
             ctx,
             api.get_config(ctx)['components'],
             columns=ctx.columns if ctx.columns else [('COMPONENT', '$')],
-            no_headers=ctx.no_headers,
-            table_format=ctx.table_format,
         )
     )
 
@@ -65,8 +61,6 @@ def whitelist_dirs(ctx: Configuration):
             ctx,
             api.get_config(ctx)['whitelist_external_dirs'],
             columns=ctx.columns if ctx.columns else [('DIRECTORY', '$')],
-            no_headers=ctx.no_headers,
-            table_format=ctx.table_format,
         )
     )
 
@@ -80,7 +74,5 @@ def release(ctx: Configuration):
             ctx,
             [api.get_config(ctx)['version']],
             columns=ctx.columns if ctx.columns else [('VERSION', '$')],
-            no_headers=ctx.no_headers,
-            table_format=ctx.table_format,
         )
     )

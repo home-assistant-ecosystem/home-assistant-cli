@@ -4,7 +4,7 @@ from http.client import HTTPConnection
 import json
 import logging
 import shlex
-from typing import Any, Dict, Generator, List, Optional, Tuple, Union, cast
+from typing import Any, Dict, Generator, List, Optional, Tuple, cast
 
 from homeassistant_cli.config import Configuration
 import homeassistant_cli.const as const
@@ -46,15 +46,19 @@ def to_tuples(entry: str) -> List[Tuple[str, str]]:
 
 def raw_format_output(
     output: str,
-    data: Union[List[Dict[str, Any]], Dict[str, Any]],
+    data: List[Dict[str, Any]],
     columns: Optional[List] = None,
     no_headers: bool = False,
     table_format: str = 'plain',
+    sort_by: Optional[str] = None,
 ) -> str:
     """Format the raw output."""
     if output == 'auto':
         _LOGGING.debug("Output `auto` thus using %s", const.DEFAULT_DATAOUTPUT)
         output = const.DEFAULT_DATAOUTPUT
+
+    if sort_by:
+        _sort_table(data, sort_by)
 
     if output == 'json':
         try:
@@ -98,16 +102,32 @@ def raw_format_output(
         )
 
 
+def _sort_table(result: List[Any], sort_by: str) -> List[Any]:
+    from jsonpath_rw import parse
+
+    expr = parse(sort_by)
+
+    def _internal_sort(row: Dict[Any, str]) -> Any:
+        val = next(iter([match.value for match in expr.find(row)]), None)
+        return (val is None, val)
+
+    result.sort(key=_internal_sort)
+    return result
+
+
 def format_output(
     ctx: Configuration,
-    data: Union[List[Dict[str, Any]], Dict[str, Any]],
+    data: List[Dict[str, Any]],
     columns: Optional[List] = None,
-    no_headers: bool = False,
-    table_format: str = 'plain',
 ) -> str:
-    """Format dict to defined output."""
+    """Format data to output based on settings in ctx/Context."""
     return raw_format_output(
-        ctx.output, data, columns, no_headers, table_format
+        ctx.output,
+        data,
+        columns,
+        ctx.no_headers,
+        ctx.table_format,
+        ctx.sort_by,
     )
 
 
