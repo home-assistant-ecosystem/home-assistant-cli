@@ -3,10 +3,11 @@
 from datetime import datetime as dt
 import os
 
+print("CWD:" + os.getcwd())
+
 import homeassistant_cli.const as hass_cli_const
 from setuptools import find_packages, setup
 
-print("CWD:" + os.getcwd())
 
 
 PROJECT_NAME = 'Home Assistant CLI'
