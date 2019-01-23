@@ -121,6 +121,7 @@ class Configuration:
         self.columns = None  # type: Optional[List[Tuple[str, str]]]
         self.no_headers = False
         self.table_format = 'plain'
+        self.sort_by = None
 
     def echo(self, msg: str, *args: Optional[Any]) -> None:
         """Put content message to stdout."""

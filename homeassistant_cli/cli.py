@@ -117,8 +117,8 @@ def _default_token() -> Optional[str]:
     envvar='HASS_TOKEN',
 )
 @click.option(
-    '--password',  # type: ignore
-    default=None,
+    '--password',
+    default=None,  # type: ignore
     help='The API password for Home Assistant instance.',
     envvar='HASS_PASSWORD',
 )
@@ -189,6 +189,11 @@ def _default_token() -> Optional[str]:
     help="Which table format to use.",
     autocompletion=autocompletion.table_formats,
 )
+@click.option(
+    '--sort-by',
+    default=None,
+    help='Sort table by the jsonpath expression. Example: last_changed',
+)
 @click.version_option()
 @pass_context
 def cli(
@@ -206,6 +211,7 @@ def cli(
     columns: str,
     no_headers: bool,
     table_format: str,
+    sort_by: Optional[str],
 ):
     """Command line interface for Home Assistant."""
     ctx.verbose = verbose
@@ -221,6 +227,7 @@ def cli(
     ctx.columns = to_tuples(columns)
     ctx.no_headers = no_headers
     ctx.table_format = table_format
+    ctx.sort_by = sort_by  # type: ignore
 
     _LOGGER.debug("Using settings: %s", ctx)
 
