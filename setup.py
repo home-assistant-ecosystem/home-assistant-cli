@@ -44,7 +44,7 @@ REQUIRES = [
     'click==7.0',
     'click-log==0.3.2',
     'tabulate==0.8.2',
-    'idna==2.5',
+    'idna==2.8',
     'jsonpath-rw==1.4.0',
     'jinja2>=2.10',
 ]
