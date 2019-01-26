@@ -52,7 +52,7 @@ TESTS_REQUIRE = [
     'flake8-docstrings==1.3.0',
     'flake8==3.6.0',
     'mock-open==1.3.1',
-    'mypy==0.650',
+    'mypy==0.660',
     'pydocstyle==2.1.1',
     'pylint==2.1.1',
     'pytest-cov==2.6.0',
