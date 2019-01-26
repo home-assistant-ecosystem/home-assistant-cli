@@ -35,7 +35,7 @@ PROJECT_URLS = {
 PACKAGES = find_packages(exclude=['tests', 'tests.*'])
 
 REQUIRES = [
-    'requests==2.20.1',
+    'requests==2.21.0',
     'pyyaml>=4.2b1',
     'netdisco==2.2.0',
     'click==7.0',
