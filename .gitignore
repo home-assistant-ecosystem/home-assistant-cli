@@ -97,3 +97,4 @@ travis_wait*
 .mypy_cache
 
 README.html
+pip-wheel-metadata
