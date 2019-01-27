@@ -1,14 +1,37 @@
 #!/usr/bin/env python3
 """Setup script for Home Assistant CLI."""
+import codecs
 from datetime import datetime as dt
+import os
+import re
 
 from setuptools import find_packages, setup
 
-# next two consts is to avoid doing this import that started failing
-# end of january 2019.
-# import homeassistant_cli.const as hass_cli_const
-__VERSION__ = '0.4.0.dev0'
+# shared consts using approach suggested at
+# https://stackoverflow.com/questions/17583443/what-is-the-correct-way-to-share-package-version-with-setup-py-and-the-package
+
+
+def read(*parts):
+    """Read file from current directory."""
+    here = os.path.abspath(os.path.dirname(__file__))
+    with codecs.open(os.path.join(here, *parts), 'r') as infofile:
+        return infofile.read()
+
+
+def find_version(*file_paths):
+    """Locate version info to share between const.py and setup.py."""
+    version_file = read(*file_paths)  # type: ignore
+    version_match = re.search(
+        r"^__version__ = ['\"]([^'\"]*)['\"]", version_file, re.M
+    )
+    if version_match:
+        return version_match.group(1)
+    raise RuntimeError("Unable to find version string.")
+
+
+__VERSION__ = find_version("homeassistant_cli", "const.py")  # type: ignore
 REQUIRED_PYTHON_VER = (3, 5, 3)
+
 
 PROJECT_NAME = 'Home Assistant CLI'
 PROJECT_PACKAGE_NAME = 'homeassistant-cli'
@@ -58,7 +81,7 @@ TESTS_REQUIRE = [
     'mypy==0.660',
     'pydocstyle==2.1.1',
     'pylint==2.2.2',
-    'pytest-cov==2.6.0',
+    'pytest-cov==2.6.1',
     'pytest-sugar==0.9.2',
     'pytest-timeout==1.3.2',
     'pytest==4.1.1',

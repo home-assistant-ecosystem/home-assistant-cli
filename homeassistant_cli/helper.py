@@ -86,10 +86,10 @@ def raw_format_output(
 
             result.append(row)
 
-        # result.sort(key=lambda row: row[3])
-        return cast(
-            str, tabulate(result, headers=headers, tablefmt=table_format)
-        )
+        res = tabulate(
+            result, headers=headers, tablefmt=table_format
+        )  # type: str
+        return res
     else:
         raise ValueError(
             "Output Format was {}, expected either 'json' or 'yaml'".format(
