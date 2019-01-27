@@ -47,19 +47,19 @@ def services(
     try:
         response = api.get_services(ctx)
     except HTTPError:
-        response = {}
+        response = []
 
     completions = []  # type: List[Tuple[str, str]]
     if response:
         for domain in response:
-            domain_name = domain['domain']  # type: ignore
-            servicesdict = domain['services']  # type: ignore
+            domain_name = domain['domain']
+            servicesdict = domain['services']
 
             for service in servicesdict:
                 completions.append(
                     (
                         "{}.{}".format(domain_name, service),
-                        servicesdict[service]['description'],  # type: ignore
+                        servicesdict[service]['description'],
                     )
                 )
 

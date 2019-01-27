@@ -2,7 +2,7 @@
 import logging
 import re as reg
 import sys
-from typing import Any, Dict, Pattern  # noqa: F401
+from typing import Any, Dict, List, Pattern  # noqa: F401
 
 import click
 import homeassistant_cli.autocompletion as autocompletion
@@ -28,30 +28,50 @@ def list_cmd(ctx: Configuration, servicefilter):
     ctx.auto_output('table')
     services = api.get_services(ctx)
 
-    result = {}  # type: Dict[str,Any]
+    result = []  # type: List[Dict[Any,Any]]
     if servicefilter == ".*":
         result = services
     else:
+        result = services
         servicefilterre = reg.compile(servicefilter)  # type: Pattern
 
+        domains = []
         for domain in services:
-            domain_name = domain['domain']  # type: ignore
+            domain_name = domain['domain']
             domaindata = {}
-            servicesdict = domain['services']  # type: ignore
+            servicesdict = domain['services']
             servicedata = {}
             for service in servicesdict:
                 if servicefilterre.search(
                     "{}.{}".format(domain_name, service)
                 ):
-                    servicedata[service] = servicesdict[  # type: ignore
-                        service
-                    ]
+                    servicedata[service] = servicesdict[service]
 
-                if servicedata:
-                    domaindata["services"] = servicedata
-                    result[domain_name] = domaindata
+            if servicedata:
+                domaindata["services"] = servicedata
+                domaindata["domain"] = domain_name
+                domains.append(domaindata)
+        result = domains
 
-    ctx.echo(format_output(ctx, result))  # type: ignore
+    flattenresult = []  # type: List[Dict[str,Any]]
+    for domain in result:
+        for service in domain['services']:
+            item = {}
+            item['domain'] = domain['domain']
+            item['service'] = service
+            item = {**item, **domain['services'][service]}
+            flattenresult.append(item)
+
+    cols = [
+        ('DOMAIN', 'domain'),
+        ('SERVICE', 'service'),
+        ('DESCRIPTION', 'description'),
+    ]
+    ctx.echo(
+        format_output(
+            ctx, flattenresult, columns=ctx.columns if ctx.columns else cols
+        )
+    )
 
 
 @cli.command('call')

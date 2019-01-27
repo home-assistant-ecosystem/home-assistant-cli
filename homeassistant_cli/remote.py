@@ -392,7 +392,7 @@ def call_service(
     return cast(Dict[str, Any], req.json())
 
 
-def get_services(ctx: Configuration,) -> Dict[str, Any]:
+def get_services(ctx: Configuration,) -> List[Dict[str, Any]]:
     """Get list of services."""
     try:
         req = restapi(ctx, METH_GET, hass.URL_API_SERVICES)
@@ -402,7 +402,7 @@ def get_services(ctx: Configuration,) -> Dict[str, Any]:
         )
 
     if req.status_code == 200:
-        return cast(Dict[str, Any], req.json())
+        return cast(List[Dict[str, Any]], req.json())
 
     raise HomeAssistantCliError(
         "Error while getting all services: {}".format(req.text)
