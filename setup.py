@@ -2,8 +2,13 @@
 """Setup script for Home Assistant CLI."""
 from datetime import datetime as dt
 
-import homeassistant_cli.const as hass_cli_const
 from setuptools import find_packages, setup
+
+# next two consts is to avoid doing this import that started failing
+# end of january 2019.
+# import homeassistant_cli.const as hass_cli_const
+__VERSION__ = '0.4.0.dev0'
+REQUIRED_PYTHON_VER = (3, 5, 3)
 
 PROJECT_NAME = 'Home Assistant CLI'
 PROJECT_PACKAGE_NAME = 'homeassistant-cli'
@@ -22,9 +27,7 @@ GITHUB_PATH = '{}/{}'.format(
 )
 GITHUB_URL = 'https://github.com/{}'.format(GITHUB_PATH)
 
-DOWNLOAD_URL = '{}/archive/{}.zip'.format(
-    GITHUB_URL, hass_cli_const.__version__
-)
+DOWNLOAD_URL = '{}/archive/{}.zip'.format(GITHUB_URL, __VERSION__)
 PROJECT_URLS = {
     'Bug Reports': '{}/issues'.format(GITHUB_URL),
     'Dev Docs': 'https://developers.home-assistant.io/',
@@ -64,14 +67,14 @@ TESTS_REQUIRE = [
     'wheel==0.32.3',  # Otherwise setup.py bdist_wheel does not work
 ]
 
-MIN_PY_VERSION = '.'.join(map(str, hass_cli_const.REQUIRED_PYTHON_VER))
+MIN_PY_VERSION = '.'.join(map(str, REQUIRED_PYTHON_VER))
 
 # Allow you to run pip3 install .[test] to get test dependencies included
 EXTRAS_REQUIRE = {'test': TESTS_REQUIRE}
 
 setup(
     name=PROJECT_PACKAGE_NAME,
-    version=hass_cli_const.__version__,
+    version=__VERSION__,
     url=PROJECT_URL,
     download_url=DOWNLOAD_URL,
     project_urls=PROJECT_URLS,
