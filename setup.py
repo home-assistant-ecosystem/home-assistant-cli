@@ -84,7 +84,7 @@ TESTS_REQUIRE = [
     'pylint==2.2.2',
     'pytest-cov==2.6.1',
     'pytest-sugar==0.9.2',
-    'pytest-timeout==1.3.2',
+    'pytest-timeout==1.3.3',
     'pytest==4.1.1',
     'requests_mock==1.5.2',
     "black==18.9b0;python_version>'3.6'",
