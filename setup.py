@@ -70,6 +70,7 @@ REQUIRES = [
     'idna==2.8',
     'jsonpath-rw==1.4.0',
     'jinja2>=2.10',
+    'dateparser==0.7.0',
 ]
 
 # Should be as close to Home Assistant dev/master as possible
