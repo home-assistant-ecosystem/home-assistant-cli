@@ -52,21 +52,17 @@ the folowing to enable autocompletion for hass-cli commands.
 Usage
 =====
 
-Note: Below is listed **some** of the features, make sure to use `--help` and autocompletion to learn
+Note: Below is listed **some** of the features, make sure to use ``--help`` and autocompletion to learn
 more of the features as they become available.
 
-By default (for now) most commands returns "raw" version of what the Home Assistant API returns.
+Most commands returns a table version of what the Home Assistant API returns.
 For example to get basic info about your Home Assistant server you use ``info``:
 
 .. code:: bash
 
-   $ hass-cli info
-    {
-      "base_url": "http://hassio.local:8123",
-      "location_name": "Fortress of Solitude",
-      "requires_api_password": false,
-      "version": "0.82.1"
-    }
+   $ hass-cli  info
+     BASE_URL                   LOCATION         REQUIRES_API_PASWORD  VERSION
+     https://hassio.local:8123  Fort of Solitude False                 0.86.2
 
 If you prefer yaml you can use `--output=yaml`:
 
@@ -76,15 +72,14 @@ If you prefer yaml you can use `--output=yaml`:
       base_url: https://hassio.local:8123
       location_name: Wayne Manor
       requires_api_password: false
-      version: 0.82.1
+      version: 0.86.2
 
-Listing entities has support for tables:
+To get list of entities you can use `entity list`:
 
 .. code:: bash
 
-    $ hass-cli --output=table entity list
+    $ hass-cli entity list
     ENTITY                                                     DESCRIPTION                                     STATE
-    ---------------------------------------------------------  ----------------------------------------------  ---------------------
     zone.school                                                School                                          zoning
     zone.home                                                  Andersens                                       zoning
     sun.sun                                                    Sun                                             below_horizon
@@ -117,17 +112,18 @@ If you for example just wanted the name and all attributes you could do:
 
 .. code:: bash
 
-   hass-cli --output=table --columns=ENTITY="entity_id,ATTRIBUTES=attributes[*]" entity list zone
+   hass-cli --columns=ENTITY="entity_id,ATTRIBUTES=attributes[*]" entity list zone
    ENTITY             ATTRIBUTES
    zone.school        {'friendly_name': 'School', 'hidden': True, 'icon': 'mdi:school', 'latitude': 7.011023, 'longitude': 16.858151, 'radius': 50.0}
    zone.unnamed_zone  {'friendly_name': 'Unnamed zone', 'hidden': True, 'icon': 'mdi:home', 'latitude': 37.006476, 'longitude': 2.861699, 'radius': 50.0}
    zone.home          {'friendly_name': 'Andersens', 'hidden': True, 'icon': 'mdi:home', 'latitude': 27.006476, 'longitude': 7.861699, 'radius': 100}
 
-Get state of a entity:
+You can more details of an entity easily by using `yaml` or `json` output format. In this example we use the
+shorthand of output: `-o`:
 
 .. code:: bash
 
-    $ hass-cli --output yaml entity get light.guestroom_light                                                                                                                                                                       ◼
+    $ hass-cli -o yaml entity get light.guestroom_light                                                                                                                                                                       ◼
     attributes:
       friendly_name: Guestroom Light
       supported_features: 61
@@ -160,7 +156,15 @@ List posible service with or without a regular expression filter:
 
 .. code:: bash
 
-    $ hass-cli --output=yaml service list 'home.*toggle'                                                                                                                             ✘ 1 dev ✭ ✱
+    $ hass-cli service list 'home.*toggle'
+      DOMAIN         SERVICE    DESCRIPTION
+      homeassistant  toggle     Generic service to toggle devices on/off...
+
+For more details the yaml format is useful:
+
+.. code:: bash
+
+    $ hass-cli -o yaml service list homeassistant.toggle
     homeassistant:
       services:
         toggle:
@@ -171,6 +175,37 @@ List posible service with or without a regular expression filter:
               description: The entity_id of the device to toggle on/off.
               example: light.living_room
 
+You can get history about one or more entities, here getting state changes for the last
+50 minutes:
+
+.. code:: bash
+
+   $ hass-cli entity history --since 50m light.kitchen_light_1 binary_sensor.presence_kitchen
+     ENTITY                          DESCRIPTION      STATE    CHANGED
+     binary_sensor.presence_kitchen  Kitchen Motion   off      2019-01-27T23:19:55.322474+00:00
+     binary_sensor.presence_kitchen  Kitchen Motion   on       2019-01-27T23:21:44.015071+00:00
+     binary_sensor.presence_kitchen  Kitchen Motion   off      2019-01-27T23:22:02.330566+00:00
+     light.kitchen_light_1           Kitchen Light 1  on       2019-01-27T23:19:55.322474+00:00
+     light.kitchen_light_1           Kitchen Light 1  off      2019-01-27T23:36:45.254266+00:00
+
+The data is sorted by default as Home Assistant returns it, thus for history it is useful
+to sort by a property:
+
+.. code:: bash
+
+   $ hass-cli --sort-by last_changed entity history --since 50m  light.kitchen_light_1 binary_sensor.presence_kitchen
+   ENTITY                          DESCRIPTION      STATE    CHANGED
+   binary_sensor.presence_kitchen  Kitchen Motion   off      2019-01-27T23:18:00.717611+00:00
+   light.kitchen_light_1           Kitchen Light 1  on       2019-01-27T23:18:00.717611+00:00
+   binary_sensor.presence_kitchen  Kitchen Motion   on       2019-01-27T23:18:12.135015+00:00
+   binary_sensor.presence_kitchen  Kitchen Motion   off      2019-01-27T23:18:30.417064+00:00
+   light.kitchen_light_1           Kitchen Light 1  off      2019-01-27T23:36:45.254266+00:00
+
+Note: the `--sort-by` argument is referring to the attribute in the underlying ``json``/``yaml``
+NOT the column name. The advantage for this is that it can be used for sorting on any property
+even if not included in the default output.
+
+You can call services:
 
 .. code:: bash
 
@@ -195,7 +230,7 @@ Render templates server side:
 
     $ hass-cli template motionlight.yaml.j2 motiondata.yaml
 
-Render templates client side:
+Render templates client (local) side:
 
 .. code:: bash
 
