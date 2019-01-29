@@ -68,7 +68,6 @@ REQUIRES = [
     'click==7.0',
     'click-log==0.3.2',
     'tabulate==0.8.3',
-    'idna==2.8',
     'jsonpath-rw==1.4.0',
     'jinja2>=2.10',
     'dateparser==0.7.0',
@@ -94,7 +93,7 @@ TESTS_REQUIRE = [
 
 MIN_PY_VERSION = '.'.join(map(str, REQUIRED_PYTHON_VER))
 
-# Allow you to run pip3 install .[test] to get test dependencies included
+# Allow you to run pip0 install .[test] to get test dependencies included
 EXTRAS_REQUIRE = {'test': TESTS_REQUIRE}
 
 setup(
