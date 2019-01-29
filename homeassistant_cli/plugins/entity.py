@@ -20,7 +20,6 @@ _LOGGING = logging.getLogger(__name__)
 @pass_context
 def cli(ctx):
     """Get info and operate on entities from Home Assistant."""
-    ctx.auto_output("table")
 
 
 @cli.command()
@@ -30,6 +29,7 @@ def cli(ctx):
 @pass_context
 def get(ctx: Configuration, entity):
     """Get/read entity state from Home Assistant."""
+    ctx.auto_output("table")
     state = api.get_state(ctx, entity)
 
     if state:
@@ -45,6 +45,7 @@ def get(ctx: Configuration, entity):
 @pass_context
 def delete(ctx: Configuration, entity):
     """Delete entity from Home Assistant."""
+    ctx.auto_output("table")
     deleted = api.remove_state(ctx, entity)
 
     if deleted:
@@ -58,6 +59,7 @@ def delete(ctx: Configuration, entity):
 @pass_context
 def listcmd(ctx, entityfilter):
     """List all state from Home Assistant."""
+    ctx.auto_output("table")
     states = api.get_states(ctx)
 
     result = []  # type: List[Dict]
@@ -102,6 +104,7 @@ def listcmd(ctx, entityfilter):
 @pass_context
 def edit(ctx: Configuration, entity, newstate, attributes, merge, json):
     """Edit entity state from Home Assistant."""
+    ctx.auto_output('data')
     if json:
         _LOGGING.debug(
             "json found overriding/creating new state for entity %s", entity
@@ -134,20 +137,26 @@ def edit(ctx: Configuration, entity, newstate, attributes, merge, json):
             wanted_state['state'] = existing_state['state']
 
     else:
+        if ctx.output not in ('yaml', 'json'):
+            raise ValueError(
+                'Output is {}. Only yaml or json supported.'.format(ctx.output)
+            )
+
         existing = api.get_state(ctx, entity)
+
         if existing:
-            existingraw = helper.raw_format_output(ctx.output, [existing])[0]
+            existingraw = helper.raw_format_output(ctx.output, [existing])
         else:
-            existingraw = helper.raw_format_output(ctx.output, [{}])[0]
+            existingraw = helper.raw_format_output(ctx.output, [{}])
 
         new = click.edit(existingraw, extension='.{}'.format(ctx.output))
 
         if new is not None:
             ctx.echo("Updating '%s'", entity)
             if ctx.output == 'yaml':
-                wanted_state = yaml.load(new)
+                wanted_state = yaml.load(new)[0]
             if ctx.output == 'json':
-                wanted_state = json_.loads(new)
+                wanted_state = json_.loads(new)[0]
 
             api.set_state(ctx, entity, wanted_state)
         else:
@@ -188,6 +197,7 @@ def _homeassistant_cmd(ctx: Configuration, entities, cmd, action):
 @pass_context
 def toggle(ctx: Configuration, entities):
     """Toggle state for one or more entities in Home Assistant."""
+    ctx.auto_output("table")
     _homeassistant_cmd(ctx, entities, 'toggle', "toggled")
 
 
@@ -198,6 +208,7 @@ def toggle(ctx: Configuration, entities):
 @pass_context
 def off_cmd(ctx: Configuration, entities):
     """Turn entity off."""
+    ctx.auto_output("table")
     _homeassistant_cmd(ctx, entities, 'turn_off', "turned off")
 
 
@@ -208,6 +219,7 @@ def off_cmd(ctx: Configuration, entities):
 @pass_context
 def on_cmd(ctx: Configuration, entities):
     """Turn entity on."""
+    ctx.auto_output("table")
     _homeassistant_cmd(ctx, entities, 'turn_on', "turned on")
 
 
@@ -242,6 +254,7 @@ def history(ctx: Configuration, entities: List, since: str, end: str):
     """
     import dateparser
 
+    ctx.auto_output("table")
     settings = {
         'DATE_ORDER': 'DMY',
         'TIMEZONE': 'UTC',
