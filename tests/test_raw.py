@@ -2,7 +2,9 @@
 import json
 
 from click.testing import CliRunner
+import homeassistant_cli.autocompletion as autocompletion
 import homeassistant_cli.cli as cli
+from homeassistant_cli.config import Configuration
 import requests_mock
 
 
@@ -17,7 +19,9 @@ def test_raw_get() -> None:
 
         runner = CliRunner()
         result = runner.invoke(
-            cli.cli, ["raw", "get", "/api/anything"], catch_exceptions=False
+            cli.cli,
+            ["--output=json", "raw", "get", "/api/anything"],
+            catch_exceptions=False,
         )
         assert result.exit_code == 0
         data = json.loads(result.output)
@@ -35,8 +39,22 @@ def test_raw_post() -> None:
 
         runner = CliRunner()
         result = runner.invoke(
-            cli.cli, ["raw", "post", "/api/anything"], catch_exceptions=False
+            cli.cli,
+            ["--output=json", "raw", "post", "/api/anything"],
+            catch_exceptions=False,
         )
         assert result.exit_code == 0
         data = json.loads(result.output)
         assert data['message'] == 'success'
+
+
+def test_apimethod_completion(default_services) -> None:
+    """Test completion for raw API methods."""
+    cfg = Configuration()
+
+    result = autocompletion.api_methods(cfg, ["raw", "get"], "/api/disc")
+    assert len(result) == 1
+
+    resultdict = dict(result)
+
+    assert "/api/discovery_info" in resultdict

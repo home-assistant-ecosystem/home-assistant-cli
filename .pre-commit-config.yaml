@@ -12,3 +12,16 @@ repos:
     rev: v2.0.0
     hooks:
     - id: flake8
+-   repo: local
+    hooks:
+      - id: pylint
+        name: pylint
+        entry: python3 -m pylint.__main__
+        language: system
+        types: [python]
+-   repo: git://github.com/luismayta/pre-commit-mypy
+    sha: '0.1.1'  # Use the sha you want to point at
+    hooks:
+    -   id: mypy
+        args:
+        - --ignore-missing-imports

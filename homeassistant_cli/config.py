@@ -2,7 +2,7 @@
 import logging
 import os
 import sys
-from typing import Any, Dict, Optional, cast  # noqa: F401
+from typing import Any, Dict, List, Optional, Tuple, cast  # noqa: F401
 
 import click
 import homeassistant_cli.const as const
@@ -118,6 +118,10 @@ class Configuration:
         self.showexceptions = False  # type: bool
         self.session = None  # type: Optional[Session]
         self.cert = None  # type: Optional[str]
+        self.columns = None  # type: Optional[List[Tuple[str, str]]]
+        self.no_headers = False
+        self.table_format = 'plain'
+        self.sort_by = None
 
     def echo(self, msg: str, *args: Optional[Any]) -> None:
         """Put content message to stdout."""
@@ -152,3 +156,12 @@ class Configuration:
     def resolve_server(self) -> str:
         """Return resolved server (after resolving if needed)."""
         return resolve_server(self)
+
+    def auto_output(self, auto_output: str) -> str:
+        """Configure output format."""
+        if self.output == "auto":
+            if auto_output == 'data':
+                auto_output = const.DEFAULT_DATAOUTPUT
+            _LOGGING.debug("Setting auto-output to: %s", auto_output)
+            self.output = auto_output
+        return self.output

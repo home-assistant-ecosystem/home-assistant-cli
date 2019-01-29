@@ -1,16 +1,17 @@
 """
-Basic api to access remote instance of Home Assistant.
+Basic API to access remote instance of Home Assistant.
 
 If a connection error occurs while communicating with the API a
 HomeAssistantCliError will be raised.
-
 """
+import collections
 from datetime import datetime
 import enum
 import json
 import logging
-from typing import Any, Dict, Optional, cast
+from typing import Any, Dict, List, Optional, cast
 import urllib.parse
+from urllib.parse import urlencode
 
 from homeassistant_cli.config import Configuration, resolve_server
 from homeassistant_cli.exceptions import HomeAssistantCliError
@@ -19,7 +20,7 @@ import requests
 
 _LOGGER = logging.getLogger(__name__)
 
-# copied from aiohttp.hdrs
+# Copied from aiohttp.hdrs
 CONTENT_TYPE = 'Content-Type'
 METH_DELETE = 'DELETE'
 METH_GET = 'GET'
@@ -121,7 +122,7 @@ def validate_api(ctx: Configuration) -> APIStatus:
 
 
 def get_info(ctx: Configuration) -> Dict[str, Any]:
-    """Get basic info about the Homeassistant instance."""
+    """Get basic info about the Home Assistant instance."""
     try:
         req = restapi(ctx, METH_GET, hass.URL_API_DISCOVERY_INFO)
 
@@ -132,7 +133,7 @@ def get_info(ctx: Configuration) -> Dict[str, Any]:
         )
 
     except (HomeAssistantCliError, ValueError):
-        raise HomeAssistantCliError("Unexpected error retriving info")
+        raise HomeAssistantCliError("Unexpected error retrieving information")
         # ValueError if req.json() can't parse the json
 
 
@@ -154,15 +155,27 @@ def get_events(ctx: Configuration) -> Dict[str, Any]:
 
 
 def get_history(
-    ctx: Configuration, entity: Optional[str] = None
-) -> Dict[str, Any]:
+    ctx: Configuration,
+    entities: Optional[List] = None,
+    start_time: Optional[datetime] = None,
+    end_time: Optional[datetime] = None,
+) -> List[Dict[str, Any]]:
     """Return History."""
     try:
-        method = hass.URL_API_HISTORY
-        if entity:
-            method = "{}?filter_entity_id={}".format(
-                hass.URL_API_HISTORY, entity
-            )
+        if start_time:
+            method = hass.URL_API_HISTORY_PERIOD.format(start_time.isoformat())
+        else:
+            method = hass.URL_API_HISTORY
+
+        params = collections.OrderedDict()  # type: Dict[str, str]
+
+        if entities:
+            params["filter_entity_id"] = ",".join(entities)
+        if end_time:
+            params["end_time"] = end_time.isoformat()
+
+        if params:
+            method = "{}?{}".format(method, urlencode(params))
 
         req = restapi(ctx, METH_GET, method)
     except HomeAssistantCliError as ex:
@@ -171,14 +184,14 @@ def get_history(
         )
 
     if req.status_code == 200:
-        return cast(Dict[str, Any], req.json())
+        return cast(List[Dict[str, Any]], req.json())
 
     raise HomeAssistantCliError(
         "Error while getting all events: {}".format(req.text)
     )
 
 
-def get_states(ctx: Configuration) -> Dict[str, Any]:
+def get_states(ctx: Configuration) -> List[Dict[str, Any]]:
     """Return all states."""
     try:
         req = restapi(ctx, METH_GET, hass.URL_API_STATES)
@@ -188,7 +201,8 @@ def get_states(ctx: Configuration) -> Dict[str, Any]:
         )
 
     if req.status_code == 200:
-        return cast(Dict[str, Any], req.json())
+        data = req.json()  # type: List[Dict[str, Any]]
+        return data
 
     raise HomeAssistantCliError(
         "Error while getting all states: {}".format(req.text)
@@ -209,19 +223,19 @@ def get_raw_error_log(ctx: Configuration) -> str:
 
 
 def get_config(ctx: Configuration) -> Dict[str, Any]:
-    """Return the runing config."""
+    """Return the running configuration."""
     try:
         req = restapi(ctx, METH_GET, hass.URL_API_CONFIG)
     except HomeAssistantCliError as ex:
         raise HomeAssistantCliError(
-            "Unexpected error getting config: {}".format(ex)
+            "Unexpected error getting configuration: {}".format(ex)
         )
 
     if req.status_code == 200:
         return cast(Dict[str, str], req.json())
 
     raise HomeAssistantCliError(
-        "Error while getting all config: {}".format(req.text)
+        "Error while getting all configuration: {}".format(req.text)
     )
 
 
@@ -378,7 +392,7 @@ def call_service(
     return cast(Dict[str, Any], req.json())
 
 
-def get_services(ctx: Configuration,) -> Dict[str, Any]:
+def get_services(ctx: Configuration,) -> List[Dict[str, Any]]:
     """Get list of services."""
     try:
         req = restapi(ctx, METH_GET, hass.URL_API_SERVICES)
@@ -388,7 +402,7 @@ def get_services(ctx: Configuration,) -> Dict[str, Any]:
         )
 
     if req.status_code == 200:
-        return cast(Dict[str, Any], req.json())
+        return cast(List[Dict[str, Any]], req.json())
 
     raise HomeAssistantCliError(
         "Error while getting all services: {}".format(req.text)

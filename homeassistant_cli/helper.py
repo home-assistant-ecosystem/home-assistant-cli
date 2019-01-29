@@ -4,18 +4,20 @@ from http.client import HTTPConnection
 import json
 import logging
 import shlex
-from typing import Any, Dict, Generator, List, Optional, cast
+from typing import Any, Dict, Generator, List, Optional, Tuple, cast
 
 from homeassistant_cli.config import Configuration
 import homeassistant_cli.const as const
 from tabulate import tabulate
 import yaml
 
+_LOGGING = logging.getLogger(__name__)
 
-def to_attributes(entry: str) -> Optional[Dict[str, str]]:
+
+def to_attributes(entry: str) -> Dict[str, str]:
     """Convert list of key=value pairs to dictionary."""
     if not entry:
-        return None
+        return {}
 
     lexer = shlex.shlex(entry, posix=True)
     lexer.whitespace_split = True
@@ -27,10 +29,37 @@ def to_attributes(entry: str) -> Optional[Dict[str, str]]:
     return attributes_dict
 
 
+def to_tuples(entry: str) -> List[Tuple[str, str]]:
+    """Convert list of key=value pairs to list of tuples."""
+    if not entry:
+        return []
+
+    lexer = shlex.shlex(entry, posix=True)
+    lexer.whitespace_split = True
+    lexer.whitespace = ','
+    attributes_list = []  # type: List[Tuple[str,str]]
+    attributes_list = list(
+        tuple(pair.split('=', 1)) for pair in lexer  # type: ignore
+    )
+    return attributes_list
+
+
 def raw_format_output(
-    output: str, data: Dict[str, Any], columns: Optional[List] = None
+    output: str,
+    data: List[Dict[str, Any]],
+    columns: Optional[List] = None,
+    no_headers: bool = False,
+    table_format: str = 'plain',
+    sort_by: Optional[str] = None,
 ) -> str:
     """Format the raw output."""
+    if output == 'auto':
+        _LOGGING.debug("Output `auto` thus using %s", const.DEFAULT_DATAOUTPUT)
+        output = const.DEFAULT_DATAOUTPUT
+
+    if sort_by:
+        _sort_table(data, sort_by)
+
     if output == 'json':
         try:
             return json.dumps(data, indent=2, sort_keys=False)
@@ -47,9 +76,12 @@ def raw_format_output(
         if not columns:
             columns = const.COLUMNS_DEFAULT
 
-        fmt = [(v[0], parse(v[1])) for v in columns]
+        fmt = [(v[0], parse(v[1] if len(v) > 1 else v[0])) for v in columns]
         result = []
-        headers = [v[0] for v in fmt]
+        if no_headers:
+            headers = []  # type: List[str]
+        else:
+            headers = [v[0] for v in fmt]
         for item in data:
             row = []
             for fmtpair in fmt:
@@ -57,7 +89,11 @@ def raw_format_output(
                 row.append(", ".join(map(str, val)))
 
             result.append(row)
-        return cast(str, tabulate(result, headers=headers))
+
+        res = tabulate(
+            result, headers=headers, tablefmt=table_format
+        )  # type: str
+        return res
     else:
         raise ValueError(
             "Output Format was {}, expected either 'json' or 'yaml'".format(
@@ -66,11 +102,33 @@ def raw_format_output(
         )
 
 
+def _sort_table(result: List[Any], sort_by: str) -> List[Any]:
+    from jsonpath_rw import parse
+
+    expr = parse(sort_by)
+
+    def _internal_sort(row: Dict[Any, str]) -> Any:
+        val = next(iter([match.value for match in expr.find(row)]), None)
+        return (val is None, val)
+
+    result.sort(key=_internal_sort)
+    return result
+
+
 def format_output(
-    ctx: Configuration, data: Dict[str, Any], columns: Optional[List] = None
+    ctx: Configuration,
+    data: List[Dict[str, Any]],
+    columns: Optional[List] = None,
 ) -> str:
-    """Format dict to defined output."""
-    return raw_format_output(ctx.output, data, columns)
+    """Format data to output based on settings in ctx/Context."""
+    return raw_format_output(
+        ctx.output,
+        data,
+        columns,
+        ctx.no_headers,
+        ctx.table_format,
+        ctx.sort_by,
+    )
 
 
 def debug_requests_on() -> None:

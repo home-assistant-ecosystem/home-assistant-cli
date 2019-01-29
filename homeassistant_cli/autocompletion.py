@@ -2,7 +2,7 @@
 import os
 from typing import Any, Dict, List, Tuple  # NOQA
 
-from homeassistant_cli import const
+from homeassistant_cli import const, hassconst
 from homeassistant_cli.config import Configuration, resolve_server
 import homeassistant_cli.remote as api
 from requests.exceptions import HTTPError
@@ -40,26 +40,26 @@ def _init_ctx(ctx: Configuration) -> None:
 
 
 def services(
-    ctx: Configuration, args: str, incomplete: str
+    ctx: Configuration, args: List, incomplete: str
 ) -> List[Tuple[str, str]]:
     """Services."""
     _init_ctx(ctx)
     try:
         response = api.get_services(ctx)
     except HTTPError:
-        response = {}
+        response = []
 
     completions = []  # type: List[Tuple[str, str]]
     if response:
         for domain in response:
-            domain_name = domain['domain']  # type: ignore
-            servicesdict = domain['services']  # type: ignore
+            domain_name = domain['domain']
+            servicesdict = domain['services']
 
             for service in servicesdict:
                 completions.append(
                     (
                         "{}.{}".format(domain_name, service),
-                        servicesdict[service]['description'],  # type: ignore
+                        servicesdict[service]['description'],
                     )
                 )
 
@@ -71,25 +71,21 @@ def services(
 
 
 def entities(
-    ctx: Configuration, args: str, incomplete: str
+    ctx: Configuration, args: List, incomplete: str
 ) -> List[Tuple[str, str]]:
     """Entities."""
     _init_ctx(ctx)
     try:
         response = api.get_states(ctx)
     except HTTPError:
-        response = {}
+        response = []
 
     completions = []  # type List[Tuple[str, str]]
 
     if response:
         for entity in response:
-            friendly_name = entity['attributes'].get(  # type: ignore
-                'friendly_name', ''
-            )
-            completions.append(
-                (entity['entity_id'], friendly_name)  # type: ignore
-            )
+            friendly_name = entity['attributes'].get('friendly_name', '')
+            completions.append((entity['entity_id'], friendly_name))
 
         completions.sort()
 
@@ -99,7 +95,7 @@ def entities(
 
 
 def events(
-    ctx: Configuration, args: str, incomplete: str
+    ctx: Configuration, args: List, incomplete: str
 ) -> List[Tuple[str, str]]:
     """Events."""
     _init_ctx(ctx)
@@ -119,3 +115,58 @@ def events(
         return [c for c in completions if incomplete in c[0]]
 
     return completions
+
+
+def table_formats(
+    ctx: Configuration, args: List, incomplete: str
+) -> List[Tuple[str, str]]:
+    """Table Formats."""
+    _init_ctx(ctx)
+
+    completions = [
+        ("plain", "Plain tables, no pseudo-graphics to draw lines"),
+        ("simple", "Simple table with --- as header/footer (default)"),
+        ("github", "Github flavored Markdown table"),
+        ("grid", "Formatted as Emacs 'table.el' package"),
+        ("fancy_grid", "Draws a fancy grid using box-drawing characters"),
+        ("pipe", "PHP Markdown Extra"),
+        ("orgtbl", "org-mode table"),
+        ("jira", "Atlassian Jira Markup"),
+        ("presto", "Formatted as PrestoDB cli"),
+        ("psql", "Formatted as Postgres psql cli"),
+        ("rst", "reStructuredText"),
+        ("mediawiki", "Media Wiki as used in Wikpedia"),
+        ("moinmoin", "MoinMain Wiki"),
+        ("youtrack", "Youtrack format"),
+        ("html", "HTML Markup"),
+        ("latex", "LaTeX markup, replacing special characters"),
+        ("latex_raw", "LaTeX markup, no replacing of special characters"),
+        (
+            "latex_booktabs",
+            "LaTex markup using spacing and style from `booktabs",
+        ),
+        ("textile", "Textile"),
+        ("tsv", "Tab Separated Values"),
+    ]
+
+    completions.sort()
+
+    return [c for c in completions if incomplete in c[0]]
+
+
+def api_methods(
+    ctx: Configuration, args: List, incomplete: str
+) -> List[Tuple[str, str]]:
+    """Auto completion for methods."""
+    _init_ctx(ctx)
+
+    from inspect import getmembers
+
+    completions = []
+    for name, value in getmembers(hassconst):
+        if name.startswith('URL_API_'):
+            completions.append((value, name[len('URL_API_') :]))
+
+    completions.sort()
+
+    return [c for c in completions if incomplete in c[0]]

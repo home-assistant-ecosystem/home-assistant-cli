@@ -14,4 +14,17 @@ _LOGGING = logging.getLogger(__name__)
 @pass_context
 def cli(ctx: Configuration):
     """Get basic info from Home Assistant."""
-    ctx.echo(format_output(ctx, api.get_info(ctx)))
+    ctx.auto_output("table")
+    cols = [
+        ("BASE_URL", "base_url"),
+        ("LOCATION", "location_name"),
+        ("REQUIRES_API_PASWORD", "requires_api_password"),
+        ("VERSION", "version"),
+    ]
+    ctx.echo(
+        format_output(
+            ctx,
+            [api.get_info(ctx)],
+            columns=ctx.columns if ctx.columns else cols,
+        )
+    )

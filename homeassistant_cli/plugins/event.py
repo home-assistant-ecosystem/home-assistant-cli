@@ -1,4 +1,4 @@
-"""Edit plugin for Home Assistant CLI (hass-cli)."""
+"""Event plugin for Home Assistant CLI (hass-cli)."""
 import json as json_
 import logging
 
@@ -35,7 +35,7 @@ def fire(ctx: Configuration, event, json):
         click.echo("Fire {}".format(event))
         response = api.fire_event(ctx, event, json)
     else:
-        existing = raw_format_output(ctx.output, {})
+        existing = raw_format_output(ctx.output, {})  # type: ignore
         new = click.edit(existing, extension='.{}'.format(ctx.output))
 
         if new:
@@ -51,4 +51,4 @@ def fire(ctx: Configuration, event, json):
             return
 
     if response:
-        ctx.echo(raw_format_output(ctx.output, response))
+        ctx.echo(raw_format_output(ctx.output, response))  # type: ignore

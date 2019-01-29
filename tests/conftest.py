@@ -22,7 +22,7 @@ FIXTURES_PATH = pkg_resources.resource_filename(__name__, 'fixtures/')
 logcore.basic_config()
 
 
-def generate_fixture(content):
+def generate_fixture(content: str):
     """Generate the individual fixtures."""
     pass  # pylint: disable=unnecessary-pass
 
@@ -33,19 +33,20 @@ def generate_fixture(content):
     return my_fixture
 
 
-def _inject_fixture(name, someparam):
+def _inject_fixture(name: str, someparam: str):
     globals()[name] = generate_fixture(someparam)
 
 
 def _all_fixtures():
     for fname in os.listdir(FIXTURES_PATH):
-        name, _ = os.path.splitext(fname)
+        name, ext = os.path.splitext(fname)
 
         with open(FIXTURES_PATH + fname) as file:
             content = file.read()
 
         _inject_fixture(name + "_text", content)
-        _inject_fixture(name, json.loads(content))
+        if ext == '.json':
+            _inject_fixture(name, json.loads(content))
 
 
-_all_fixtures()
+_all_fixtures()  # type: ignore

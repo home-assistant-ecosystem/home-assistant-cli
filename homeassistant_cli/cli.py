@@ -1,15 +1,16 @@
-"""Configuration plugin for Home Assistant CLI (hass-cli)."""
+"""Home Assistant CLI (hass-cli)."""
 import logging
 import os
 import sys
-from typing import List, Optional, Union, cast, no_type_check
+from typing import List, Optional, Union, cast
 
 import click
 from click.core import Command, Context, Group
 import click_log
+import homeassistant_cli.autocompletion as autocompletion
 from homeassistant_cli.config import Configuration
 import homeassistant_cli.const as const
-from homeassistant_cli.helper import debug_requests_on
+from homeassistant_cli.helper import debug_requests_on, to_tuples
 
 click_log.basic_config()
 
@@ -25,22 +26,21 @@ pass_context = click.make_pass_decorator(  # pylint: disable=invalid-name
 def run() -> None:
     """Run entry point.
 
-    Wraps click for full control
-    over exception handling in Click.
+    Wraps click for full control over exception handling in Click.
     """
-    # a hack to see if exception details should be printed.
+    # A hack to see if exception details should be printed.
     exceptionflags = ['-x']
     verbose = [c for c in exceptionflags if c in sys.argv]
 
     try:
-        # could use cli.invoke here to use the just created context
+        # Could use cli.invoke here to use the just created context
         # but then shell completion will not work. Thus calling
         # standalone mode to keep that working.
         result = cli.main(standalone_mode=False)
         if isinstance(result, int):
             sys.exit(result)
 
-    # exception handling below is done to use logger
+    # Exception handling below is done to use logger
     # and mimick as close as possible what click would
     # do normally in its main()
     except click.ClickException as ex:
@@ -55,7 +55,7 @@ def run() -> None:
         else:
             _LOGGER.error("%s: %s", type(ex).__name__, ex)
             _LOGGER.info(
-                "Run with %s to see full exception info.",
+                "Run with %s to see full exception infomation.",
                 " or ".join(exceptionflags),
             )
         sys.exit(1)
@@ -99,7 +99,6 @@ def _default_token() -> Optional[str]:
     return os.environ.get('HASS_TOKEN', os.environ.get('HASSIO_TOKEN', None))
 
 
-@no_type_check
 @click.command(cls=HomeAssistantCli, context_settings=CONTEXT_SETTINGS)
 @click_log.simple_verbosity_option(logging.getLogger(), "--loglevel", "-l")
 @click.version_option(const.__version__)
@@ -119,7 +118,7 @@ def _default_token() -> Optional[str]:
 )
 @click.option(
     '--password',
-    default=None,
+    default=None,  # type: ignore
     help='The API password for Home Assistant instance.',
     envvar='HASS_PASSWORD',
 )
@@ -132,9 +131,9 @@ def _default_token() -> Optional[str]:
 @click.option(
     '--output',
     '-o',
-    help="Output format",
-    type=click.Choice(['json', 'yaml', 'table']),
-    default='json',
+    help="Output format.",
+    type=click.Choice(['json', 'yaml', 'table', 'auto']),
+    default='auto',
     show_default=True,
 )
 @click.option(
@@ -155,7 +154,7 @@ def _default_token() -> Optional[str]:
     '--cert',
     default=None,
     envvar="HASS_CERT",
-    help=('Path to client certificate file (.pem) to use when connecting.'),
+    help="Path to client certificate file (.pem) to use when connecting.",
 )
 @click.option(
     '--insecure',
@@ -163,13 +162,37 @@ def _default_token() -> Optional[str]:
     default=False,
     help=(
         'Ignore SSL Certificates.'
-        ' Allow to connect to servers with'
-        ' self-signed certificates.'
+        ' Allow to connect to servers with self-signed certificates.'
         ' Be careful!'
     ),
 )
 @click.option(
     '--debug', is_flag=True, default=False, help='Enables debug mode.'
+)
+@click.option(
+    '--columns',
+    default=None,
+    help=(
+        'Custom columns key=value list.'
+        ' Example: ENTITY=entity_name, NAME=attributes.friendly_name'
+    ),
+)
+@click.option(
+    '--no-headers',
+    default=False,
+    is_flag=True,
+    help="When printing tables don\'t use headers (default: print headers)",
+)
+@click.option(
+    '--table-format',
+    default='plain',
+    help="Which table format to use.",
+    autocompletion=autocompletion.table_formats,
+)
+@click.option(
+    '--sort-by',
+    default=None,
+    help='Sort table by the jsonpath expression. Example: last_changed',
 )
 @click.version_option()
 @pass_context
@@ -185,6 +208,10 @@ def cli(
     insecure: bool,
     showexceptions: bool,
     cert: str,
+    columns: str,
+    no_headers: bool,
+    table_format: str,
+    sort_by: Optional[str],
 ):
     """Command line interface for Home Assistant."""
     ctx.verbose = verbose
@@ -197,6 +224,10 @@ def cli(
     ctx.insecure = insecure
     ctx.showexceptions = showexceptions
     ctx.cert = cert
+    ctx.columns = to_tuples(columns)
+    ctx.no_headers = no_headers
+    ctx.table_format = table_format
+    ctx.sort_by = sort_by  # type: ignore
 
     _LOGGER.debug("Using settings: %s", ctx)
 

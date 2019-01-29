@@ -13,7 +13,7 @@
       "user_id": null
     },
     "entity_id": "sensor.one",
-    "last_changed": "2018-12-04T10:13:05.914548+00:00",
+    "last_changed": "2018-12-02T10:13:05.914548+00:00",
     "last_updated": "2018-12-04T10:13:05.914548+00:00",
     "state": "on"
   },
@@ -27,7 +27,7 @@
       "user_id": "2b0f58a02c35408c86e9e34f1d6e141d"
     },
     "entity_id": "sensor.two",
-    "last_changed": "2018-12-05T12:17:52.434229+00:00",
+    "last_changed": "2018-12-01T12:17:52.434229+00:00",
     "last_updated": "2018-12-05T12:17:52.434229+00:00",
     "state": "off"
   },
@@ -39,7 +39,7 @@
       "user_id": "2b0f58a02c35408c86e9e34f1d6e141d"
     },
     "entity_id": "sensor.three",
-    "last_changed": "2018-12-05T12:17:52.434229+00:00",
+    "last_changed": "2018-12-03T12:17:52.434229+00:00",
     "last_updated": "2018-12-05T12:17:52.434229+00:00",
     "state": "off"
   }

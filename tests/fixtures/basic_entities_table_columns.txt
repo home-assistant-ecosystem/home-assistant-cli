@@ -1,0 +1,4 @@
+entity              state
+friendly long name  on
+                    off
+                    off

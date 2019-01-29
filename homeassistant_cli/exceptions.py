@@ -3,5 +3,3 @@
 
 class HomeAssistantCliError(Exception):
     """General Home Assistant CLI exception occurred."""
-
-    pass

@@ -1,4 +1,4 @@
-"""Location plugin for Home Assistant CLI (hass-cli)."""
+"""Template plugin for Home Assistant CLI (hass-cli)."""
 import logging
 import os
 from typing import Any, Dict  # noqa, flake8 issue

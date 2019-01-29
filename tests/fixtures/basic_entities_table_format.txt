@@ -1,0 +1,10 @@
+<table>
+<thead>
+<tr><th>ENTITY      </th><th>DESCRIPTION       </th><th>STATE  </th><th>CHANGED                         </th></tr>
+</thead>
+<tbody>
+<tr><td>sensor.one  </td><td>friendly long name</td><td>on     </td><td>2018-12-02T10:13:05.914548+00:00</td></tr>
+<tr><td>sensor.two  </td><td>                  </td><td>off    </td><td>2018-12-01T12:17:52.434229+00:00</td></tr>
+<tr><td>sensor.three</td><td>                  </td><td>off    </td><td>2018-12-03T12:17:52.434229+00:00</td></tr>
+</tbody>
+</table>
