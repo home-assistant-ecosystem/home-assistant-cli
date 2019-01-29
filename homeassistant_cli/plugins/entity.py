@@ -160,11 +160,11 @@ def edit(ctx: Configuration, entity, newstate, attributes, merge, json):
     _LOGGING.debug("Updated to: %s", result)
 
 
-def _report(ctx: Configuration, result: Dict[str, Any], action: str):
+def _report(ctx: Configuration, result: List[Dict[str, Any]], action: str):
     ctx.echo(
         helper.format_output(
             ctx,
-            [result],
+            result,
             columns=ctx.columns if ctx.columns else const.COLUMNS_ENTITIES,
         )
     )

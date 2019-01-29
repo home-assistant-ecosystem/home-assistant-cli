@@ -372,7 +372,7 @@ def call_service(
     domain: str,
     service: str,
     service_data: Optional[Dict] = None,
-) -> Dict[str, Any]:
+) -> List[Dict[str, Any]]:
     """Call a service."""
     try:
         req = restapi(
@@ -389,7 +389,7 @@ def call_service(
             "Error calling service: {} - {}".format(req.status_code, req.text)
         )
 
-    return cast(Dict[str, Any], req.json())
+    return cast(List[Dict[str, Any]], req.json())
 
 
 def get_services(ctx: Configuration,) -> List[Dict[str, Any]]:
