@@ -99,4 +99,4 @@ def call(ctx: Configuration, service, arguments):
     result = api.call_service(ctx, parts[0], parts[1], data)
 
     _LOGGING.debug("Formatting ouput")
-    ctx.echo(format_output(ctx, result))  # type: ignore
+    ctx.echo(format_output(ctx, result))
