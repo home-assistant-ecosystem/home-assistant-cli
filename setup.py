@@ -62,8 +62,8 @@ PACKAGES = find_packages(exclude=['tests', 'tests.*'])
 
 REQUIRES = [
     'requests==2.21.0',
-    'pyyaml>=4.2b1',
-    'ruamel.yaml==0.15.80',
+    'pyyaml<4,>=3.13',
+    'ruamel.yaml==0.15.85',
     'netdisco==2.3.0',
     'click==7.0',
     'click-log==0.3.2',
@@ -71,6 +71,7 @@ REQUIRES = [
     'jsonpath-rw==1.4.0',
     'jinja2>=2.10',
     'dateparser==0.7.0',
+    'pytz>=2018.07',
 ]
 
 # Should be as close to Home Assistant dev/master as possible
@@ -89,6 +90,8 @@ TESTS_REQUIRE = [
     'requests_mock==1.5.2',
     "black==18.9b0;python_version>'3.6'",
     'wheel==0.32.3',  # Otherwise setup.py bdist_wheel does not work
+    'pytest-venv==0.2',
+    'pytest-xprocess==0.12.1',
 ]
 
 MIN_PY_VERSION = '.'.join(map(str, REQUIRED_PYTHON_VER))
