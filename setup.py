@@ -89,6 +89,8 @@ TESTS_REQUIRE = [
     'requests_mock==1.5.2',
     "black==18.9b0;python_version>'3.6'",
     'wheel==0.32.3',  # Otherwise setup.py bdist_wheel does not work
+    'pytest-venv==0.2',
+    'pytest-xprocess==0.12.1',
 ]
 
 MIN_PY_VERSION = '.'.join(map(str, REQUIRED_PYTHON_VER))

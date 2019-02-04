@@ -1,0 +1,2 @@
+Testing basic template {{ states.sun.sun.name }}.
+
