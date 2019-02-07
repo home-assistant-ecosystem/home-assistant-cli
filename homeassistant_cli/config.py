@@ -6,7 +6,9 @@ from typing import Any, Dict, List, Optional, Tuple, cast  # noqa: F401
 
 import click
 import homeassistant_cli.const as const
+import homeassistant_cli.yaml as yaml
 from requests import Session  # noqa: ignore
+from ruamel.yaml import YAML
 import zeroconf
 
 _LOGGING = logging.getLogger(__name__)
@@ -165,3 +167,16 @@ class Configuration:
             _LOGGING.debug("Setting auto-output to: %s", auto_output)
             self.output = auto_output
         return self.output
+
+    def yaml(self) -> YAML:
+        """Create default yaml parser."""
+        if self:
+            return yaml.yaml()
+
+    def yamlload(self, source: str) -> Any:
+        """Utility used to load yaml."""
+        return self.yaml().load(source)
+
+    def yamldump(self, source: Any) -> str:
+        """Dump dictionary to yaml string."""
+        return cast(str, yaml.dumpyaml(self.yaml(), source))

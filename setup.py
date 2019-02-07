@@ -62,7 +62,6 @@ PACKAGES = find_packages(exclude=['tests', 'tests.*'])
 
 REQUIRES = [
     'requests==2.21.0',
-    'pyyaml>=4.2b1',
     'netdisco==2.3.0',
     'click==7.0',
     'click-log==0.3.2',
@@ -70,6 +69,8 @@ REQUIRES = [
     'jsonpath-rw==1.4.0',
     'jinja2>=2.10',
     'dateparser==0.7.0',
+    'regex==2019.01.24',
+    'ruamel.yaml==0.15.85',
 ]
 
 # Should be as close to Home Assistant dev/master as possible

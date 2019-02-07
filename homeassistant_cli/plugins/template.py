@@ -8,7 +8,6 @@ from homeassistant_cli.cli import pass_context
 from homeassistant_cli.config import Configuration
 import homeassistant_cli.remote as api
 from jinja2 import Environment, FileSystemLoader
-import yaml
 
 _LOGGING = logging.getLogger(__name__)
 
@@ -49,7 +48,7 @@ def cli(ctx: Configuration, template, datafile, local: bool) -> None:
     """
     variables = {}  # type: Dict[str, Any]
     if datafile:
-        variables = yaml.load(datafile)
+        variables = ctx.yamlload(datafile)
 
     templatestr = template.read()
 

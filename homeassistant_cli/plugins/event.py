@@ -8,7 +8,6 @@ from homeassistant_cli.cli import pass_context
 from homeassistant_cli.config import Configuration
 from homeassistant_cli.helper import raw_format_output
 import homeassistant_cli.remote as api
-import yaml
 
 _LOGGING = logging.getLogger(__name__)
 
@@ -35,13 +34,13 @@ def fire(ctx: Configuration, event, json):
         click.echo("Fire {}".format(event))
         response = api.fire_event(ctx, event, json)
     else:
-        existing = raw_format_output(ctx.output, {})  # type: ignore
+        existing = raw_format_output(ctx.output, [{}], ctx.yaml())
         new = click.edit(existing, extension='.{}'.format(ctx.output))
 
         if new:
             click.echo("Fire {}".format(event))
             if ctx.output == 'yaml':
-                data = yaml.load(new)
+                data = ctx.yamlload(new)
             else:
                 data = json_.loads(new)
 
@@ -51,4 +50,4 @@ def fire(ctx: Configuration, event, json):
             return
 
     if response:
-        ctx.echo(raw_format_output(ctx.output, response))  # type: ignore
+        ctx.echo(raw_format_output(ctx.output, [response], ctx.yaml()))

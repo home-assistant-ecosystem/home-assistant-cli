@@ -11,7 +11,6 @@ from homeassistant_cli.config import Configuration
 import homeassistant_cli.const as const
 import homeassistant_cli.helper as helper
 import homeassistant_cli.remote as api
-import yaml
 
 _LOGGING = logging.getLogger(__name__)
 
@@ -136,16 +135,20 @@ def edit(ctx: Configuration, entity, newstate, attributes, merge, json):
     else:
         existing = api.get_state(ctx, entity)
         if existing:
-            existingraw = helper.raw_format_output(ctx.output, [existing])[0]
+            existingraw = helper.raw_format_output(
+                ctx.output, [existing], ctx.yaml()
+            )[0]
         else:
-            existingraw = helper.raw_format_output(ctx.output, [{}])[0]
+            existingraw = helper.raw_format_output(
+                ctx.output, [{}], ctx.yaml()
+            )[0]
 
         new = click.edit(existingraw, extension='.{}'.format(ctx.output))
 
         if new is not None:
             ctx.echo("Updating '%s'", entity)
             if ctx.output == 'yaml':
-                wanted_state = yaml.load(new)
+                wanted_state = ctx.yamlload(new)
             if ctx.output == 'json':
                 wanted_state = json_.loads(new)
 

@@ -5,8 +5,8 @@ from typing import Any
 from click.testing import CliRunner
 import homeassistant_cli.cli as cli
 from homeassistant_cli.exceptions import HomeAssistantCliError
+import homeassistant_cli.yaml as yaml
 import requests_mock
-import yaml
 
 VALID_INFO = {
     "base_url": "http://192.168.1.156:8123",
@@ -84,4 +84,4 @@ def test_info_yaml() -> None:
             cli.cli, ['--output=yaml', 'info'], catch_exceptions=False
         )
         assert result.exit_code == 0
-        assert [VALID_INFO] == yaml.load(result.output)
+        assert [VALID_INFO] == yaml.loadyaml(yaml.yaml(), result.output)
