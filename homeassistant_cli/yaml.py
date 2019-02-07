@@ -7,7 +7,7 @@ from ruamel.yaml.compat import StringIO
 
 
 def yaml() -> YAML:
-    """"Return default YAML parser."""
+    """Return default YAML parser."""
     yamlp = YAML(typ='rt')
     yamlp.preserve_quotes = True
     yamlp.default_flow_style = False
@@ -15,15 +15,14 @@ def yaml() -> YAML:
 
 
 def loadyaml(yamlp: YAML, source: str) -> Any:
-    """Load yaml."""
+    """Load YAML."""
     return yamlp.load(source)
 
 
 def dumpyaml(
     yamlp: YAML, data: Any, stream: Any = None, **kw: Any
 ) -> Optional[str]:
-    """Dump yaml to string."""
-
+    """Dump YAML to string."""
     inefficient = False
     if stream is None:
         inefficient = True
