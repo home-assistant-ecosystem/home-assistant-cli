@@ -1,5 +1,13 @@
 FROM python:3.7-alpine
+LABEL maintainer="Max Rydahl Andersen <max@xam.dk>"
 
-RUN apk add --no-cache --virtual build-dependencies gcc musl-dev
-RUN pip3 install --no-cache-dir homeassistant-cli==0.4.4
-RUN apk del build-dependencies
+WORKDIR /usr/src/app
+
+COPY . .
+
+RUN apk add --no-cache --virtual build-dependencies gcc musl-dev\
+    &&  rm -rf /var/cache/apk/*
+
+RUN pip3 install --no-cache-dir -e .
+
+ENTRYPOINT ["hass-cli"]
