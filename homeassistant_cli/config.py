@@ -174,9 +174,9 @@ class Configuration:
             return yaml.yaml()
 
     def yamlload(self, source: str) -> Any:
-        """Utility used to load yaml."""
+        """Load YAML from source."""
         return self.yaml().load(source)
 
     def yamldump(self, source: Any) -> str:
-        """Dump dictionary to yaml string."""
+        """Dump dictionary to YAML string."""
         return cast(str, yaml.dumpyaml(self.yaml(), source))
