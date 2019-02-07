@@ -8,8 +8,9 @@ from typing import Any, Dict, Generator, List, Optional, Tuple, cast
 
 from homeassistant_cli.config import Configuration
 import homeassistant_cli.const as const
+import homeassistant_cli.yaml as yaml
+from ruamel.yaml import YAML
 from tabulate import tabulate
-import yaml
 
 _LOGGING = logging.getLogger(__name__)
 
@@ -47,6 +48,7 @@ def to_tuples(entry: str) -> List[Tuple[str, str]]:
 def raw_format_output(
     output: str,
     data: List[Dict[str, Any]],
+    yamlparser: YAML,
     columns: Optional[List] = None,
     no_headers: bool = False,
     table_format: str = 'plain',
@@ -67,7 +69,7 @@ def raw_format_output(
             return str(data)
     elif output == 'yaml':
         try:
-            return cast(str, yaml.safe_dump(data, default_flow_style=False))
+            return cast(str, yaml.dumpyaml(yamlparser, data))
         except ValueError:
             return str(data)
     elif output == 'table':
@@ -124,6 +126,7 @@ def format_output(
     return raw_format_output(
         ctx.output,
         data,
+        ctx.yaml(),
         columns,
         ctx.no_headers,
         ctx.table_format,
