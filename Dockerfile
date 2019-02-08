@@ -5,9 +5,13 @@ WORKDIR /usr/src/app
 
 COPY . .
 
-RUN apk add --no-cache --virtual build-dependencies gcc musl-dev\
-    &&  rm -rf /var/cache/apk/*
+# install build dependencies
+RUN apk add --no-cache --virtual build-dependencies gcc musl-dev
 
+# install home-assistant-cli
 RUN pip3 install --no-cache-dir -e .
+
+# remove build dependencies
+RUN apk del build-dependencies
 
 ENTRYPOINT ["hass-cli"]
