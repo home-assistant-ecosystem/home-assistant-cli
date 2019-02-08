@@ -5,13 +5,9 @@ WORKDIR /usr/src/app
 
 COPY . .
 
-# install build dependencies
-RUN apk add --no-cache --virtual build-dependencies gcc musl-dev
-
-# install home-assistant-cli
-RUN pip3 install --no-cache-dir --editable .
-
-# remove build dependencies
-RUN apk del build-dependencies
+# install build dependencies & home-assistant cli
+RUN apk add --no-cache --virtual build-dependencies gcc musl-dev \
+    && pip3 install --no-cache-dir --editable . \
+    && apk del build-dependencies
 
 ENTRYPOINT ["hass-cli"]
