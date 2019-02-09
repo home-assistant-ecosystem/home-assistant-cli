@@ -4,6 +4,7 @@ Basic API to access remote instance of Home Assistant.
 If a connection error occurs while communicating with the API a
 HomeAssistantCliError will be raised.
 """
+import asyncio
 import collections
 from datetime import datetime
 import enum
@@ -13,6 +14,7 @@ from typing import Any, Dict, List, Optional, cast
 import urllib.parse
 from urllib.parse import urlencode
 
+import aiohttp
 from homeassistant_cli.config import Configuration, resolve_server
 from homeassistant_cli.exceptions import HomeAssistantCliError
 import homeassistant_cli.hassconst as hass
@@ -85,6 +87,44 @@ def restapi(
         raise HomeAssistantCliError(error)
 
 
+def wsapi(
+    ctx: Configuration, frame: Dict, wait: bool = False
+) -> Optional[Dict]:
+    """Make a call to Home Assistant using WS API."""
+    async def fetcher() -> Optional[Dict]:
+        async with aiohttp.ClientSession() as session:
+            async with session.ws_connect(
+                resolve_server(ctx) + "/api/websocket"
+            ) as wsconn:
+
+                await wsconn.send_str(
+                    json.dumps({'type': 'auth', 'access_token': ctx.token})
+                )
+
+                frame['id'] = 1
+
+                await wsconn.send_str(json.dumps(frame))
+
+                while True:
+                    msg = await wsconn.receive()
+                    if msg.type == aiohttp.WSMsgType.ERROR:
+                        break
+                    elif msg.type == aiohttp.WSMsgType.CLOSED:
+                        break
+                    elif msg.type == aiohttp.WSMsgType.TEXT:
+                        mydata = json.loads(msg.data)  # type: Dict
+
+                        if wait:
+                            print(mydata)
+                        elif mydata['type'] == 'result':
+                            return mydata
+        return None
+
+    loop = asyncio.get_event_loop()
+    result = loop.run_until_complete(fetcher())
+    return result
+
+
 class JSONEncoder(json.JSONEncoder):
     """JSONEncoder that supports Home Assistant objects."""
 
@@ -102,6 +142,79 @@ class JSONEncoder(json.JSONEncoder):
             return o.as_dict()
 
         return json.JSONEncoder.default(self, o)
+
+
+def get_areas(ctx: Configuration) -> List[Dict[str, Any]]:
+    """Return all areas."""
+    frame = {'type': hass.WS_TYPE_AREA_REGISTRY_LIST}
+
+    areas = cast(Dict, wsapi(ctx, frame))[
+        'result'
+    ]  # type: List[Dict[str, Any]]
+
+    return areas
+
+
+def find_area(ctx: Configuration, id_or_name: str) -> Optional[Dict[str, str]]:
+    """Find area first by id and if no match by name."""
+    areas = get_areas(ctx)
+
+    area = next((x for x in areas if x['area_id'] == id_or_name), None)
+    if not area:
+        area = next((x for x in areas if x['name'] == id_or_name), None)
+
+    return area
+
+
+def create_area(ctx: Configuration, name: str) -> Dict[str, Any]:
+    """Create area."""
+    frame = {'type': hass.WS_TYPE_AREA_REGISTRY_CREATE, 'name': name}
+
+    return cast(Dict[str, Any], wsapi(ctx, frame))
+
+
+def delete_area(ctx: Configuration, area_id: str) -> Dict[str, Any]:
+    """Delete area."""
+    frame = {'type': hass.WS_TYPE_AREA_REGISTRY_DELETE, 'area_id': area_id}
+
+    return cast(Dict[str, Any], wsapi(ctx, frame))
+
+
+def rename_area(
+    ctx: Configuration, area_id: str, new_name: str
+) -> Dict[str, Any]:
+    """Rename area."""
+    frame = {
+        'type': hass.WS_TYPE_AREA_REGISTRY_UPDATE,
+        'area_id': area_id,
+        'name': new_name,
+    }
+
+    return cast(Dict[str, Any], wsapi(ctx, frame))
+
+
+def assign_area(
+    ctx: Configuration, device_id: str, area_id: str
+) -> Dict[str, Any]:
+    """Assign area."""
+    frame = {
+        'type': hass.WS_TYPE_DEVICE_REGISTRY_UPDATE,
+        'area_id': area_id,
+        'device_id': device_id,
+    }
+
+    return cast(Dict[str, Any], wsapi(ctx, frame))
+
+
+def get_devices(ctx: Configuration) -> List[Dict[str, Any]]:
+    """Return all devices."""
+    frame = {'type': hass.WS_TYPE_DEVICE_REGISTRY_LIST}
+
+    devices = cast(Dict[str, List[Dict[str, Any]]], wsapi(ctx, frame))[
+        'result'
+    ]
+
+    return devices
 
 
 def validate_api(ctx: Configuration) -> APIStatus:

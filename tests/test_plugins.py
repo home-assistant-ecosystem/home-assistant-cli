@@ -17,6 +17,8 @@ DFEAULT_PLUGINS = [
     'service',
     'system',
     'template',
+    'area',
+    'device',
 ]
 DFEAULT_PLUGINS.sort()
 

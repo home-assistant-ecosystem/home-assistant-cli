@@ -170,3 +170,29 @@ def api_methods(
     completions.sort()
 
     return [c for c in completions if incomplete in c[0]]
+
+
+def _quoteifneeded(val: str) -> str:
+    if val and ' ' in val:
+        return '"{}"'.format(val)
+    return val
+
+
+def areas(
+    ctx: Configuration, args: List, incomplete: str
+) -> List[Tuple[str, str]]:
+    """Areas."""
+    _init_ctx(ctx)
+    allareas = api.get_areas(ctx)
+
+    completions = []  # type List[Tuple[str, str]]
+
+    if allareas:
+        for area in allareas:
+            completions.append((_quoteifneeded(area['name']), area['area_id']))
+
+        completions.sort()
+
+        return [c for c in completions if incomplete in c[0]]
+
+    return completions

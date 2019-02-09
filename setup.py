@@ -71,6 +71,7 @@ REQUIRES = [
     'dateparser==0.7.0',
     'regex==2019.01.24',
     'ruamel.yaml==0.15.85',
+    'aiohttp==3.5.4',
 ]
 
 # Should be as close to Home Assistant dev/master as possible

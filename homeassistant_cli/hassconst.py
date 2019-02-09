@@ -453,3 +453,12 @@ PRECISION_TENTHS = 0.1
 # Static list of entities that will never be exposed to
 # cloud, alexa, or google_home components
 CLOUD_NEVER_EXPOSED_ENTITIES = ['group.all_locks']
+
+
+# Websocket API
+WS_TYPE_DEVICE_REGISTRY_LIST = 'config/device_registry/list'
+WS_TYPE_AREA_REGISTRY_LIST = 'config/area_registry/list'
+WS_TYPE_AREA_REGISTRY_CREATE = 'config/area_registry/create'
+WS_TYPE_AREA_REGISTRY_DELETE = 'config/area_registry/delete'
+WS_TYPE_AREA_REGISTRY_UPDATE = 'config/area_registry/update'
+WS_TYPE_DEVICE_REGISTRY_UPDATE = 'config/device_registry/update'

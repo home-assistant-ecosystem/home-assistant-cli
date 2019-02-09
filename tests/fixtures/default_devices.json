@@ -1,0 +1,355 @@
+[
+  {
+    "config_entries": [
+      "424ae83a64a54fa8b6b01d71aa7d9b3d"
+    ],
+    "connections": [],
+    "manufacturer": "Sonos",
+    "model": "Play:5",
+    "name": "Kitchen",
+    "sw_version": null,
+    "id": "fa56ea5934f44fa19161bbf2a3d33732",
+    "hub_device_id": null,
+    "area_id": "e6ebd3e6f6e04b63a0e4a109b4748584"
+  },
+  {
+    "config_entries": [],
+    "connections": [],
+    "manufacturer": "Philips",
+    "model": "Hue color lamp",
+    "name": "Kitchen table left",
+    "sw_version": "5.105.0.21536",
+    "id": "b6f1087b94c84bc8bbe2a01adbd014d8",
+    "hub_device_id": "3e2f3eaccc0a4dedbbc86c32275e6249",
+    "area_id": "e6ebd3e6f6e04b63a0e4a109b4748584"
+  },
+  {
+    "config_entries": [],
+    "connections": [],
+    "manufacturer": "Philips",
+    "model": "Hue color lamp",
+    "name": "Kitchen table right",
+    "sw_version": "5.105.0.21536",
+    "id": "921ac3ce2d7948e98ceabdecc295e742",
+    "hub_device_id": "3e2f3eaccc0a4dedbbc86c32275e6249",
+    "area_id": "e6ebd3e6f6e04b63a0e4a109b4748584"
+  },
+  {
+    "config_entries": [],
+    "connections": [],
+    "manufacturer": "Philips",
+    "model": "Hue color spot",
+    "name": "Kitchen left middle at window",
+    "sw_version": "5.105.0.21536",
+    "id": "1eaf5f51bf464a80b4c17a4f1fad1d8f",
+    "hub_device_id": "3e2f3eaccc0a4dedbbc86c32275e6249",
+    "area_id": "e6ebd3e6f6e04b63a0e4a109b4748584"
+  },
+  {
+    "config_entries": [],
+    "connections": [],
+    "manufacturer": "Philips",
+    "model": "Hue color spot",
+    "name": "Kitchen front right at fridge",
+    "sw_version": "5.105.0.21536",
+    "id": "c022c2a832194a9aadbc40d39e7d5ee7",
+    "hub_device_id": "3e2f3eaccc0a4dedbbc86c32275e6249",
+    "area_id": "e6ebd3e6f6e04b63a0e4a109b4748584"
+  },
+  {
+    "config_entries": [],
+    "connections": [],
+    "manufacturer": "Philips",
+    "model": "Hue color spot",
+    "name": "Kitchen left back at hub",
+    "sw_version": "5.105.0.21536",
+    "id": "cabab7fdfc97462f959aec7434989c82",
+    "hub_device_id": "3e2f3eaccc0a4dedbbc86c32275e6249",
+    "area_id": "e6ebd3e6f6e04b63a0e4a109b4748584"
+  },
+  {
+    "config_entries": [],
+    "connections": [],
+    "manufacturer": "Philips",
+    "model": "Hue color spot",
+    "name": "Kitchen left back at bar",
+    "sw_version": "5.105.0.21536",
+    "id": "a5ffc6e863b1478d8f91b414014138d9",
+    "hub_device_id": "3e2f3eaccc0a4dedbbc86c32275e6249",
+    "area_id": "e6ebd3e6f6e04b63a0e4a109b4748584"
+  },
+  {
+    "config_entries": [],
+    "connections": [],
+    "manufacturer": "Philips",
+    "model": "Hue color spot",
+    "name": "Kitchen right back at sink",
+    "sw_version": "5.105.0.21536",
+    "id": "63b899e6357d43879a7f356b31c233ae",
+    "hub_device_id": "3e2f3eaccc0a4dedbbc86c32275e6249",
+    "area_id": "e6ebd3e6f6e04b63a0e4a109b4748584"
+  },
+  {
+    "config_entries": [],
+    "connections": [],
+    "manufacturer": "Philips",
+    "model": "Hue color spot",
+    "name": "Kitchen right middle at oven",
+    "sw_version": "5.105.0.21536",
+    "id": "43e5a30659cd4837b7ecaa5447d8be67",
+    "hub_device_id": "3e2f3eaccc0a4dedbbc86c32275e6249",
+    "area_id": "e6ebd3e6f6e04b63a0e4a109b4748584"
+  },
+  {
+    "config_entries": [
+      "1a64b7d520ad44fab8622bc4efb64e88"
+    ],
+    "connections": [
+      [
+        "zigbee",
+        "00:17:88:01:00:f0:b1:28"
+      ]
+    ],
+    "manufacturer": "Philips",
+    "model": "LCT003",
+    "name": "Kitchen Light 2",
+    "sw_version": "5.105.0.21536",
+    "id": "f9cad07069c74d519fbe84811c91f1fb",
+    "hub_device_id": "ff7da1f735c14b2f865b33615e359474",
+    "area_id": "e6ebd3e6f6e04b63a0e4a109b4748584"
+  },
+  {
+    "config_entries": [
+      "1a64b7d520ad44fab8622bc4efb64e88"
+    ],
+    "connections": [
+      [
+        "zigbee",
+        "00:17:88:01:00:f0:b2:c8"
+      ]
+    ],
+    "manufacturer": "Philips",
+    "model": "LCT003",
+    "name": "Kitchen Light 3",
+    "sw_version": "5.105.0.21536",
+    "id": "d02ec64623ae4407a80b903cbc061511",
+    "hub_device_id": "ff7da1f735c14b2f865b33615e359474",
+    "area_id": "e6ebd3e6f6e04b63a0e4a109b4748584"
+  },
+  {
+    "config_entries": [
+      "1a64b7d520ad44fab8622bc4efb64e88"
+    ],
+    "connections": [
+      [
+        "zigbee",
+        "00:17:88:01:00:f0:b2:f1"
+      ]
+    ],
+    "manufacturer": "Philips",
+    "model": "LCT003",
+    "name": "Kitchen Light 1",
+    "sw_version": "5.105.0.21536",
+    "id": "820c9e511fce42ea92b228c18710aa56",
+    "hub_device_id": "ff7da1f735c14b2f865b33615e359474",
+    "area_id": "e6ebd3e6f6e04b63a0e4a109b4748584"
+  },
+  {
+    "config_entries": [
+      "1a64b7d520ad44fab8622bc4efb64e88"
+    ],
+    "connections": [
+      [
+        "zigbee",
+        "00:17:88:01:00:f0:ac:69"
+      ]
+    ],
+    "manufacturer": "Philips",
+    "model": "LCT003",
+    "name": "Kitchen Light 5",
+    "sw_version": "5.105.0.21536",
+    "id": "417dd42c0c764765aa29580d77b8b7ad",
+    "hub_device_id": "ff7da1f735c14b2f865b33615e359474",
+    "area_id": "e6ebd3e6f6e04b63a0e4a109b4748584"
+  },
+  {
+    "config_entries": [
+      "1a64b7d520ad44fab8622bc4efb64e88"
+    ],
+    "connections": [
+      [
+        "zigbee",
+        "00:17:88:01:10:4b:e9:a8"
+      ]
+    ],
+    "manufacturer": "Philips",
+    "model": "LCT007",
+    "name": "Kitchen Table Light 1",
+    "sw_version": "5.105.0.21536",
+    "id": "d379711d01fc47d6aef5b85bd81acba4",
+    "hub_device_id": "ff7da1f735c14b2f865b33615e359474",
+    "area_id": "e6ebd3e6f6e04b63a0e4a109b4748584"
+  },
+  {
+    "config_entries": [
+      "1a64b7d520ad44fab8622bc4efb64e88"
+    ],
+    "connections": [
+      [
+        "zigbee",
+        "00:17:88:01:10:5d:b9:8f"
+      ]
+    ],
+    "manufacturer": "Philips",
+    "model": "LCT007",
+    "name": "Kitchen Table Light 2",
+    "sw_version": "5.105.0.21536",
+    "id": "a3229ac663734c2cb67c7b13c8a2ba0f",
+    "hub_device_id": "ff7da1f735c14b2f865b33615e359474",
+    "area_id": "e6ebd3e6f6e04b63a0e4a109b4748584"
+  },
+  {
+    "config_entries": [
+      "1a64b7d520ad44fab8622bc4efb64e88"
+    ],
+    "connections": [
+      [
+        "zigbee",
+        "00:17:88:01:00:f0:aa:eb"
+      ]
+    ],
+    "manufacturer": "Philips",
+    "model": "LCT003",
+    "name": "Kitchen Light 6",
+    "sw_version": "5.105.0.21536",
+    "id": "e20132e0f90942298bdae2340e61c079",
+    "hub_device_id": "ff7da1f735c14b2f865b33615e359474",
+    "area_id": "e6ebd3e6f6e04b63a0e4a109b4748584"
+  },
+  {
+    "config_entries": [
+      "1a64b7d520ad44fab8622bc4efb64e88"
+    ],
+    "connections": [
+      [
+        "zigbee",
+        "00:17:88:01:00:f0:ad:cf"
+      ]
+    ],
+    "manufacturer": "Philips",
+    "model": "LCT003",
+    "name": "Kitchen Light 4",
+    "sw_version": "5.105.0.21536",
+    "id": "9dd4074e35e546ed8d1a4e630fe07926",
+    "hub_device_id": "ff7da1f735c14b2f865b33615e359474",
+    "area_id": "e6ebd3e6f6e04b63a0e4a109b4748584"
+  },
+  {
+    "config_entries": [
+      "1a64b7d520ad44fab8622bc4efb64e88"
+    ],
+    "connections": [
+      [
+        "zigbee",
+        "00:17:88:01:02:01:1c:f9"
+      ]
+    ],
+    "manufacturer": "Philips",
+    "model": "SML001",
+    "name": "Kitchen Motion",
+    "sw_version": "6.1.0.18912",
+    "id": "ae8b84e99dbf4a9e94072a1588f29298",
+    "hub_device_id": "ff7da1f735c14b2f865b33615e359474",
+    "area_id": "e6ebd3e6f6e04b63a0e4a109b4748584"
+  },
+  {
+    "config_entries": [
+      "1a64b7d520ad44fab8622bc4efb64e88"
+    ],
+    "connections": [
+      [
+        "zigbee",
+        "00:17:88:01:10:3e:30:37"
+      ]
+    ],
+    "manufacturer": "Philips",
+    "model": "RWL021",
+    "name": "Kitchen Switch",
+    "sw_version": "5.45.1.16265",
+    "id": "ed7a661b309e4f0093f440b327fb0fd4",
+    "hub_device_id": "ff7da1f735c14b2f865b33615e359474",
+    "area_id": "e6ebd3e6f6e04b63a0e4a109b4748584"
+  },
+  {
+    "config_entries": [
+      "1a64b7d520ad44fab8622bc4efb64e88"
+    ],
+    "connections": [
+      [
+        "zigbee",
+        "00:17:88:01:10:32:d3:74"
+      ]
+    ],
+    "manufacturer": "Philips",
+    "model": "RWL021",
+    "name": "Kitchen Cupboard Switch",
+    "sw_version": "5.45.1.16265",
+    "id": "2fa6cccbebab476d8e6899899df34b38",
+    "hub_device_id": "ff7da1f735c14b2f865b33615e359474",
+    "area_id": "e6ebd3e6f6e04b63a0e4a109b4748584"
+  },
+  {
+    "config_entries": [
+      "1a64b7d520ad44fab8622bc4efb64e88"
+    ],
+    "connections": [
+      [
+        "zigbee",
+        "00:15:8d:00:02:75:0d:4b"
+      ]
+    ],
+    "manufacturer": "LUMI",
+    "model": "lumi.sensor_magnet.aq2",
+    "name": "Kitchen Terrace Door",
+    "sw_version": "20161128",
+    "id": "4110ac63ee4f4b9a804fe63f372bb601",
+    "hub_device_id": "ff7da1f735c14b2f865b33615e359474",
+    "area_id": "e6ebd3e6f6e04b63a0e4a109b4748584"
+  },
+  {
+    "config_entries": [
+      "1a64b7d520ad44fab8622bc4efb64e88"
+    ],
+    "connections": [
+      [
+        "zigbee",
+        "00:0b:57:ff:fe:e8:89:2a"
+      ]
+    ],
+    "manufacturer": "IKEA of Sweden",
+    "model": "TRADFRI transformer 30W",
+    "name": "Kitchen Cupboard Light 2",
+    "sw_version": "1.2.245",
+    "id": "f231511fa73c4634b4236f4b46e2f547",
+    "hub_device_id": "ff7da1f735c14b2f865b33615e359474",
+    "area_id": "e6ebd3e6f6e04b63a0e4a109b4748584"
+  },
+  {
+    "config_entries": [
+      "1a64b7d520ad44fab8622bc4efb64e88"
+    ],
+    "connections": [
+      [
+        "zigbee",
+        "00:0b:57:ff:fe:e8:a5:da"
+      ]
+    ],
+    "manufacturer": "IKEA of Sweden",
+    "model": "TRADFRI transformer 30W",
+    "name": "Kitchen Cupboard Light 1",
+    "sw_version": "1.2.245",
+    "id": "4168666fad43443d807398d3e407a36b",
+    "hub_device_id": "ff7da1f735c14b2f865b33615e359474",
+    "area_id": "e6ebd3e6f6e04b63a0e4a109b4748584"
+  }
+]
