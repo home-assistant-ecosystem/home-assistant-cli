@@ -51,3 +51,19 @@ def fire(ctx: Configuration, event, json):
 
     if response:
         ctx.echo(raw_format_output(ctx.output, [response], ctx.yaml()))
+
+
+@cli.command()
+@click.argument('event_type', required=False)
+@pass_context
+def watch(ctx: Configuration, event_type):
+    """Subscribe and print events.
+
+    EVENT-TYPE even type to subscribe to. if empty subscribe to all.
+    """
+    frame = {'type': 'subscribe_events'}
+
+    if event_type:
+        frame['event_type'] = event_type
+
+    api.wsapi(ctx, frame, True)
