@@ -32,7 +32,13 @@ def get(ctx: Configuration, entity):
     state = api.get_state(ctx, entity)
 
     if state:
-        ctx.echo(helper.format_output(ctx, [state], const.COLUMNS_ENTITIES))
+        ctx.echo(
+            helper.format_output(
+                ctx,
+                [state],
+                columns=ctx.columns if ctx.columns else const.COLUMNS_ENTITIES,
+            )
+        )
     else:
         _LOGGING.error("Entity with id: '%s' not found.", entity)
 
