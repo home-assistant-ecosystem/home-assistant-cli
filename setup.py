@@ -32,7 +32,7 @@ def find_version(*file_paths):
 
 
 def get_git_commit_datetime() -> str:
-    """Return timestamp from last commit"""
+    """Return timestamp from last commit."""
     try:
         commit_hash = (
             subprocess.check_output(
