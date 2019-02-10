@@ -48,6 +48,9 @@ the folowing to enable autocompletion for hass-cli commands.
 
   $  source <(hass-cli completion zsh)
 
+A Note about Python Virtual Environments
+========================================
+In the 0.4 release we made a mistake on the pyyml release so there would be a mismatch in dependencies in relation to Home Assistant but past and future releases should in theory be fine. That said - if you want the least amount of surprises then a separate venv or using pipsi like : `pipsi install --python python3 homeassistant-cli` is best.
 
 Usage
 =====
