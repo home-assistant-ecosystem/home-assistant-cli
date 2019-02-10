@@ -34,7 +34,6 @@ cache:
 install: pip install -U tox coveralls
 language: python
 script: travis_wait 30 tox --develop
-before_deploy: script/check_release
 deploy:
   provider: pypi
   user: maxandersen

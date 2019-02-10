@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Setup script for Home Assistant CLI."""
 import codecs
+import datetime
 from datetime import datetime as dt
 import os
 import re
+import subprocess
 
 from setuptools import find_packages, setup
 
@@ -29,7 +31,42 @@ def find_version(*file_paths):
     raise RuntimeError("Unable to find version string.")
 
 
+def get_git_commit_datetime() -> str:
+    """Return timestamp from last commit"""
+    try:
+        commit_hash = (
+            subprocess.check_output(
+                "git rev-parse HEAD", shell=True, stderr=subprocess.STDOUT
+            )
+            .decode("utf-8")
+            .strip()
+        )
+        commit_datetime = (
+            subprocess.check_output(
+                "git show -s --format=%ci " + commit_hash,
+                shell=True,
+                stderr=subprocess.STDOUT,
+            )
+            .decode("utf-8")
+            .strip()
+        )
+        print(commit_datetime)
+        datetime_object = datetime.datetime.strptime(
+            commit_datetime, '%Y-%m-%d %H:%M:%S +%f'
+        )
+        print("{:%Y%m%d%H%M%S}".format(datetime_object))
+        return "{:%Y%m%d%H%M%S}".format(datetime_object)
+    except subprocess.CalledProcessError as cpe:
+        print(cpe.output)
+        return "00000000000000"
+
+
 __VERSION__ = find_version("homeassistant_cli", "const.py")  # type: ignore
+# Append a suffix to the version for dev builds
+# Append a suffix to the version for dev builds
+if 'dev' in __VERSION__:
+    __VERSION__ = '{v}-{s}'.format(v=__VERSION__, s=get_git_commit_datetime())
+
 REQUIRED_PYTHON_VER = (3, 5, 3)
 
 
