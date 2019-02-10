@@ -106,7 +106,7 @@ REQUIRES = [
     'jsonpath-rw==1.4.0',
     'jinja2>=2.10',
     'dateparser==0.7.0',
-    'regex==2019.01.24',
+    'regex==2019.02.07',
     'ruamel.yaml==0.15.85',
     'aiohttp==3.5.4',
 ]
