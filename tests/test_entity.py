@@ -28,6 +28,8 @@ EDITED_ENTITY = """
 }
 """
 
+LIST_EDITED_ENTITY = "[{}]".format(EDITED_ENTITY)
+
 
 def test_entity_list(basic_entities_text) -> None:
     """Test entities can be listed."""
@@ -213,6 +215,36 @@ def test_entity_edit(basic_entities_text, basic_entities) -> None:
         assert get.call_count == 1
         assert post.call_count == 1
         assert post.request_history[0].json()['state'] == 'myspecialstate'
+
+
+def test_entity_toggle(basic_entities_text, basic_entities) -> None:
+    """Test basic edit of state."""
+    with requests_mock.Mocker() as mock:
+        mock.get(
+            "http://localhost:8123/api/states",
+            text=basic_entities_text,
+            status_code=200,
+        )
+        post = mock.post(
+            "http://localhost:8123/api/services/homeassistant/toggle",
+            text=LIST_EDITED_ENTITY,
+            status_code=200,
+        )
+
+        runner = CliRunner()
+        result = runner.invoke(
+            cli.cli,
+            ["--output=json", "entity", "toggle", "sensor.one"],
+            catch_exceptions=False,
+        )
+
+        assert result.exit_code == 0
+        assert post.call_count == 1
+
+        data = json.loads(result.output)
+        assert isinstance(data, list)
+        assert len(data) == 1
+        assert isinstance(data[0], dict)
 
 
 def test_entity_filter(default_entities) -> None:

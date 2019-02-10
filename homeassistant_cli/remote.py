@@ -91,6 +91,7 @@ def wsapi(
     ctx: Configuration, frame: Dict, wait: bool = False
 ) -> Optional[Dict]:
     """Make a call to Home Assistant using WS API."""
+
     async def fetcher() -> Optional[Dict]:
         async with aiohttp.ClientSession() as session:
             async with session.ws_connect(
@@ -485,7 +486,7 @@ def call_service(
     domain: str,
     service: str,
     service_data: Optional[Dict] = None,
-) -> Dict[str, Any]:
+) -> List[Dict[str, Any]]:
     """Call a service."""
     try:
         req = restapi(
@@ -502,7 +503,7 @@ def call_service(
             "Error calling service: {} - {}".format(req.status_code, req.text)
         )
 
-    return cast(Dict[str, Any], req.json())
+    return cast(List[Dict[str, Any]], req.json())
 
 
 def get_services(ctx: Configuration,) -> List[Dict[str, Any]]:

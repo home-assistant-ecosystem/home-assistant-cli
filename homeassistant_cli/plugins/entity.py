@@ -19,7 +19,6 @@ _LOGGING = logging.getLogger(__name__)
 @pass_context
 def cli(ctx):
     """Get info and operate on entities from Home Assistant."""
-    ctx.auto_output("table")
 
 
 @cli.command()
@@ -29,6 +28,7 @@ def cli(ctx):
 @pass_context
 def get(ctx: Configuration, entity):
     """Get/read entity state from Home Assistant."""
+    ctx.auto_output("table")
     state = api.get_state(ctx, entity)
 
     if state:
@@ -50,6 +50,7 @@ def get(ctx: Configuration, entity):
 @pass_context
 def delete(ctx: Configuration, entity):
     """Delete entity from Home Assistant."""
+    ctx.auto_output("table")
     deleted = api.remove_state(ctx, entity)
 
     if deleted:
@@ -63,6 +64,7 @@ def delete(ctx: Configuration, entity):
 @pass_context
 def listcmd(ctx, entityfilter):
     """List all state from Home Assistant."""
+    ctx.auto_output("table")
     states = api.get_states(ctx)
 
     result = []  # type: List[Dict]
@@ -107,6 +109,7 @@ def listcmd(ctx, entityfilter):
 @pass_context
 def edit(ctx: Configuration, entity, newstate, attributes, merge, json):
     """Edit entity state from Home Assistant."""
+    ctx.auto_output('data')
     if json:
         _LOGGING.debug(
             "json found overriding/creating new state for entity %s", entity
@@ -169,11 +172,11 @@ def edit(ctx: Configuration, entity, newstate, attributes, merge, json):
     _LOGGING.debug("Updated to: %s", result)
 
 
-def _report(ctx: Configuration, result: Dict[str, Any], action: str):
+def _report(ctx: Configuration, result: List[Dict[str, Any]], action: str):
     ctx.echo(
         helper.format_output(
             ctx,
-            [result],
+            result,
             columns=ctx.columns if ctx.columns else const.COLUMNS_ENTITIES,
         )
     )
@@ -197,6 +200,7 @@ def _homeassistant_cmd(ctx: Configuration, entities, cmd, action):
 @pass_context
 def toggle(ctx: Configuration, entities):
     """Toggle state for one or more entities in Home Assistant."""
+    ctx.auto_output("table")
     _homeassistant_cmd(ctx, entities, 'toggle', "toggled")
 
 
@@ -207,6 +211,7 @@ def toggle(ctx: Configuration, entities):
 @pass_context
 def off_cmd(ctx: Configuration, entities):
     """Turn entity off."""
+    ctx.auto_output("table")
     _homeassistant_cmd(ctx, entities, 'turn_off', "turned off")
 
 
@@ -217,6 +222,7 @@ def off_cmd(ctx: Configuration, entities):
 @pass_context
 def on_cmd(ctx: Configuration, entities):
     """Turn entity on."""
+    ctx.auto_output("table")
     _homeassistant_cmd(ctx, entities, 'turn_on', "turned on")
 
 
@@ -251,6 +257,7 @@ def history(ctx: Configuration, entities: List, since: str, end: str):
     """
     import dateparser
 
+    ctx.auto_output("table")
     settings = {
         'DATE_ORDER': 'DMY',
         'TIMEZONE': 'UTC',
