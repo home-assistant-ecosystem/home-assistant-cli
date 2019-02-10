@@ -1,7 +1,7 @@
 Home Assistant Command-line Interface (``hass-cli``)
 ====================================================
 
-|Build Status| |Coverage| |Chat Status| |License| |PyPI| |Docker|
+|Build Status| |Coverage| |Chat Status| |License| |PyPI|
 
 The Home Assistant Command-line interface (``hass-cli``) allows one to
 work with a local or a remote `Home Assistant <https://home-assistant.io>`_
@@ -28,7 +28,24 @@ To use latest pre-release from ``dev`` branch:
 
 .. code:: bash
 
-   $ pip install pip3 install git+https://github.com/home-assistant/home-assistant-cli@dev
+   $ pip install git+https://github.com/home-assistant/home-assistant-cli@dev
+
+Docker
+-------
+
+If you do not have a Python setup you can try use hass-cli via a container using docker.
+
+To make auto-completion and access environment work like other scripts you'll need to
+create a script file to execute.
+
+   $ curl https://raw.githubusercontent.com/home-assistant/home-assistant-cli/dev/docker-hass-cli > hass-cli
+   $ chmod +x hass-cli
+
+Now put `hass-cli` script into your path and you can use it like if you had installed it via
+command line as long as you don't need file system access (like for `hass-cli template`).
+
+Setup
+======
 
 To get started you'll need to have or generate a long lasting token format
 on your Home Assistant profile page (i.e. https://localhost:8123/profile).
@@ -452,6 +469,8 @@ Development
 Developing is (re)using as much as possible from `homeassistant development setup <https://developers.home-assistant.io/docs/en/development_environment.html>`.
 
 Recommended way to develop is to use virtual environment to ensure isolation from rest of your system using the following steps:
+
+Clone the git repository and do the following:
 
 .. code:: bash
 
