@@ -1,7 +1,7 @@
 Home Assistant Command-line Interface (``hass-cli``)
 ====================================================
 
-|Build Status| |Coverage| |Chat Status| |License| |PyPI|
+|Build Status| |Coverage| |Chat Status| |License| |PyPI| |Docker|
 
 The Home Assistant Command-line interface (``hass-cli``) allows one to
 work with a local or a remote `Home Assistant <https://home-assistant.io>`_
@@ -484,3 +484,6 @@ after this you should be able to edit the source code and running `hass-cli` dir
 .. |Coverage| image:: https://coveralls.io/repos/github/home-assistant/home-assistant-cli/badge.svg?branch=dev
     :target: https://coveralls.io/github/home-assistant/home-assistant-cli?branch=dev
     :alt: Coveralls
+.. |Docker| image:: https://img.shields.io/docker/pulls/homeassistant/home-assistant-cli.svg?style=flat
+    :target: https://hub.docker.com/r/homeassistant/home-assistant-cli
+    :alt: Docker

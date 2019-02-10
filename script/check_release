@@ -1,3 +1,4 @@
+#!/bin/bash
 ## check if preconditions are in place to do a release
 
 cd "$(dirname "$0")/.."
@@ -10,7 +11,7 @@ cd "$(dirname "$0")/.."
 #  exit 1
 #fi
 
-head -n 5 homeassistant_cli/const.py | tail -n 1 | grep dev > /dev/null
+head -n 4 homeassistant_cli/const.py | tail -n 1 | grep dev > /dev/null
 
 if [ $? -eq 0 ]
 then
