@@ -355,7 +355,7 @@ For bash:
 
 .. code:: bash
 
-  eval "$(_FOO_BAR_COMPLETE=source foo-bar)"
+  eval "$(_HASS_CLI_COMPLETE=source hass-cli)"
 
 
 Once enabled there is autocompletion for commands and for certain attributes like entities:
