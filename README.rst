@@ -35,6 +35,8 @@ Docker
 
 If you do not have a Python setup you can try use hass-cli via a container using docker.
 
+   $ docker run homeassistant/home-assistant-cli:dev
+
 To make auto-completion and access environment work like other scripts you'll need to
 create a script file to execute.
 
