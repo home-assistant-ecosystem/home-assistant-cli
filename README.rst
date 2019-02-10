@@ -152,7 +152,7 @@ You can also explicitly create/edit via the `--json` flag:
   $ hass-cli entity edit sensor.test --json='{ "state":"off"}'
 ..
 
-List posible service with or without a regular expression filter:
+List possible services with or without a regular expression filter:
 
 .. code:: bash
 
@@ -204,6 +204,107 @@ to sort by a property:
 Note: the `--sort-by` argument is referring to the attribute in the underlying ``json``/``yaml``
 NOT the column name. The advantage for this is that it can be used for sorting on any property
 even if not included in the default output.
+
+Areas and Device Registry
+-------------------------
+
+Since v0.87 of Home Assistant there is a notion of Areas in the Device registry. hass-cli lets
+you list devices and areas and assign areas to devices.
+
+Listing devices and areas works similar to list Entities.
+
+.. code:: bash
+
+   $ hass-cli device list
+   ID                                NAME                           MODEL                            MANUFACTURER        AREA
+   a3852c3c3ebd47d3acac195478ca6f8b  Basement stairs motion         SML001                           Philips             c6c962b892064a218e968fcaee7950c8
+   880a944e74db4bb48ea3db6dd24af357  Basement Light 2               TRADFRI bulb GU10 WS 400lm       IKEA of Sweden      c6c962b892064a218e968fcaee7950c8
+   657c3cc908594479aab819ff80d0c710  Office                         Hue white lamp                   Philips             None
+   ee62c3af815f4ec89994977a730782a0  Kids room main                 Hue color lamp                   Philips             69fdd00e91614957980a8dc1a7f0f68a
+   4637186392b84c1a843f64c810f04bbe  Dinner table 4                 Hue ambiance candle              Philips             81c28de473dd41a7846fc97fdcd3027b
+   90f8944476e544348e6691bc0d3cc855  Bedroom                        Play:1                           Sonos               None
+   e20132e0f90942298bdae2340e61c079  Kitchen Light 6                LCT003                           Philips             e6ebd3e6f6e04b63a0e4a109b4748584
+   9ea61cecaf8d4de08aa20306ec6bdd07  Winter Garden Light 3          LCT012                           Philips             9e08d89203804d5db995c3d0d5dbd91b
+   93cc3e42be224ef6b192ce203f6bf7fe  Dinner table 3                 Hue ambiance candle              Philips             81c28de473dd41a7846fc97fdcd3027b
+   ae8b84e99dbf4a9e94072a1588f29298  Kitchen Motion                 SML001                           Philips             e6ebd3e6f6e04b63a0e4a109b4748584
+
+   $ hass-cli area list
+   ID                                NAME
+   295afc88012341ecb897cd12d3fbc6b4  Bathroom
+   9e08d89203804d5db995c3d0d5dbd91b  Winter Garden
+   8816ee92b7b84f54bbb30a68b877e739  Office
+   e6ebd3e6f6e04b63a0e4a109b4748584  Kitchen
+   f7f5412a9f47436da669a537e0c0c10f  Livingroom
+   bc98c209249f452f8d074e8384780e15  Hallway
+   5f8de5b8cf264c17b10d21e741573713  Small Bathroom
+   c6c962b892064a218e968fcaee7950c8  Basement
+   efaa42ae0b7645aebfa51d8303c361c5  Loft
+   ea63e86747104abdb26f6d6ea9d2ddef  Old Shed
+   16bd0505030a430b91fcf331340090f8  Entrance
+   81c28de473dd41a7846fc97fdcd3027b  Dinner Table
+   69fdd00e91614957980a8dc1a7f0f68a  Kids room  
+
+
+You can create and delete areas:
+
+.. code:: bash
+
+   $ hass-cli area delete "Old Shed"
+   -  id: 1
+      type: result
+      success: true
+      result: success
+
+   $ hass-cli area create "New Shed"
+   -  id: 1
+      type: result
+      success: true
+      result:
+          area_id: cdd09a80f03a4cc59d2943053c0414c0
+          name: New Shed
+
+You can assign area to a specific device. Here the Kitchen
+area gets assigned to device named "Cupboard Light".
+
+.. code:: bash
+
+   $ hass-cli device assign Kitchen "Cupboard Light"
+
+Besides assigning individual devices you can assign in bulk:
+
+.. code:: bash
+
+   $ hass-cli device assign Kitchen --match "Kitchen Light"
+
+The above line will assign Kitchen area to all devices with substring "Kitchen Light".
+
+You can also combine individual and matched devices in one line:
+
+.. code:: bash
+
+   $ hass-cli device assign Kitchen --match "Kitchen Light" eab9930f8652408882cc8cb604651c60 Cupboard
+
+Above will assign area named "Kitchen" to all devices having substring "Kitchen Light" and to
+specific area with id "eab9930..." or named "Cupboard".
+
+Events
+------
+
+You can subscribe and watch all or a specific event type using `event watch`.
+
+.. code:: bash
+
+   $ hass-cli event watch
+
+This will watch for all event types, you can limit to a specific event type
+by specifying it as an argument:
+
+.. code:: bash
+
+   $ hass-cli event watch deconz_event
+
+Other
+-----
 
 You can call services:
 
@@ -303,7 +404,8 @@ Help
                                      instance.
      --timeout INTEGER               Timeout for network operations.  [default:
                                      5]
-     -o, --output [json|yaml|table]  Output format  [default: json]
+     -o, --output [json|yaml|table|auto]
+                                     Output format.  [default: auto]
      -v, --verbose                   Enables verbose mode.
      -x                              Print backtraces when exception occurs.
      --cert TEXT                     Path to client certificate file (.pem) to
@@ -318,12 +420,16 @@ Help
      --no-headers                    When printing tables don't use headers
                                      (default: print headers)
      --table-format TEXT             Which table format to use.
+     --sort-by TEXT                  Sort table by the jsonpath expression.
+                                     Example: last_changed
      --version                       Show the version and exit.
      --help                          Show this message and exit.
 
    Commands:
+     area        Get info and operate on areas from Home Assistant...
      completion  Output shell completion code for the specified shell (bash or...
-     config      Get configuration from Home Assistant.
+     config      Get configuration from a Home Assistant instance.
+     device      Get info and operate on devices from Home Assistant...
      discover    Discovery for the local network.
      entity      Get info and operate on entities from Home Assistant.
      event       Interact with events.
@@ -334,7 +440,6 @@ Help
      system      System details and operations for Home Assistant.
      template    Render templates on server or locally.
 
-   
 
 Clone the git repository and
 
