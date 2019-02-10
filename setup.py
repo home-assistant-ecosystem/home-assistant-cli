@@ -65,7 +65,7 @@ __VERSION__ = find_version("homeassistant_cli", "const.py")  # type: ignore
 # Append a suffix to the version for dev builds
 # Append a suffix to the version for dev builds
 if 'dev' in __VERSION__:
-    __VERSION__ = '{v}-{s}'.format(v=__VERSION__, s=get_git_commit_datetime())
+    __VERSION__ = '{v}+{s}'.format(v=__VERSION__, s=get_git_commit_datetime())
 
 REQUIRED_PYTHON_VER = (3, 5, 3)
 
