@@ -1,7 +1,7 @@
 Home Assistant Command-line Interface (``hass-cli``)
 ====================================================
 
-|Build Status| |Coverage| |Chat Status| |License| |PyPI| |Docker|
+|Build Status| |Coverage| |Chat Status| |License| |PyPI|
 
 The Home Assistant Command-line interface (``hass-cli``) allows one to
 work with a local or a remote `Home Assistant <https://home-assistant.io>`_
@@ -12,8 +12,8 @@ instance directly from the command-line.
       :target: https://asciinema.org/a/216235?autoplay=1&speed=1
 
 
-**Note**: This is still in alpha and under heavy development. Name and structure of
-commands are expected to still change.
+**Note**: This is still in alpha and under heavy development. Name and
+structure of commands are expected to still change.
 
 Installation
 ============
@@ -28,13 +28,32 @@ To use latest pre-release from ``dev`` branch:
 
 .. code:: bash
 
-   $ pip install  pip3 install git+https://github.com/home-assistant/home-assistant-cli@dev
+   $ pip install git+https://github.com/home-assistant/home-assistant-cli@dev
+
+Docker
+-------
+
+If you do not have a Python setup you can try use hass-cli via a container using docker.
+
+   $ docker run homeassistant/home-assistant-cli:dev
+
+To make auto-completion and access environment work like other scripts you'll need to
+create a script file to execute.
+
+   $ curl https://raw.githubusercontent.com/home-assistant/home-assistant-cli/dev/docker-hass-cli > hass-cli
+   $ chmod +x hass-cli
+
+Now put `hass-cli` script into your path and you can use it like if you had installed it via
+command line as long as you don't need file system access (like for `hass-cli template`).
+
+Setup
+======
 
 To get started you'll need to have or generate a long lasting token format
 on your Home Assistant profile page (i.e. https://localhost:8123/profile).
 
-Then you can use ``--server`` and ``--token`` paremeter on each call,
-or as is recommended setup ``HASS_SERVER`` and ``HASS_TOKEN`` environment variables.
+Then you can use ``--server`` and ``--token`` paremeter on each call or as is
+recommended setup ``HASS_SERVER`` and ``HASS_TOKEN`` environment variables.
 
 .. code:: bash
 
@@ -42,7 +61,7 @@ or as is recommended setup ``HASS_SERVER`` and ``HASS_TOKEN`` environment variab
     $ export HASS_TOKEN=<secret>
 
 Once that is enabled and you are using either ``zsh`` or ``bash`` run
-the folowing to enable autocompletion for hass-cli commands.
+the following to enable autocompletion for ``hass-cli`` commands.
 
 .. code:: bash
 
@@ -52,8 +71,8 @@ the folowing to enable autocompletion for hass-cli commands.
 Usage
 =====
 
-Note: Below is listed **some** of the features, make sure to use ``--help`` and autocompletion to learn
-more of the features as they become available.
+Note: Below is listed **some** of the features, make sure to use ``--help`` and
+autocompletion to learn more of the features as they become available.
 
 Most commands returns a table version of what the Home Assistant API returns.
 For example to get basic info about your Home Assistant server you use ``info``:
@@ -64,7 +83,7 @@ For example to get basic info about your Home Assistant server you use ``info``:
      BASE_URL                   LOCATION         REQUIRES_API_PASWORD  VERSION
      https://hassio.local:8123  Fort of Solitude False                 0.86.2
 
-If you prefer yaml you can use `--output=yaml`:
+If you prefer yaml you can use ``--output=yaml``:
 
 .. code:: bash
 
@@ -112,14 +131,14 @@ If you for example just wanted the name and all attributes you could do:
 
 .. code:: bash
 
-   hass-cli --columns=ENTITY="entity_id,ATTRIBUTES=attributes[*]" entity list zone
+   $ hass-cli --columns=ENTITY="entity_id,ATTRIBUTES=attributes[*]" entity list zone
    ENTITY             ATTRIBUTES
    zone.school        {'friendly_name': 'School', 'hidden': True, 'icon': 'mdi:school', 'latitude': 7.011023, 'longitude': 16.858151, 'radius': 50.0}
    zone.unnamed_zone  {'friendly_name': 'Unnamed zone', 'hidden': True, 'icon': 'mdi:home', 'latitude': 37.006476, 'longitude': 2.861699, 'radius': 50.0}
    zone.home          {'friendly_name': 'Andersens', 'hidden': True, 'icon': 'mdi:home', 'latitude': 27.006476, 'longitude': 7.861699, 'radius': 100}
 
-You can more details of an entity easily by using `yaml` or `json` output format. In this example we use the
-shorthand of output: `-o`:
+You can more details of an entity easily by using ``yaml`` or ``json`` output
+format. In this example we use the shorthand of output: ``-o``:
 
 .. code:: bash
 
@@ -140,17 +159,15 @@ You can edit state via an editor:
 .. code:: bash
 
     $ hass-cli entity edit light.guestroom_light
-..
 
 This will open the current state in your favorite editor and any changes you save will
 be used for an update.
 
-You can also explicitly create/edit via the `--json` flag:
+You can also explicitly create/edit via the ``--json`` flag:
 
 .. code:: bash
 
   $ hass-cli entity edit sensor.test --json='{ "state":"off"}'
-..
 
 List possible services with or without a regular expression filter:
 
@@ -160,7 +177,7 @@ List possible services with or without a regular expression filter:
       DOMAIN         SERVICE    DESCRIPTION
       homeassistant  toggle     Generic service to toggle devices on/off...
 
-For more details the yaml format is useful:
+For more details the YAML format is useful:
 
 .. code:: bash
 
@@ -290,7 +307,7 @@ specific area with id "eab9930..." or named "Cupboard".
 Events
 ------
 
-You can subscribe and watch all or a specific event type using `event watch`.
+You can subscribe and watch all or a specific event type using ``event watch``.
 
 .. code:: bash
 
@@ -342,22 +359,23 @@ Auto-completion
 ###############
 
 As described above you can use ``source <(hass-cli completion zsh)`` to
-quickly and easy enable auto completion. If you do it from your ``.bashrc`` or ``.zshrc``
-its recommend to use the form below as that does not trigger a run of `hass-cli` itself.
+quickly and easy enable auto completion. If you do it from your ``.bashrc``
+or ``.zshrc`` it's recommend to use the form below as that does not trigger
+a run of ``hass-cli`` itself.
 
 For zsh:
 
 .. code:: bash
 
   eval "$(_HASS_CLI_COMPLETE=source_zsh hass-cli)"
-..
+
 
 For bash:
 
 .. code:: bash
 
-  eval "$(_FOO_BAR_COMPLETE=source foo-bar)"
-..
+  eval "$(_HASS_CLI_COMPLETE=source hass-cli)"
+
 
 Once enabled there is autocompletion for commands and for certain attributes like entities:
 
@@ -371,7 +389,6 @@ Once enabled there is autocompletion for commands and for certain attributes lik
   light.guestroom_light          light.basement_light_stairs    light.basement_light_2         light.hallroom_light_5         light.dinner_table_light_3     light.winter_garden_light_5
   light.hallroom_light_3         light.basement_light_3         light.basement_light_8         light.dinner_table_light_2     light.winter_garden_light_1    light.kitchen_light_3
 
-..
 
 Note: For this to work you'll need to have setup the following environment variables if your home-assistant
 is secured and not running on localhost:8123:
@@ -381,7 +398,6 @@ is secured and not running on localhost:8123:
    export HASS_SERVER=https://hassio.local:8123
    export HASS_TOKEN=<Bearer token from HASS_SERVER/profile>
 
-..
 
 Help
 ####
@@ -455,6 +471,8 @@ Development
 Developing is (re)using as much as possible from `homeassistant development setup <https://developers.home-assistant.io/docs/en/development_environment.html>`.
 
 Recommended way to develop is to use virtual environment to ensure isolation from rest of your system using the following steps:
+
+Clone the git repository and do the following:
 
 .. code:: bash
 

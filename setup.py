@@ -107,7 +107,7 @@ REQUIRES = [
     'jinja2>=2.10',
     'dateparser==0.7.0',
     'regex==2019.02.07',
-    'ruamel.yaml==0.15.85',
+    'ruamel.yaml==0.15.87',
     'aiohttp==3.5.4',
 ]
 
@@ -115,15 +115,15 @@ REQUIRES = [
 TESTS_REQUIRE = [
     'coveralls==1.2.0',
     'flake8-docstrings==1.3.0',
-    'flake8==3.6.0',
+    'flake8==3.7.5',
     'mock-open==1.3.1',
-    'mypy==0.660',
+    'mypy==0.670',
     'pydocstyle==2.1.1',
     'pylint==2.2.2',
     'pytest-cov==2.6.1',
     'pytest-sugar==0.9.2',
     'pytest-timeout==1.3.3',
-    'pytest==4.1.1',
+    'pytest==4.2.0',
     'requests_mock==1.5.2',
     "black==18.9b0;python_version>'3.6'",
     'wheel==0.32.3',  # Otherwise setup.py bdist_wheel does not work

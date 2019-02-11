@@ -1,0 +1,17 @@
+
+## Use the tag that best fits you
+## dev contains last build from dev branch. 
+TAG=dev
+## latest is latest released build
+#TAG=latest
+## You can also use a specific tag, see https://hub.docker.com/r/homeassistant/home-assistant-cli/tags
+## for available ones.
+##TAG=0.6.0
+
+IMAGE=homeassistant/home-assistant-cli:$TAG
+
+## The -e arguments passes in the environment variables needed for basic hass-cli setup (HASS_SERVER and HASS_TOKEN)
+## and whats needed for auto completion (_HASS_CLI_COMPLETE, COMP_WORDS, COMP_CWORD)
+## Be aware that while hass-cli runs via docker these variables values will be visible using `docker inspect`.
+docker run -e HASS_TOKEN -e HASS_SERVER -e _HASS_CLI_COMPLETE -e COMP_WORDS -e COMP_CWORD -e _HASS_CLI_COMPLETE $IMAGE $*
+
