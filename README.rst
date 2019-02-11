@@ -33,18 +33,24 @@ To use latest pre-release from ``dev`` branch:
 Docker
 -------
 
-If you do not have a Python setup you can try use hass-cli via a container using docker.
+If you do not have a Python setup you can try use ``hass-cli`` via a container using Docker.
+
+.. code:: bash
 
    $ docker run homeassistant/home-assistant-cli:dev
+
 
 To make auto-completion and access environment work like other scripts you'll need to
 create a script file to execute.
 
+.. code:: bash
+
    $ curl https://raw.githubusercontent.com/home-assistant/home-assistant-cli/dev/docker-hass-cli > hass-cli
    $ chmod +x hass-cli
 
-Now put `hass-cli` script into your path and you can use it like if you had installed it via
-command line as long as you don't need file system access (like for `hass-cli template`).
+
+Now put the ``hass-cli`` script into your path and you can use it like if you had installed it via
+command line as long as you don't need file system access (like for ``hass-cli template``).
 
 Setup
 ======
