@@ -115,7 +115,7 @@ REQUIRES = [
 TESTS_REQUIRE = [
     'coveralls==1.2.0',
     'flake8-docstrings==1.3.0',
-    'flake8==3.6.0',
+    'flake8==3.7.5',
     'mock-open==1.3.1',
     'mypy==0.670',
     'pydocstyle==2.1.1',
