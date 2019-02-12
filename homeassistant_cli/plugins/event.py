@@ -59,7 +59,7 @@ def fire(ctx: Configuration, event, json):
 def watch(ctx: Configuration, event_type):
     """Subscribe and print events.
 
-    EVENT-TYPE even type to subscribe to. if empty subscribe to all.
+    EVENT-TYPE even type to subscribe to. If empty then subscribe to all.
     """
     frame = {'type': 'subscribe_events'}
 
