@@ -91,7 +91,6 @@ def wsapi(
     ctx: Configuration, frame: Dict, wait: bool = False
 ) -> Optional[Dict]:
     """Make a call to Home Assistant using the WebSocket API."""
-
     async def fetcher() -> Optional[Dict]:
         """Get the data from the WebSocket API."""
         async with aiohttp.ClientSession() as session:
