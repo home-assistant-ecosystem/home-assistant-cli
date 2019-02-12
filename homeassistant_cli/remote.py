@@ -89,9 +89,9 @@ def restapi(
 
 def wsapi(
     ctx: Configuration, frame: Dict, wait: bool = False
-) -> Optional[Dict]:
+) -> Optional[str]:
     """Make a call to Home Assistant using the WebSocket API."""
-    async def fetcher() -> Optional[Dict]:
+    async def fetcher() -> Optional[str]:
         """Get the data from the WebSocket API."""
         async with aiohttp.ClientSession() as session:
             async with session.ws_connect(
