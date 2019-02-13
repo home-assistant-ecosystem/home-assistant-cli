@@ -107,7 +107,7 @@ REQUIRES = [
     'jinja2>=2.10',
     'dateparser==0.7.0',
     'regex==2019.02.07',
-    'ruamel.yaml==0.15.87',
+    'ruamel.yaml==0.15.88',
     'aiohttp==3.5.4',
 ]
 
