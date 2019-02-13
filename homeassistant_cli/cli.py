@@ -96,6 +96,7 @@ class HomeAssistantCli(click.MultiCommand):
 
 
 def _default_token() -> Optional[str]:
+    """Handle the token provided as env variable."""
     return os.environ.get('HASS_TOKEN', os.environ.get('HASSIO_TOKEN', None))
 
 
