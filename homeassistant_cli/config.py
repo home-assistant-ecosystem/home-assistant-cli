@@ -42,8 +42,7 @@ def _locate_ha() -> Optional[str]:
         retries = 0
         while not listener.services and retries < 5:
             _LOGGING.info(
-                "Trying to locate Home Assistant on\
-                local network..."
+                "Trying to locate Home Assistant on local network..."
             )
             time.sleep(0.5)
             retries = retries + 1
@@ -65,8 +64,7 @@ def _locate_ha() -> Optional[str]:
         return cast(str, base_url)
 
     _LOGGING.warning(
-        "Found no Home Assistant on\
-        local network. Using defaults."
+        "Found no Home Assistant on local network. Using defaults."
     )
     return None
 
