@@ -96,6 +96,7 @@ class HomeAssistantCli(click.MultiCommand):
 
 
 def _default_token() -> Optional[str]:
+    """Handle the token provided as env variable."""
     return os.environ.get('HASS_TOKEN', os.environ.get('HASSIO_TOKEN', None))
 
 
@@ -105,7 +106,10 @@ def _default_token() -> Optional[str]:
 @click.option(
     '--server',
     '-s',
-    help='The server URL or `auto` for automatic detection',
+    help=(
+        'The server URL or `auto` for automatic detection. Can also be set '
+        'with he environment variable HASS_SERVER.'
+    ),
     default="auto",
     show_default=True,
     envvar='HASS_SERVER',
@@ -113,13 +117,19 @@ def _default_token() -> Optional[str]:
 @click.option(
     '--token',
     default=_default_token,
-    help='The Bearer token for Home Assistant instance.',
+    help=(
+        'The Bearer token for Home Assistant instance. Can also be set with '
+        'the environment variable HASS_TOKEN.'
+    ),
     envvar='HASS_TOKEN',
 )
 @click.option(
     '--password',
-    default=None,  # type: ignore
-    help='The API password for Home Assistant instance.',
+    default=None,
+    help=(
+        'The API password for Home Assistant instance. Can also be set with '
+        'the environment variable HASS_PASSWORD.'
+    ),
     envvar='HASS_PASSWORD',
 )
 @click.option(
@@ -212,7 +222,7 @@ def cli(
     no_headers: bool,
     table_format: str,
     sort_by: Optional[str],
-):
+) -> None:
     """Command line interface for Home Assistant."""
     ctx.verbose = verbose
     ctx.server = server
