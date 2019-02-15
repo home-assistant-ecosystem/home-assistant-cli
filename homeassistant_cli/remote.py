@@ -91,6 +91,8 @@ def wsapi(
     ctx: Configuration, frame: Dict, wait: bool = False
 ) -> Optional[Dict]:
     """Make a call to Home Assistant using WS API."""
+    loop = asyncio.get_event_loop()
+
     async def fetcher() -> Optional[Dict]:
         async with aiohttp.ClientSession() as session:
             async with session.ws_connect(
@@ -120,7 +122,6 @@ def wsapi(
                             return mydata
         return None
 
-    loop = asyncio.get_event_loop()
     result = loop.run_until_complete(fetcher())
     return result
 
@@ -204,6 +205,15 @@ def assign_area(
     }
 
     return cast(Dict[str, Any], wsapi(ctx, frame))
+
+
+def get_health(ctx: Configuration) -> Dict[str, Any]:
+    """Get system Health."""
+    frame = {'type': 'system_health/info'}
+
+    info = cast(Dict[str, Dict[str, Any]], wsapi(ctx, frame))['result']
+
+    return info
 
 
 def get_devices(ctx: Configuration) -> List[Dict[str, Any]]:

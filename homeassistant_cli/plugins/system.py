@@ -3,8 +3,10 @@ import logging
 
 import click
 from homeassistant_cli.cli import pass_context
-import homeassistant_cli.remote as api
 from homeassistant_cli.config import Configuration
+import homeassistant_cli.const as const
+from homeassistant_cli.helper import format_output
+import homeassistant_cli.remote as api
 
 _LOGGING = logging.getLogger(__name__)
 
@@ -26,6 +28,12 @@ def log(ctx):
 @pass_context
 def health(ctx: Configuration):
     """Get system health from Home Assistant."""
-    frame = {'type': 'system_health/info'}
+    info = api.get_health(ctx)
 
-    click.echo(api.wsapi(ctx, frame, False))
+    ctx.echo(
+        format_output(
+            ctx,
+            [info],
+            columns=ctx.columns if ctx.columns else const.COLUMNS_DEFAULT,
+        )
+    )
