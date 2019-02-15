@@ -108,7 +108,7 @@ def _default_token() -> Optional[str]:
     '-s',
     help=(
         'The server URL or `auto` for automatic detection. Can also be set '
-        'with he environment variable HASS_SERVER.'
+        'with the environment variable HASS_SERVER.'
     ),
     default="auto",
     show_default=True,
