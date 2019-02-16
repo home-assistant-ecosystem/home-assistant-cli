@@ -1,12 +1,13 @@
 """Event plugin for Home Assistant CLI (hass-cli)."""
 import json as json_
 import logging
+from typing import Dict
 
 import click
 import homeassistant_cli.autocompletion as autocompletion
 from homeassistant_cli.cli import pass_context
 from homeassistant_cli.config import Configuration
-from homeassistant_cli.helper import raw_format_output
+from homeassistant_cli.helper import format_output, raw_format_output
 import homeassistant_cli.remote as api
 
 _LOGGING = logging.getLogger(__name__)
@@ -63,7 +64,19 @@ def watch(ctx: Configuration, event_type):
     """
     frame = {'type': 'subscribe_events'}
 
+    cols = [('EVENT_TYPE', 'event_type'), ('DATA', '$.data')]
+
+    def _msghandler(msg: Dict) -> None:
+        if msg['type'] == 'event':
+            ctx.echo(
+                format_output(
+                    ctx,
+                    msg['event'],
+                    columns=ctx.columns if ctx.columns else cols,
+                )
+            )
+
     if event_type:
         frame['event_type'] = event_type
 
-    api.wsapi(ctx, frame, True)
+    api.wsapi(ctx, frame, _msghandler)
