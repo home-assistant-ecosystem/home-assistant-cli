@@ -4,7 +4,7 @@ from http.client import HTTPConnection
 import json
 import logging
 import shlex
-from typing import Any, Dict, Generator, List, Optional, Tuple, cast
+from typing import Any, Dict, Generator, List, Optional, Tuple, Union, cast
 
 from homeassistant_cli.config import Configuration
 import homeassistant_cli.const as const
@@ -47,7 +47,7 @@ def to_tuples(entry: str) -> List[Tuple[str, str]]:
 
 def raw_format_output(
     output: str,
-    data: List[Dict[str, Any]],
+    data: Union[Dict[str, Any], List[Dict[str, Any]]],
     yamlparser: YAML,
     columns: Optional[List] = None,
     no_headers: bool = False,
@@ -59,7 +59,7 @@ def raw_format_output(
         _LOGGING.debug("Output `auto` thus using %s", const.DEFAULT_DATAOUTPUT)
         output = const.DEFAULT_DATAOUTPUT
 
-    if sort_by:
+    if sort_by and isinstance(data, List):
         _sort_table(data, sort_by)
 
     if output == 'json':
@@ -79,17 +79,24 @@ def raw_format_output(
             columns = const.COLUMNS_DEFAULT
 
         fmt = [(v[0], parse(v[1] if len(v) > 1 else v[0])) for v in columns]
+
         result = []
+
         if no_headers:
             headers = []  # type: List[str]
         else:
             headers = [v[0] for v in fmt]
+
+        # in case data passed in is a single element
+        # we turn it into a single item list for better table output
+        if not isinstance(data, List):
+            data = [data]
+
         for item in data:
             row = []
             for fmtpair in fmt:
                 val = [match.value for match in fmtpair[1].find(item)]
                 row.append(", ".join(map(str, val)))
-
             result.append(row)
 
         res = tabulate(

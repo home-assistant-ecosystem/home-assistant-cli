@@ -10,7 +10,7 @@ from datetime import datetime
 import enum
 import json
 import logging
-from typing import Any, Dict, List, Optional, cast
+from typing import Any, Callable, Dict, List, Optional, cast
 import urllib.parse
 from urllib.parse import urlencode
 
@@ -88,9 +88,17 @@ def restapi(
 
 
 def wsapi(
-    ctx: Configuration, frame: Dict, wait: bool = False
+    ctx: Configuration,
+    frame: Dict,
+    callback: Optional[Callable[[Dict], Any]] = None,
 ) -> Optional[Dict]:
-    """Make a call to Home Assistant using WS API."""
+    """Make a call to Home Assistant using WS API.
+
+    if callback provided will keep listening and call
+    on every message.
+
+    If no callback return data returned.
+    """
     loop = asyncio.get_event_loop()
 
     async def fetcher() -> Optional[Dict]:
@@ -116,8 +124,8 @@ def wsapi(
                     elif msg.type == aiohttp.WSMsgType.TEXT:
                         mydata = json.loads(msg.data)  # type: Dict
 
-                        if wait:
-                            print(mydata)
+                        if callback:
+                            callback(mydata)
                         elif mydata['type'] == 'result':
                             return mydata
         return None

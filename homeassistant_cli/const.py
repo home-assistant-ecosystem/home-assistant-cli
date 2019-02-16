@@ -13,7 +13,7 @@ DEFAULT_OUTPUT = 'json'  # TODO: Have default be human table relevant output
 
 DEFAULT_DATAOUTPUT = 'yaml'
 
-COLUMNS_DEFAULT = [('ALL', '*')]
+COLUMNS_DEFAULT = [('ALL', '$')]
 COLUMNS_ENTITIES = [
     ('ENTITY', 'entity_id'),
     ('DESCRIPTION', 'attributes.friendly_name'),
