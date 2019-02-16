@@ -123,7 +123,7 @@ TESTS_REQUIRE = [
     'pytest-cov==2.6.1',
     'pytest-sugar==0.9.2',
     'pytest-timeout==1.3.3',
-    'pytest==4.2.0',
+    'pytest==4.2.1',
     'requests_mock==1.5.2',
     "black==18.9b0;python_version>'3.6'",
     'wheel==0.32.3',  # Otherwise setup.py bdist_wheel does not work
