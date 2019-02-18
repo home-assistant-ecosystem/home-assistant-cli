@@ -105,7 +105,7 @@ REQUIRES = [
     'tabulate==0.8.3',
     'jsonpath-rw==1.4.0',
     'jinja2>=2.10',
-    'dateparser==0.7.0',
+    'dateparser==0.7.1',
     'regex==2019.02.07',
     'ruamel.yaml==0.15.88',
     'aiohttp==3.5.4',
