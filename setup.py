@@ -126,7 +126,7 @@ TESTS_REQUIRE = [
     'pytest==4.2.0',
     'requests_mock==1.5.2',
     "black==18.9b0;python_version>'3.6'",
-    'wheel==0.32.3',  # Otherwise setup.py bdist_wheel does not work
+    'wheel==0.33.0',  # Otherwise setup.py bdist_wheel does not work
 ]
 
 MIN_PY_VERSION = '.'.join(map(str, REQUIRED_PYTHON_VER))
