@@ -202,6 +202,26 @@ def rename_area(
     return cast(Dict[str, Any], wsapi(ctx, frame))
 
 
+def rename_entity(
+    ctx: Configuration,
+    entity_id: str,
+    new_id: Optional[str],
+    new_name: Optional[str],
+) -> Dict[str, Any]:
+    """Rename entity."""
+    frame = {
+        'type': hass.WS_TYPE_ENTITY_REGISTRY_UPDATE,
+        'entity_id': entity_id,
+    }
+
+    if new_name:
+        frame['name'] = new_name
+    if new_id:
+        frame['new_entity_id'] = new_id
+
+    return cast(Dict[str, Any], wsapi(ctx, frame))
+
+
 def assign_area(
     ctx: Configuration, device_id: str, area_id: str
 ) -> Dict[str, Any]:
@@ -233,6 +253,26 @@ def get_devices(ctx: Configuration) -> List[Dict[str, Any]]:
     ]
 
     return devices
+
+
+def get_entities(ctx: Configuration) -> List[Dict[str, Any]]:
+    """Return all entities."""
+    frame = {'type': hass.WS_TYPE_ENTITY_REGISTRY_LIST}
+
+    devices = cast(Dict[str, List[Dict[str, Any]]], wsapi(ctx, frame))[
+        'result'
+    ]
+
+    return devices
+
+
+def get_entity(ctx: Configuration, entity_id: str) -> List[Dict[str, Any]]:
+    """Return id."""
+    frame = {'type': hass.WS_TYPE_ENTITY_REGISTRY_GET, 'entity_id': entity_id}
+
+    result = cast(Dict[str, List[Dict[str, Any]]], wsapi(ctx, frame))
+
+    return result['id']
 
 
 def validate_api(ctx: Configuration) -> APIStatus:
