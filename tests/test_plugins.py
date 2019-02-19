@@ -9,6 +9,7 @@ DFEAULT_PLUGINS = [
     'completion',
     'config',
     'discover',
+    'state',
     'entity',
     'event',
     'info',

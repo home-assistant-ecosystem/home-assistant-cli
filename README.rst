@@ -75,7 +75,7 @@ the following to enable autocompletion for ``hass-cli`` commands.
 
 
 Usage
-=====
+=======
 
 Note: Below is listed **some** of the features, make sure to use ``--help`` and
 autocompletion to learn more of the features as they become available.
@@ -99,11 +99,11 @@ If you prefer yaml you can use ``--output=yaml``:
       requires_api_password: false
       version: 0.86.2
 
-To get list of entities you can use `entity list`:
+To get list of states you use `state list`:
 
 .. code:: bash
 
-    $ hass-cli entity list
+    $ hass-cli state list
     ENTITY                                                     DESCRIPTION                                     STATE
     zone.school                                                School                                          zoning
     zone.home                                                  Andersens                                       zoning
@@ -137,18 +137,18 @@ If you for example just wanted the name and all attributes you could do:
 
 .. code:: bash
 
-   $ hass-cli --columns=ENTITY="entity_id,ATTRIBUTES=attributes[*]" entity list zone
+   $ hass-cli --columns=ENTITY="entity_id,ATTRIBUTES=attributes[*]" state list zone
    ENTITY             ATTRIBUTES
    zone.school        {'friendly_name': 'School', 'hidden': True, 'icon': 'mdi:school', 'latitude': 7.011023, 'longitude': 16.858151, 'radius': 50.0}
    zone.unnamed_zone  {'friendly_name': 'Unnamed zone', 'hidden': True, 'icon': 'mdi:home', 'latitude': 37.006476, 'longitude': 2.861699, 'radius': 50.0}
    zone.home          {'friendly_name': 'Andersens', 'hidden': True, 'icon': 'mdi:home', 'latitude': 27.006476, 'longitude': 7.861699, 'radius': 100}
 
-You can more details of an entity easily by using ``yaml`` or ``json`` output
+You can get more details about a state by using ``yaml`` or ``json`` output
 format. In this example we use the shorthand of output: ``-o``:
 
 .. code:: bash
 
-    $ hass-cli -o yaml entity get light.guestroom_light                                                                                                                                                                       ◼
+    $ hass-cli -o yaml state get light.guestroom_light                                                                                                                                                                       ◼
     attributes:
       friendly_name: Guestroom Light
       supported_features: 61
@@ -164,7 +164,7 @@ You can edit state via an editor:
 
 .. code:: bash
 
-    $ hass-cli entity edit light.guestroom_light
+    $ hass-cli state edit light.guestroom_light
 
 This will open the current state in your favorite editor and any changes you save will
 be used for an update.
@@ -173,7 +173,7 @@ You can also explicitly create/edit via the ``--json`` flag:
 
 .. code:: bash
 
-  $ hass-cli entity edit sensor.test --json='{ "state":"off"}'
+  $ hass-cli state edit sensor.test --json='{ "state":"off"}'
 
 List possible services with or without a regular expression filter:
 
@@ -203,7 +203,7 @@ You can get history about one or more entities, here getting state changes for t
 
 .. code:: bash
 
-   $ hass-cli entity history --since 50m light.kitchen_light_1 binary_sensor.presence_kitchen
+   $ hass-cli state history --since 50m light.kitchen_light_1 binary_sensor.presence_kitchen
      ENTITY                          DESCRIPTION      STATE    CHANGED
      binary_sensor.presence_kitchen  Kitchen Motion   off      2019-01-27T23:19:55.322474+00:00
      binary_sensor.presence_kitchen  Kitchen Motion   on       2019-01-27T23:21:44.015071+00:00
@@ -216,7 +216,7 @@ to sort by a property:
 
 .. code:: bash
 
-   $ hass-cli --sort-by last_changed entity history --since 50m  light.kitchen_light_1 binary_sensor.presence_kitchen
+   $ hass-cli --sort-by last_changed state history --since 50m  light.kitchen_light_1 binary_sensor.presence_kitchen
    ENTITY                          DESCRIPTION      STATE    CHANGED
    binary_sensor.presence_kitchen  Kitchen Motion   off      2019-01-27T23:18:00.717611+00:00
    light.kitchen_light_1           Kitchen Light 1  on       2019-01-27T23:18:00.717611+00:00
@@ -387,7 +387,7 @@ Once enabled there is autocompletion for commands and for certain attributes lik
 
 .. code:: bash
 
-  $ hass-cli entity get light.<TAB>                                                                                                                                                                    ⏎ ✱ ◼
+  $ hass-cli state get light.<TAB>                                                                                                                                                                    ⏎ ✱ ◼
   light.kitchen_light_5          light.office_light             light.basement_light_4         light.basement_light_9         light.dinner_table_light_4     light.winter_garden_light_2    light.kitchen_light_2
   light.kitchen_table_light_1    light.hallroom_light_2         light.basement_light_5         light.basement_light_10        light.dinner_table_wall_light  light.winter_garden_light_4    light.kitchen_table_light_2
   light.kitchen_light_1          light.hallroom_light_1         light.basement_light_6         light.small_bathroom_light     light.dinner_table_light_5     light.winter_garden_light_3    light.kitchen_light_4
@@ -453,7 +453,7 @@ Help
      config      Get configuration from a Home Assistant instance.
      device      Get info and operate on devices from Home Assistant...
      discover    Discovery for the local network.
-     entity      Get info and operate on entities from Home Assistant.
+     state       Get info and operate on entities from Home Assistant.
      event       Interact with events.
      info        Get basic info from Home Assistant.
      map         Print the current location on a map.
