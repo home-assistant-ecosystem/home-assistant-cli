@@ -98,21 +98,22 @@ PROJECT_URLS = {
 PACKAGES = find_packages(exclude=['tests', 'tests.*'])
 
 REQUIRES = [
-    'requests==2.21.0',
-    'netdisco==2.3.0',
-    'click==7.0',
-    'click-log==0.3.2',
-    'tabulate==0.8.3',
-    'jsonpath-rw==1.4.0',
-    'jinja2>=2.10',
-    'dateparser==0.7.1',
-    'regex==2019.02.18',
-    'ruamel.yaml==0.15.88',
     'aiohttp==3.5.4',
+    'click-log==0.3.2',
+    'click==7.0',
+    'dateparser==0.7.1',
+    'jinja2>=2.10',
+    'jsonpath-rw==1.4.0',
+    'netdisco==2.3.0',
+    'regex==2019.02.18',
+    'requests==2.21.0',
+    'ruamel.yaml==0.15.88',
+    'tabulate==0.8.3',
 ]
 
 # Should be as close to Home Assistant dev/master as possible
 TESTS_REQUIRE = [
+    "black==18.9b0;python_version>'3.6'",
     'coveralls==1.2.0',
     'flake8-docstrings==1.3.0',
     'flake8==3.7.6',
@@ -125,7 +126,6 @@ TESTS_REQUIRE = [
     'pytest-timeout==1.3.3',
     'pytest==4.3.0',
     'requests_mock==1.5.2',
-    "black==18.9b0;python_version>'3.6'",
     'wheel==0.33.1',  # Otherwise setup.py bdist_wheel does not work
 ]
 
