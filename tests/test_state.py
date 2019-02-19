@@ -31,7 +31,7 @@ EDITED_ENTITY = """
 LIST_EDITED_ENTITY = "[{}]".format(EDITED_ENTITY)
 
 
-def test_entity_list(basic_entities_text) -> None:
+def test_state_list(basic_entities_text) -> None:
     """Test entities can be listed."""
     with requests_mock.Mocker() as mock:
         mock.get(
@@ -42,9 +42,7 @@ def test_entity_list(basic_entities_text) -> None:
 
         runner = CliRunner()
         result = runner.invoke(
-            cli.cli,
-            ["--output=json", "entity", "list"],
-            catch_exceptions=False,
+            cli.cli, ["--output=json", "state", "list"], catch_exceptions=False
         )
         assert result.exit_code == 0
         data = json.loads(result.output)
@@ -71,38 +69,38 @@ def output_formats(cmd, data, output) -> None:
         assert result.output == output
 
 
-def test_entity_list_table(
+def test_state_list_table(
     basic_entities_text, basic_entities_table_text
 ) -> None:
     """Test table."""
     output_formats(
-        ["--output=table", "entity", "list"],
+        ["--output=table", "state", "list"],
         basic_entities_text,
         basic_entities_table_text,
     )
 
 
-def test_entity_default_list_table(
+def test_state_default_list_table(
     basic_entities_text, basic_entities_table_text
 ) -> None:
     """Test table."""
     output_formats(
-        ["entity", "list"], basic_entities_text, basic_entities_table_text
+        ["state", "list"], basic_entities_text, basic_entities_table_text
     )
 
 
-def test_entity_list_tblformat(
+def test_state_list_tblformat(
     basic_entities_text, basic_entities_table_format_text
 ) -> None:
     """Test table format."""
     output_formats(
-        ["--output=table", "--table-format=html", "entity", "list"],
+        ["--output=table", "--table-format=html", "state", "list"],
         basic_entities_text,
         basic_entities_table_format_text,
     )
 
 
-def test_entity_list_table_columns(
+def test_state_list_table_columns(
     basic_entities_text, basic_entities_table_columns_text
 ) -> None:
     """Test table columns."""
@@ -110,7 +108,7 @@ def test_entity_list_table_columns(
         [
             "--output=table",
             "--columns=entity=attributes.friendly_name,state=state",
-            "entity",
+            "state",
             "list",
         ],
         basic_entities_text,
@@ -118,7 +116,7 @@ def test_entity_list_table_columns(
     )
 
 
-def test_entity_list_table_columns_sortby(
+def test_state_list_table_columns_sortby(
     basic_entities_text, basic_entities_table_sorted_text
 ) -> None:
     """Test table columns."""
@@ -130,7 +128,7 @@ def test_entity_list_table_columns_sortby(
                 'state=state,last_changed'
             ),
             "--sort-by=last_changed",
-            "entity",
+            "state",
             "list",
         ],
         basic_entities_text,
@@ -138,18 +136,18 @@ def test_entity_list_table_columns_sortby(
     )
 
 
-def test_entity_list_no_header(
+def test_state_list_no_header(
     basic_entities_text, basic_entities_table_no_header_text
 ) -> None:
     """Test table no header."""
     output_formats(
-        ["--output=table", "--no-headers", "entity", "list"],
+        ["--output=table", "--no-headers", "state", "list"],
         basic_entities_text,
         basic_entities_table_no_header_text,
     )
 
 
-def test_entity_get(basic_entities_text, basic_entities) -> None:
+def test_state_get(basic_entities_text, basic_entities) -> None:
     """Test entity get."""
     with requests_mock.Mocker() as mock:
         sensorone = next(
@@ -164,7 +162,7 @@ def test_entity_get(basic_entities_text, basic_entities) -> None:
         runner = CliRunner()
         result = runner.invoke(
             cli.cli,
-            ["--output=json", "entity", "get", "sensor.one"],
+            ["--output=json", "state", "get", "sensor.one"],
             catch_exceptions=False,
         )
         assert result.exit_code == 0
@@ -175,7 +173,7 @@ def test_entity_get(basic_entities_text, basic_entities) -> None:
         assert data[0]["entity_id"] == "sensor.one"
 
 
-def test_entity_edit(basic_entities_text, basic_entities) -> None:
+def test_state_edit(basic_entities_text, basic_entities) -> None:
     """Test basic edit of state."""
     with requests_mock.Mocker() as mock:
         get = mock.get(
@@ -200,13 +198,7 @@ def test_entity_edit(basic_entities_text, basic_entities) -> None:
         runner = CliRunner()
         result = runner.invoke(
             cli.cli,
-            [
-                "--output=json",
-                "entity",
-                "edit",
-                "sensor.one",
-                "myspecialstate",
-            ],
+            ["--output=json", "state", "edit", "sensor.one", "myspecialstate"],
             catch_exceptions=False,
         )
 
@@ -217,7 +209,7 @@ def test_entity_edit(basic_entities_text, basic_entities) -> None:
         assert post.request_history[0].json()['state'] == 'myspecialstate'
 
 
-def test_entity_toggle(basic_entities_text, basic_entities) -> None:
+def test_state_toggle(basic_entities_text, basic_entities) -> None:
     """Test basic edit of state."""
     with requests_mock.Mocker() as mock:
         mock.get(
@@ -234,7 +226,7 @@ def test_entity_toggle(basic_entities_text, basic_entities) -> None:
         runner = CliRunner()
         result = runner.invoke(
             cli.cli,
-            ["--output=json", "entity", "toggle", "sensor.one"],
+            ["--output=json", "state", "toggle", "sensor.one"],
             catch_exceptions=False,
         )
 
@@ -247,7 +239,7 @@ def test_entity_toggle(basic_entities_text, basic_entities) -> None:
         assert isinstance(data[0], dict)
 
 
-def test_entity_filter(default_entities) -> None:
+def test_state_filter(default_entities) -> None:
     """Test entities can be listed with filter."""
     with requests_mock.Mocker() as mock:
         mock.get(
@@ -259,7 +251,7 @@ def test_entity_filter(default_entities) -> None:
         runner = CliRunner()
         result = runner.invoke(
             cli.cli,
-            ["--output=json", "entity", "list", "bathroom"],
+            ["--output=json", "state", "list", "bathroom"],
             catch_exceptions=False,
         )
         assert result.exit_code == 0
@@ -274,7 +266,7 @@ def test_entity_filter(default_entities) -> None:
         assert "light.small_bathroom_light" in ids
 
 
-def test_entity_history(default_entities) -> None:
+def test_state_history(default_entities) -> None:
     """Test entities can list history."""
     with requests_mock.Mocker() as mock:
         mock.get(
@@ -293,7 +285,7 @@ def test_entity_history(default_entities) -> None:
         runner = CliRunner()
         result = runner.invoke(
             cli.cli,
-            ["--output=json", "entity", "history", "bathroom"],
+            ["--output=json", "state", "history", "bathroom"],
             catch_exceptions=False,
         )
         assert result.exit_code == 0
