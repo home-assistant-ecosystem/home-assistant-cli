@@ -37,7 +37,7 @@ If you do not have a Python setup you can try use ``hass-cli`` via a container u
 
 .. code:: bash
 
-   $ docker run homeassistant/home-assistant-cli:dev
+   $ docker run homeassistant/home-assistant-cli
 
 
 To make auto-completion and access environment work like other scripts you'll need to
@@ -45,7 +45,7 @@ create a script file to execute.
 
 .. code:: bash
 
-   $ curl https://raw.githubusercontent.com/home-assistant/home-assistant-cli/dev/docker-hass-cli > hass-cli
+   $ curl https://raw.githubusercontent.com/home-assistant/home-assistant-cli/master/docker-hass-cli > hass-cli
    $ chmod +x hass-cli
 
 

@@ -1,9 +1,9 @@
 
 ## Use the tag that best fits you
 ## dev contains last build from dev branch. 
-TAG=dev
+#TAG=dev
 ## latest is latest released build
-#TAG=latest
+TAG=latest
 ## You can also use a specific tag, see https://hub.docker.com/r/homeassistant/home-assistant-cli/tags
 ## for available ones.
 ##TAG=0.6.0
