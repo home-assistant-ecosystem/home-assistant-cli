@@ -34,7 +34,7 @@ To use homebrew on Mac OSX:
 
 .. code:: bash
 
-   $ brew install hass-cli
+   $ brew install homeassistant-cli
 
 Docker
 -------
