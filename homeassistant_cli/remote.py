@@ -479,8 +479,7 @@ def set_state(
                 entity_id, req.status_code, req.text
             )
         )
-    else:
-        return cast(Dict[str, Any], req.json())
+    return cast(Dict[str, Any], req.json())
 
 
 def render_template(ctx: Configuration, template: str, variables: Dict) -> str:
@@ -500,8 +499,7 @@ def render_template(ctx: Configuration, template: str, variables: Dict) -> str:
                 req.status_code, req.text
             )
         )
-    else:
-        return req.text
+    return req.text
 
 
 def get_event_listeners(ctx: Configuration) -> Dict:
