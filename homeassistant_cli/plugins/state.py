@@ -145,12 +145,10 @@ def edit(ctx: Configuration, entity, newstate, attributes, merge, json):
         existing = api.get_state(ctx, entity)
         if existing:
             existingraw = helper.raw_format_output(
-                ctx.output, [existing], ctx.yaml()
-            )[0]
+                ctx.output, existing, ctx.yaml()
+            )
         else:
-            existingraw = helper.raw_format_output(
-                ctx.output, [{}], ctx.yaml()
-            )[0]
+            existingraw = helper.raw_format_output(ctx.output, {}, ctx.yaml())
 
         new = click.edit(existingraw, extension='.{}'.format(ctx.output))
 
