@@ -116,7 +116,7 @@ TESTS_REQUIRE = [
     "black==18.9b0;python_version>'3.6'",
     'coveralls==1.2.0',
     'flake8-docstrings==1.3.0',
-    'flake8==3.7.6',
+    'flake8==3.7.7',
     'mock-open==1.3.1',
     'mypy==0.670',
     'pydocstyle==2.1.1',
