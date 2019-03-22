@@ -105,7 +105,7 @@ REQUIRES = [
     'jinja2>=2.10',
     'jsonpath-rw==1.4.0',
     'netdisco==2.5.0',
-    'regex==2019.02.21',
+    'regex==2019.03.12',
     'requests==2.21.0',
     'ruamel.yaml==0.15.89',
     'tabulate==0.8.3',
@@ -120,11 +120,11 @@ TESTS_REQUIRE = [
     'mock-open==1.3.1',
     'mypy==0.670',
     'pydocstyle==2.1.1',
-    'pylint==2.3.0',
+    'pylint==2.3.1',
     'pytest-cov==2.6.1',
     'pytest-sugar==0.9.2',
     'pytest-timeout==1.3.3',
-    'pytest==4.3.0',
+    'pytest==4.3.1',
     'requests_mock==1.5.2',
     'wheel==0.33.1',  # Otherwise setup.py bdist_wheel does not work
 ]
