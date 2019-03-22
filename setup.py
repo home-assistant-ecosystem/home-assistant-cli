@@ -105,7 +105,7 @@ REQUIRES = [
     'jinja2>=2.10',
     'jsonpath-rw==1.4.0',
     'netdisco==2.3.0',
-    'regex==2019.02.21',
+    'regex==2019.03.12',
     'requests==2.21.0',
     'ruamel.yaml==0.15.89',
     'tabulate==0.8.3',
