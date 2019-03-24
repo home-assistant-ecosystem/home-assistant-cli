@@ -30,6 +30,12 @@ To use latest pre-release from ``dev`` branch:
 
    $ pip install git+https://github.com/home-assistant/home-assistant-cli@dev
 
+To use homebrew on Mac OSX:
+
+.. code:: bash
+
+   $ brew install homeassistant-cli
+
 Docker
 -------
 
