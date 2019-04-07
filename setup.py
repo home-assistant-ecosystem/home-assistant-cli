@@ -119,7 +119,7 @@ TESTS_REQUIRE = [
     'flake8==3.7.7',
     'mock-open==1.3.1',
     'mypy==0.670',
-    'pydocstyle==2.1.1',
+    'pydocstyle==3.0.0',
     'pylint==2.3.1',
     'pytest-cov==2.6.1',
     'pytest-sugar==0.9.2',
