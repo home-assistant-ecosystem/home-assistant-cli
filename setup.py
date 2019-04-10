@@ -113,7 +113,7 @@ REQUIRES = [
 
 # Should be as close to Home Assistant dev/master as possible
 TESTS_REQUIRE = [
-    "black==18.9b0;python_version>'3.6'",
+    "black==19.3b0;python_version>'3.6'",
     'coveralls==1.2.0',
     'flake8-docstrings==1.3.0',
     'flake8==3.7.7',
