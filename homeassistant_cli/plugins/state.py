@@ -5,6 +5,7 @@ import re
 from typing import Any, Dict, List, Pattern  # noqa
 
 import click
+
 import homeassistant_cli.autocompletion as autocompletion
 from homeassistant_cli.cli import pass_context
 from homeassistant_cli.config import Configuration

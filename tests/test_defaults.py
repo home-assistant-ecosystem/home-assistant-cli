@@ -3,9 +3,10 @@ import os
 from typing import Dict, Optional
 from unittest import mock
 
-import homeassistant_cli.cli as cli
 import pytest
 import requests_mock
+
+import homeassistant_cli.cli as cli
 
 HASSIO_SERVER_FALLBACK = "http://hassio/homeassistant"
 HASS_SERVER = "http://localhost:8123"

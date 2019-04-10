@@ -5,11 +5,12 @@ import sys
 from typing import Any, Dict, List, Optional, Tuple, cast  # noqa: F401
 
 import click
-import homeassistant_cli.const as const
-import homeassistant_cli.yaml as yaml
 from requests import Session  # noqa: ignore
 from ruamel.yaml import YAML
 import zeroconf
+
+import homeassistant_cli.const as const
+import homeassistant_cli.yaml as yaml
 
 _LOGGING = logging.getLogger(__name__)
 

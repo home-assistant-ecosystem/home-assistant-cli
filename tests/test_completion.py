@@ -1,7 +1,8 @@
 """Tests file for Home Assistant CLI (hass-cli)."""
+import requests_mock
+
 import homeassistant_cli.autocompletion as autocompletion
 import homeassistant_cli.cli as cli
-import requests_mock
 
 
 def test_entity_completion(basic_entities_text) -> None:

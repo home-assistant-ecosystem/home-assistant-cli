@@ -7,6 +7,7 @@ from typing import List, Optional, Union, cast
 import click
 from click.core import Command, Context, Group
 import click_log
+
 import homeassistant_cli.autocompletion as autocompletion
 from homeassistant_cli.config import Configuration
 import homeassistant_cli.const as const

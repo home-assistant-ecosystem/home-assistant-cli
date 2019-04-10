@@ -15,10 +15,11 @@ import urllib.parse
 from urllib.parse import urlencode
 
 import aiohttp
+import requests
+
 from homeassistant_cli.config import Configuration, resolve_server
 from homeassistant_cli.exceptions import HomeAssistantCliError
 import homeassistant_cli.hassconst as hass
-import requests
 
 _LOGGER = logging.getLogger(__name__)
 

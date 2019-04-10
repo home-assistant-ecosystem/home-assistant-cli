@@ -2,10 +2,11 @@
 import json
 
 from click.testing import CliRunner
+import requests_mock
+
 import homeassistant_cli.autocompletion as autocompletion
 import homeassistant_cli.cli as cli
 from homeassistant_cli.config import Configuration
-import requests_mock
 
 
 def test_service_list(default_services) -> None:

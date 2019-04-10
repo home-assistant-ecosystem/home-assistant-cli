@@ -4,6 +4,7 @@ import json
 import unittest.mock as mock
 
 from click.testing import CliRunner
+
 import homeassistant_cli.cli as cli
 
 
