@@ -3,10 +3,11 @@ import json
 from typing import Any
 
 from click.testing import CliRunner
+import requests_mock
+
 import homeassistant_cli.cli as cli
 from homeassistant_cli.exceptions import HomeAssistantCliError
 import homeassistant_cli.yaml as yaml
-import requests_mock
 
 VALID_INFO = {
     "base_url": "http://192.168.1.156:8123",

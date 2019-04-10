@@ -2,10 +2,11 @@
 import os
 from typing import Any, Dict, List, Tuple  # NOQA
 
+from requests.exceptions import HTTPError
+
 from homeassistant_cli import const, hassconst
 from homeassistant_cli.config import Configuration, resolve_server
 import homeassistant_cli.remote as api
-from requests.exceptions import HTTPError
 
 
 def _init_ctx(ctx: Configuration) -> None:

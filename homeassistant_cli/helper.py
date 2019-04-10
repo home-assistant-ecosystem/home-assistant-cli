@@ -6,11 +6,12 @@ import logging
 import shlex
 from typing import Any, Dict, Generator, List, Optional, Tuple, Union, cast
 
+from ruamel.yaml import YAML
+from tabulate import tabulate
+
 from homeassistant_cli.config import Configuration
 import homeassistant_cli.const as const
 import homeassistant_cli.yaml as yaml
-from ruamel.yaml import YAML
-from tabulate import tabulate
 
 _LOGGING = logging.getLogger(__name__)
 

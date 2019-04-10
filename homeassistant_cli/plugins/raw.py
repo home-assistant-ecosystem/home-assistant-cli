@@ -3,6 +3,7 @@ import json as json_
 import logging
 
 import click
+
 import homeassistant_cli.autocompletion as autocompletion
 from homeassistant_cli.cli import pass_context
 from homeassistant_cli.config import Configuration

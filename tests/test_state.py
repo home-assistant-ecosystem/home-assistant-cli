@@ -3,8 +3,9 @@ import json
 import re
 
 from click.testing import CliRunner
-import homeassistant_cli.cli as cli
 import requests_mock
+
+import homeassistant_cli.cli as cli
 
 EDITED_ENTITY = """
 {

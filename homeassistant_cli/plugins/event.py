@@ -4,6 +4,7 @@ import logging
 from typing import Dict
 
 import click
+
 import homeassistant_cli.autocompletion as autocompletion
 from homeassistant_cli.cli import pass_context
 from homeassistant_cli.config import Configuration
