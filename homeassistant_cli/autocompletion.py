@@ -17,7 +17,9 @@ def _init_ctx(ctx: Configuration) -> None:
         ctx.server = os.environ.get('HASS_SERVER', const.AUTO_SERVER)
 
     if not hasattr(ctx, 'token'):
-        ctx.token = os.environ.get('HASS_TOKEN', None)
+        ctx.token = os.environ.get(
+            'HASS_TOKEN', os.environ.get('HASSIO_TOKEN', None)
+        )
 
     if not hasattr(ctx, 'password'):
         ctx.password = os.environ.get('HASS_PASSWORD', None)
