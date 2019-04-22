@@ -76,7 +76,7 @@ def rename(ctx, oldid, newid, name):
 
     entity = api.get_entity(ctx, oldid)
     if not entity:
-        _LOGGING.error("Could not find entity with id: %s", oldid)
+        _LOGGING.error("Could not find entity with ID: %s", oldid)
         sys.exit(1)
 
     result = api.rename_entity(ctx, oldid, newid, name)

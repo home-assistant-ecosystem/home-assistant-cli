@@ -28,7 +28,7 @@ def _report(ctx, cmd, method, response) -> None:
         try:
             ctx.echo(format_output(ctx, response.json()))
         except json_.decoder.JSONDecodeError:
-            _LOGGING.debug("Response could not be parsed as json.")
+            _LOGGING.debug("Response could not be parsed as JSON")
             ctx.echo(response.text)
     else:
         _LOGGING.warning(

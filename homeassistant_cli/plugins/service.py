@@ -80,7 +80,7 @@ def list_cmd(ctx: Configuration, servicefilter):
     'service', required=True, autocompletion=autocompletion.services
 )
 @click.option(
-    '--arguments', help="Comma separated key/value pairs to use as arguments"
+    '--arguments', help="Comma separated key/value pairs to use as arguments."
 )
 @pass_context
 def call(ctx: Configuration, service, arguments):
@@ -89,7 +89,7 @@ def call(ctx: Configuration, service, arguments):
     _LOGGING.debug("service call <start>")
     parts = service.split(".")
     if len(parts) != 2:
-        _LOGGING.error("Service name not following <domain>.<service> format.")
+        _LOGGING.error("Service name not following <domain>.<service> format")
         sys.exit(1)
 
     _LOGGING.debug("Convert arguments %s to dict", arguments)
@@ -99,5 +99,5 @@ def call(ctx: Configuration, service, arguments):
 
     result = api.call_service(ctx, parts[0], parts[1], data)
 
-    _LOGGING.debug("Formatting ouput")
+    _LOGGING.debug("Formatting output")
     ctx.echo(format_output(ctx, result))

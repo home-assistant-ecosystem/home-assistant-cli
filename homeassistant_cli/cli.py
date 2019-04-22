@@ -56,7 +56,7 @@ def run() -> None:
         else:
             _LOGGER.error("%s: %s", type(ex).__name__, ex)
             _LOGGER.info(
-                "Run with %s to see full exception infomation.",
+                "Run with %s to see full exception information",
                 " or ".join(exceptionflags),
             )
         sys.exit(1)
