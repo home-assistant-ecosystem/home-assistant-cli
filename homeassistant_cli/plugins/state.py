@@ -93,7 +93,7 @@ def listcmd(ctx, entityfilter):
 @click.argument('newstate', required=False)
 @click.option(
     '--attributes',
-    help="Comma separated key/value pairs to use as " "attributes.",
+    help="Comma separated key/value pairs to use as attributes.",
 )
 @click.option(
     '--json',
