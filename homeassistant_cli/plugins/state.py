@@ -41,7 +41,7 @@ def get(ctx: Configuration, entity):
             )
         )
     else:
-        _LOGGING.error("Entity with id: '%s' not found.", entity)
+        _LOGGING.error("Entity with ID: '%s' not found.", entity)
 
 
 @cli.command()
@@ -92,7 +92,8 @@ def listcmd(ctx, entityfilter):
 )
 @click.argument('newstate', required=False)
 @click.option(
-    '--attributes', help="Comma separated key/value pairs to use as attributes"
+    '--attributes',
+    help="Comma separated key/value pairs to use as " "attributes.",
 )
 @click.option(
     '--json',
@@ -113,7 +114,7 @@ def edit(ctx: Configuration, entity, newstate, attributes, merge, json):
     ctx.auto_output('data')
     if json:
         _LOGGING.debug(
-            "json found overriding/creating new state for entity %s", entity
+            "JSON found overriding/creating new state for entity %s", entity
         )
         wanted_state = json_.loads(json)
     elif newstate or attributes:
@@ -167,7 +168,7 @@ def edit(ctx: Configuration, entity, newstate, attributes, merge, json):
 
     _LOGGING.debug("wanted: %s", str(wanted_state))
     result = api.set_state(ctx, entity, wanted_state)
-    ctx.echo("Entity %s updated succesfully", entity)
+    ctx.echo("Entity %s updated successfully", entity)
     _LOGGING.debug("Updated to: %s", result)
 
 
@@ -233,15 +234,15 @@ def on_cmd(ctx: Configuration, entities):
     '--since',
     required=False,
     default="1d",
-    help="Start of the period to get history from. A timestamp or relative\
-    expression relative to now. Defaults to 1 day.",
+    help="Start of the period to get history from. A timestamp or relative "
+    "expression relative to now. Defaults to 1 day.",
 )
 @click.option(
     '--end',
     required=False,
     default="now",
-    help="End of the period to query history from. A timestamp or relative\
-    expression relative to now. Defaults to now.",
+    help="End of the period to query history from. A timestamp or relative "
+    "expression relative to now. Defaults to now.",
 )
 @pass_context
 def history(ctx: Configuration, entities: List, since: str, end: str):

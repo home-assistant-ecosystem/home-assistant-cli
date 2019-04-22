@@ -38,14 +38,14 @@ def render(template_path, data, strict=False) -> str:
     '--local',
     default=False,
     is_flag=True,
-    help="If should render template locally",
+    help="If should render template locally.",
 )
 @pass_context
 def cli(ctx: Configuration, template, datafile, local: bool) -> None:
     """Render templates on server or locally.
 
     TEMPLATE - jinja2 template file
-    DATAFILE - yaml file with variables to pass to rendering
+    DATAFILE - YAML file with variables to pass to rendering
     """
     variables = {}  # type: Dict[str, Any]
     if datafile:

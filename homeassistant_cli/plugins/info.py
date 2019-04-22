@@ -19,7 +19,7 @@ def cli(ctx: Configuration):
     cols = [
         ("BASE_URL", "base_url"),
         ("LOCATION", "location_name"),
-        ("REQUIRES_API_PASWORD", "requires_api_password"),
+        ("REQUIRES_API_PASSWORD", "requires_api_password"),
         ("VERSION", "version"),
     ]
     ctx.echo(

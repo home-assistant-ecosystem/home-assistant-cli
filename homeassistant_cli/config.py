@@ -65,7 +65,7 @@ def _locate_ha() -> Optional[str]:
         return cast(str, base_url)
 
     _LOGGING.warning(
-        "Found no Home Assistant on local network. Using defaults."
+        "Found no Home Assistant on local network. Using defaults"
     )
     return None
 
