@@ -88,7 +88,7 @@ def raw_format_output(
         else:
             headers = [v[0] for v in fmt]
 
-        # in case data passed in is a single element
+        # In case data passed in is a single element
         # we turn it into a single item list for better table output
         if not isinstance(data, List):
             data = [data]
@@ -113,6 +113,7 @@ def raw_format_output(
 
 
 def _sort_table(result: List[Any], sort_by: str) -> List[Any]:
+    """Sort the content of a table."""
     from jsonpath_rw import parse
 
     expr = parse(sort_by)

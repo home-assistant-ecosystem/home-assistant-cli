@@ -133,11 +133,11 @@ def table_formats(
         ("pipe", "PHP Markdown Extra"),
         ("orgtbl", "org-mode table"),
         ("jira", "Atlassian Jira Markup"),
-        ("presto", "Formatted as PrestoDB cli"),
-        ("psql", "Formatted as Postgres psql cli"),
+        ("presto", "Formatted as PrestoDB CLI"),
+        ("psql", "Formatted as Postgres psql CLI"),
         ("rst", "reStructuredText"),
-        ("mediawiki", "Media Wiki as used in Wikpedia"),
-        ("moinmoin", "MoinMain Wiki"),
+        ("mediawiki", "Media Wiki as used in Wikipedia"),
+        ("moinmoin", "MoinMoin Wiki"),
         ("youtrack", "Youtrack format"),
         ("html", "HTML Markup"),
         ("latex", "LaTeX markup, replacing special characters"),
@@ -166,7 +166,7 @@ def api_methods(
     completions = []
     for name, value in getmembers(hassconst):
         if name.startswith('URL_API_'):
-            completions.append((value, name[len('URL_API_') :]))
+            completions.append((value, name[len('URL_API_'):]))
 
     completions.sort()
 
@@ -174,6 +174,7 @@ def api_methods(
 
 
 def _quoteifneeded(val: str) -> str:
+    """Add quotes if needed."""
     if val and ' ' in val:
         return '"{}"'.format(val)
     return val
