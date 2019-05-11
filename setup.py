@@ -127,6 +127,7 @@ TESTS_REQUIRE = [
     'pytest==4.4.1',
     'requests_mock==1.6.0',
     'wheel==0.33.1',  # Otherwise setup.py bdist_wheel does not work
+    'codecov==2.0.15',
 ]
 
 MIN_PY_VERSION = '.'.join(map(str, REQUIRED_PYTHON_VER))
