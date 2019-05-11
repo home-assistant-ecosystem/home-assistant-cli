@@ -36,10 +36,10 @@ HASS_SERVER = "http://localhost:8123"
             "Honor HASS_SERVER together with HASSIO_TOKEN",
             {
                 'HASSIO_TOKEN': 'supersecret',
-                'HASS_SERVER': 'http://localhost:999999',
+                'HASS_SERVER': 'http://localhost:63333',
             },
-            "http://localhost:999999",
-            "http://localhost:999999",
+            "http://localhost:63333",
+            "http://localhost:63333",
             "supersecret",
             None,
         ),
