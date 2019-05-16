@@ -185,6 +185,31 @@ jobs:
           path: test-reports
           destination: test-reports
 
+  deploy:
+    executor:
+      name: python
+      tag: 3.5.5-stretch
+    steps:
+      - checkout
+      - docker-prereqs
+      - install
+
+      - run:
+          name: verify release okey
+          command: |
+            script/check_release
+      - run:
+          name: init .pypirc
+          command: |
+            echo -e "[pypi]" >> ~/.pypirc
+            echo -e "username = maxandersen" >> ~/.pypirc
+            echo -e "password = $PYPI_PASSWORD" >> ~/.pypirc
+            echo -e "repository = https://test.pypi.org/legacy" >> ~/.pypirc
+      - run:
+          name: do release
+          command: |
+            script/release
+
 workflows:
   version: 2
   build:
@@ -230,3 +255,16 @@ workflows:
       # - test:
       #     name: test 3.8
       #     python: 3.8-rc-stretch
+      - deploy:
+          requires:
+            - test 3.6
+            - pylint
+            - test 3.5.5
+            - test 3.7
+          filters:
+            tags:
+              only: /[0-9]+(\.[0-9]+)*/
+            branches:
+              only:
+                - dev
+
