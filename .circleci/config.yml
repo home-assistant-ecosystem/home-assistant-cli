@@ -193,7 +193,7 @@ jobs:
       - checkout
       - docker-prereqs
       - install-requirements:
-          python: << parameters.python >>
+          python: 3.5.5-stretch
           test: true
       - install
 
