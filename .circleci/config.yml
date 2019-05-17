@@ -192,6 +192,9 @@ jobs:
     steps:
       - checkout
       - docker-prereqs
+      - install-requirements:
+          python: << parameters.python >>
+          test: true
       - install
 
       - run:
