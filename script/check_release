@@ -11,18 +11,35 @@ cd "$(dirname "$0")/.."
 #  exit 1
 #fi
 
-head -n 4 homeassistant_cli/const.py | tail -n 1 | grep dev > /dev/null
-
-if [ $? -eq 0 ]
-then
-  echo "Release version should not contain dev tag"
-  exit 1
-fi
-
 CURRENT_BRANCH=`git rev-parse --abbrev-ref HEAD`
+CURRENT_TAG=`git describe --exact-match --tags $(git rev-parse --abbrev-ref HEAD)`
 
-if [ "$CURRENT_BRANCH" != "master" ] && [ "$CURRENT_BRANCH" != "rc" ]
+versionpattern="[0-9]+\.[0-9]+\.[0-9]+"
+
+echo "Release check believes it is branch '$CURRENT_BRANCH' and tag '$CURRENT_TAG'"
+
+if [ "$CURRENT_BRANCH" != "dev" ] && [[ ! "$CURRENT_TAG" =~ $versionpattern ]]
 then
-  echo "On '$CURRENT_BRANCH' - You have to be on the master or rc branch to release."
-  exit 1
+    echo "On '$CURRENT_BRANCH' - You have to be on dev or a version numbered (1.2.3) named tag to release."
+    exit 1
 fi
+
+
+if [ "$CURRENT_BRANCH" != "dev" ]
+then
+    head -n 4 homeassistant_cli/const.py | tail -n 1 | grep dev > /dev/null
+    if [ $? -eq 0 ]
+    then
+        echo "Release version should not contain dev tag"
+        exit 1
+    fi
+else
+    head -n 4 homeassistant_cli/const.py | tail -n 1 | grep dev > /dev/null
+    if [ $? -eq 1 ]
+    then
+        echo "Release version should contain dev tag"
+        exit 1
+    fi
+fi
+
+
