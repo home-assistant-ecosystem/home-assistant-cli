@@ -42,7 +42,7 @@ commands:
     steps:
       - restore_cache:
           keys:
-            - v1-<< parameters.python >>-{{ checksum "homeassistant_cli/package_constraints.txt" }}-<<# parameters.all >>{{ checksum "requirements.txt" }}<</ parameters.all>>-<<# parameters.test >>{{ checksum "requirements_test_all.txt" }}<</ parameters.test>>
+            - v1-<< parameters.python >>-{{ checksum "homeassistant_cli/package_constraints.txt" }}-<<# parameters.all >>{{ checksum "requirements.txt" }}<</ parameters.all>>-<<# parameters.test >>{{ checksum "requirements_test_all.txt" }}<</ parameters.test>>-{{ checksum "setup.py" }}
       - run:
           name: install dependencies
           command: |
@@ -50,13 +50,15 @@ commands:
             . venv/bin/activate
             pip install -q -U pip
             pip install -q -U setuptools
+            pip install -q -U twine
+
             <<# parameters.all >>pip install -q --progress-bar off -r requirements.txt -c homeassistant_cli/package_constraints.txt<</ parameters.all>>
             <<# parameters.test >>pip install -q --progress-bar off -r requirements_test_all.txt -c homeassistant_cli/package_constraints.txt<</ parameters.test>>
           no_output_timeout: 15m
       - save_cache:
           paths:
             - ./venv
-          key: v1-<< parameters.python >>-{{ checksum "homeassistant_cli/package_constraints.txt" }}-<<# parameters.all >>{{ checksum "requirements.txt" }}<</ parameters.all>>-<<# parameters.test >>{{ checksum "requirements_test_all.txt" }}<</ parameters.test>>
+          key: v1-<< parameters.python >>-{{ checksum "homeassistant_cli/package_constraints.txt" }}-<<# parameters.all >>{{ checksum "requirements.txt" }}<</ parameters.all>>-<<# parameters.test >>{{ checksum "requirements_test_all.txt" }}<</ parameters.test>>-{{ checksum "setup.py" }}
 
   install:
     description: Install Home Assistant CLI
@@ -207,10 +209,11 @@ jobs:
             echo -e "[pypi]" >> ~/.pypirc
             echo -e "username = maxandersen" >> ~/.pypirc
             echo -e "password = $PYPI_PASSWORD" >> ~/.pypirc
-            echo -e "repository = https://test.pypi.org/legacy" >> ~/.pypirc
+            echo -e "repository = https://test.pypi.org/legacy/" >> ~/.pypirc
       - run:
           name: do release
           command: |
+            . venv/bin/activate
             script/release
 
 workflows:

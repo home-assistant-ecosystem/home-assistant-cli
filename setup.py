@@ -65,7 +65,7 @@ __VERSION__ = find_version("homeassistant_cli", "const.py")  # type: ignore
 # Append a suffix to the version for dev builds
 # Append a suffix to the version for dev builds
 if 'dev' in __VERSION__:
-    __VERSION__ = '{v}+{s}'.format(v=__VERSION__, s=get_git_commit_datetime())
+    __VERSION__ = '{v}{s}'.format(v=__VERSION__, s=get_git_commit_datetime())
 
 REQUIRED_PYTHON_VER = (3, 5, 3)
 
@@ -106,8 +106,8 @@ REQUIRES = [
     'jsonpath-rw==1.4.0',
     'netdisco==2.6.0',
     'regex==2019.04.14',
-    'requests==2.21.0',
     'ruamel.yaml==0.15.96',
+    'requests==2.22.0',
     'tabulate==0.8.3',
 ]
 
@@ -128,6 +128,7 @@ TESTS_REQUIRE = [
     'requests_mock==1.6.0',
     'wheel==0.33.1',  # Otherwise setup.py bdist_wheel does not work
     'codecov==2.0.15',
+    'twine==1.13.0',
 ]
 
 MIN_PY_VERSION = '.'.join(map(str, REQUIRED_PYTHON_VER))
