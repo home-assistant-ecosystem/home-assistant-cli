@@ -50,8 +50,8 @@ commands:
             . venv/bin/activate
             pip install -q -U pip
             pip install -q -U setuptools
-            pip install -U twine
-            
+            pip install -q -U twine
+
             <<# parameters.all >>pip install -q --progress-bar off -r requirements.txt -c homeassistant_cli/package_constraints.txt<</ parameters.all>>
             <<# parameters.test >>pip install -q --progress-bar off -r requirements_test_all.txt -c homeassistant_cli/package_constraints.txt<</ parameters.test>>
           no_output_timeout: 15m
@@ -213,6 +213,7 @@ jobs:
       - run:
           name: do release
           command: |
+            . venv/bin/activate
             script/release
 
 workflows:
