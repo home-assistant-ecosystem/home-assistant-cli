@@ -49,7 +49,7 @@ commands:
             python3 -m venv venv
             . venv/bin/activate
             pip install -q -U pip
-            pip install -q -U setuptools
+            pip install -q -U setuptools twine
             <<# parameters.all >>pip install -q --progress-bar off -r requirements.txt -c homeassistant_cli/package_constraints.txt<</ parameters.all>>
             <<# parameters.test >>pip install -q --progress-bar off -r requirements_test_all.txt -c homeassistant_cli/package_constraints.txt<</ parameters.test>>
           no_output_timeout: 15m
@@ -196,11 +196,7 @@ jobs:
           python: 3.5.5-stretch
           test: true
       - install
-      - run:
-          name: install deploy/twine tools
-          command: |
-            pip install -q twine
-            
+
       - run:
           name: verify release okey
           command: |
