@@ -332,6 +332,12 @@ by specifying it as an argument:
 
    $ hass-cli event watch deconz_event
 
+Hassio
+------
+
+If you are using hassio there are a few commands available for you to interact with hassio services/systems.
+
+
 Other
 -----
 
@@ -365,7 +371,6 @@ Render templates client (local) side:
 .. code:: bash
 
     $ hass-cli template --local lovelace-template.yaml
-
 
 Auto-completion
 ###############
@@ -425,11 +430,15 @@ Help
                                      DEBUG
      --version                       Show the version and exit.
      -s, --server TEXT               The server URL or `auto` for automatic
-                                     detection  [default: auto]
+                                     detection. Can also be set with the
+                                     environment variable HASS_SERVER.  [default:
+                                     auto]
      --token TEXT                    The Bearer token for Home Assistant
-                                     instance.
+                                     instance. Can also be set with the
+                                     environment variable HASS_TOKEN.
      --password TEXT                 The API password for Home Assistant
-                                     instance.
+                                     instance. Can also be set with the
+                                     environment variable HASS_PASSWORD.
      --timeout INTEGER               Timeout for network operations.  [default:
                                      5]
      -o, --output [json|yaml|table|auto]
@@ -459,12 +468,14 @@ Help
      config      Get configuration from a Home Assistant instance.
      device      Get info and operate on devices from Home Assistant...
      discover    Discovery for the local network.
-     state       Get info and operate on entities from Home Assistant.
+     entity      Get info on entities from Home Assistant.
      event       Interact with events.
+     hassio      Hass.io commands (if available).
      info        Get basic info from Home Assistant.
-     map         Print the current location on a map.
+     map         Show the location of the config or an entity on a map.
      raw         Call the raw API (advanced).
      service     Call and work with services.
+     state       Get info on entity state from Home Assistant.
      system      System details and operations for Home Assistant.
      template    Render templates on server or locally.
 
