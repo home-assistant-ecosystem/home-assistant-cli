@@ -21,6 +21,7 @@ DFEAULT_PLUGINS = [
     'template',
     'area',
     'device',
+    'hassio',
 ]
 DFEAULT_PLUGINS.sort()
 
