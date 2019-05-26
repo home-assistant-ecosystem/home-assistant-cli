@@ -42,7 +42,7 @@ commands:
     steps:
       - restore_cache:
           keys:
-            - v1-<< parameters.python >>-{{ checksum "homeassistant_cli/package_constraints.txt" }}-<<# parameters.all >>{{ checksum "requirements.txt" }}<</ parameters.all>>-<<# parameters.test >>{{ checksum "requirements_test_all.txt" }}<</ parameters.test>>
+            - v1-<< parameters.python >>-{{ checksum "homeassistant_cli/package_constraints.txt" }}-<<# parameters.all >>{{ checksum "requirements.txt" }}<</ parameters.all>>-<<# parameters.test >>{{ checksum "requirements_test_all.txt" }}<</ parameters.test>>-{{ checksum "setup.py" }}
       - run:
           name: install dependencies
           command: |
@@ -56,7 +56,7 @@ commands:
       - save_cache:
           paths:
             - ./venv
-          key: v1-<< parameters.python >>-{{ checksum "homeassistant_cli/package_constraints.txt" }}-<<# parameters.all >>{{ checksum "requirements.txt" }}<</ parameters.all>>-<<# parameters.test >>{{ checksum "requirements_test_all.txt" }}<</ parameters.test>>
+          key: v1-<< parameters.python >>-{{ checksum "homeassistant_cli/package_constraints.txt" }}-<<# parameters.all >>{{ checksum "requirements.txt" }}<</ parameters.all>>-<<# parameters.test >>{{ checksum "requirements_test_all.txt" }}<</ parameters.test>>-{{ checksum "setup.py" }}
 
   install:
     description: Install Home Assistant CLI
