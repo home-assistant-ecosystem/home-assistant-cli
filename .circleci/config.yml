@@ -207,9 +207,9 @@ jobs:
           name: init .pypirc
           command: |
             echo -e "[pypi]" >> ~/.pypirc
-            echo -e "username = maxandersen" >> ~/.pypirc
+            echo -e "username = $PYPI_USER" >> ~/.pypirc
             echo -e "password = $PYPI_PASSWORD" >> ~/.pypirc
-            echo -e "repository = https://test.pypi.org/legacy/" >> ~/.pypirc
+            ## echo -e "repository = https://test.pypi.org/legacy/" >> ~/.pypirc
       - run:
           name: do release
           command: |
