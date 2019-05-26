@@ -196,7 +196,11 @@ jobs:
           python: 3.5.5-stretch
           test: true
       - install
-
+      - run:
+          name: install deploy/twine tools
+          command: |
+            pip install -q twine
+            
       - run:
           name: verify release okey
           command: |
