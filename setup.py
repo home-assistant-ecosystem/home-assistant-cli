@@ -106,8 +106,8 @@ REQUIRES = [
     'jsonpath-rw==1.4.0',
     'netdisco==2.6.0',
     'regex==2019.04.14',
+    'ruamel.yaml==0.15.96',
     'requests==2.22.0',
-    'ruamel.yaml==0.15.94',
     'tabulate==0.8.3',
 ]
 
