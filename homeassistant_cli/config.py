@@ -170,7 +170,8 @@ class Configuration:
     def yaml(self) -> YAML:
         """Create default yaml parser."""
         if self:
-            return yaml.yaml()
+            yaml.yaml()
+        return yaml.yaml()
 
     def yamlload(self, source: str) -> Any:
         """Load YAML from source."""
