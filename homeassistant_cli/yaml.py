@@ -9,7 +9,7 @@ from ruamel.yaml.compat import StringIO
 def yaml() -> YAML:
     """Return default YAML parser."""
     yamlp = YAML(typ='safe', pure=True)
-    yamlp.preserve_quotes = True
+    yamlp.preserve_quotes = cast(None, True)
     yamlp.default_flow_style = False
     return yamlp
 

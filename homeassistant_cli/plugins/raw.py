@@ -1,6 +1,7 @@
 """Raw plugin for Home Assistant CLI (hass-cli)."""
 import json as json_
 import logging
+from typing import Any, Dict, List, cast  # noqa: F401
 
 import click
 
@@ -67,3 +68,31 @@ def post(ctx: Configuration, method, json):
     response = api.restapi(ctx, 'post', method, data)
 
     _report(ctx, "GET", method, response)
+
+
+@cli.command("ws")
+@click.argument(  # type: ignore
+    'wstype', autocompletion=autocompletion.wsapi_methods
+)
+@click.option('--json')
+@pass_context
+def websocket(ctx: Configuration, wstype, json):  # noqa: D301
+    """Send a websocket request against /api/websocket.
+
+    WSTYPE is name of websocket methods.
+
+    \b
+    --json is dictionary to pass in addition to the type.
+           Example: --json='{ "area_id":"2c8bf93c8082492f99c989896962f207" }'
+    """
+    if json:
+        data = json_.loads(json)
+    else:
+        data = {}
+
+    frame = {'type': wstype}
+    frame = {**frame, **data}  # merging data into frame
+
+    response = cast(List[Dict[str, Any]], api.wsapi(ctx, frame))
+
+    ctx.echo(format_output(ctx, response))

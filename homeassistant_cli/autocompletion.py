@@ -168,7 +168,25 @@ def api_methods(
     completions = []
     for name, value in getmembers(hassconst):
         if name.startswith('URL_API_'):
-            completions.append((value, name[len('URL_API_'):]))
+            completions.append((value, name[len('URL_API_') :]))
+
+    completions.sort()
+
+    return [c for c in completions if incomplete in c[0]]
+
+
+def wsapi_methods(
+    ctx: Configuration, args: List, incomplete: str
+) -> List[Tuple[str, str]]:
+    """Auto completion for websocket methods."""
+    _init_ctx(ctx)
+
+    from inspect import getmembers
+
+    completions = []
+    for name, value in getmembers(hassconst):
+        if name.startswith('WS_TYPE_'):
+            completions.append((value, name[len('WS_TYPE_') :]))
 
     completions.sort()
 
