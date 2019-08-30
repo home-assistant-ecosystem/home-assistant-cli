@@ -74,13 +74,13 @@ jobs:
   static-check:
     executor:
       name: python
-      tag: 3.5.5-stretch
+      tag: 3.6-stretch
 
     steps:
       - checkout
       - docker-prereqs
       - install-requirements:
-          python: 3.5.5-stretch
+          python: 3.6-stretch
           test: true
 
       - run:
@@ -101,27 +101,27 @@ jobs:
   pre-install-all-requirements:
     executor:
       name: python
-      tag: 3.5.5-stretch
+      tag: 3.6-stretch
 
     steps:
       - checkout
       - docker-prereqs
       - install-requirements:
-          python: 3.5.5-stretch
+          python: 3.6-stretch
           all: true
           test: true
 
   pylint:
     executor:
       name: python
-      tag: 3.5.5-stretch
+      tag: 3.6-stretch
     parallelism: 2
 
     steps:
       - checkout
       - docker-prereqs
       - install-requirements:
-          python: 3.5.5-stretch
+          python: 3.6-stretch
           all: true
           test: true
       - install
@@ -190,12 +190,12 @@ jobs:
   deploy:
     executor:
       name: python
-      tag: 3.5.5-stretch
+      tag: 3.6-stretch
     steps:
       - checkout
       - docker-prereqs
       - install-requirements:
-          python: 3.5.5-stretch
+          python: 3.6-stretch
           test: true
       - install
 
@@ -228,11 +228,6 @@ workflows:
           requires:
             - pre-install-all-requirements
       - pre-test:
-          name: pre-test 3.5.5
-          requires:
-            - static-check
-          python: 3.5.5-stretch
-      - pre-test:
           name: pre-test 3.6
           requires:
             - static-check
@@ -242,11 +237,6 @@ workflows:
           requires:
             - static-check
           python: 3.7-stretch
-      - test:
-          name: test 3.5.5
-          requires:
-            - pre-test 3.5.5
-          python: 3.5.5-stretch
       - test:
           name: test 3.6
           requires:
@@ -265,7 +255,6 @@ workflows:
           requires:
             - test 3.6
             - pylint
-            - test 3.5.5
             - test 3.7
           filters:
             tags:
