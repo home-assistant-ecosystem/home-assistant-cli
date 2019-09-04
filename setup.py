@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 """Setup script for Home Assistant CLI."""
 import codecs
 from datetime import datetime as dt
