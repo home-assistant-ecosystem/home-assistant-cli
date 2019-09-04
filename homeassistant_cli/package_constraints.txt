@@ -8,7 +8,7 @@ jinja2>=2.10
 PyJWT==1.7.1
 cryptography==2.7
 pip>=8.0.3
-pytz>=2018.07
+pytz>=2019.02
 pyyaml>=4.2b1
 requests==2.22.0
 ruamel.yaml==0.16.5
