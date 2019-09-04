@@ -88,7 +88,7 @@ REQUIRES = [
     'netdisco==2.6.0',
     'regex==2019.04.14',
     'ruamel.yaml==0.15.96',
-    'requests==2.22.0',
+    'requests>=2.22.0,<3',
     'tabulate==0.8.3',
 ]
 
