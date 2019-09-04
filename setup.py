@@ -105,7 +105,7 @@ TESTS_REQUIRE = [
     'pytest-cov==2.6.1',
     'pytest-sugar==0.9.2',
     'pytest-timeout==1.3.3',
-    'pytest==4.4.1',
+    'pytest>=5.1.2,<6',
     'requests_mock==1.6.0',
     'wheel==0.33.1',  # Otherwise setup.py bdist_wheel does not work
     'codecov==2.0.15',
