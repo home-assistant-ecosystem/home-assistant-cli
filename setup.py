@@ -89,7 +89,7 @@ REQUIRES = [
     'regex==2019.04.14',
     'ruamel.yaml==0.15.96',
     'requests==2.22.0',
-    'tabulate==0.8.3',
+    'tabulate>=0.8.3,<0.9',
 ]
 
 # Should be as close to Home Assistant dev/master as possible
