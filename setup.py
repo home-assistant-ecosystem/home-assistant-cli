@@ -85,7 +85,7 @@ REQUIRES = [
     'dateparser==0.7.1',
     'jinja2>=2.10',
     'jsonpath-rw==1.4.0',
-    'netdisco>=2.6.0,>3',
+    'netdisco>=2.6.0,<3',
     'regex==2019.04.14',
     'ruamel.yaml==0.15.96',
     'requests==2.22.0',
