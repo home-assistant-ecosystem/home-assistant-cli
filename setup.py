@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 """Setup script for Home Assistant CLI."""
 import codecs
 from datetime import datetime as dt
@@ -79,17 +79,17 @@ PROJECT_URLS = {
 PACKAGES = find_packages(exclude=['tests', 'tests.*'])
 
 REQUIRES = [
-    'aiohttp==3.5.4',
+    'aiohttp>=3.5.4,<4',
     'click-log==0.3.2',
     'click==7.0',
-    'dateparser==0.7.1',
+    'dateparser>=0.7.1,<0.8',
     'jinja2>=2.10',
     'jsonpath-rw==1.4.0',
-    'netdisco==2.6.0',
+    'netdisco>=2.6.0,<3',
     'regex==2019.04.14',
-    'ruamel.yaml==0.15.96',
+    'ruamel.yaml>=0.16.5,<0.17',
     'requests>=2.22.0,<3',
-    'tabulate==0.8.3',
+    'tabulate>=0.8.3,<0.9',
 ]
 
 # Should be as close to Home Assistant dev/master as possible
