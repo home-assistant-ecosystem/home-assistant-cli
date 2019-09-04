@@ -104,7 +104,7 @@ TESTS_REQUIRE = [
     'pylint==2.3.1',
     'pytest-cov==2.6.1',
     'pytest-sugar==0.9.2',
-    'pytest-timeout==1.3.3',
+    'pytest-timeout>=1.3.3,<1.4',
     'pytest>=5.1.2,<6',
     'requests_mock==1.6.0',
     'wheel==0.33.1',  # Otherwise setup.py bdist_wheel does not work
