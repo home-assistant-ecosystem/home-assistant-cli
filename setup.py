@@ -100,7 +100,7 @@ TESTS_REQUIRE = [
     'flake8>=3.7.7,<4',
     'mock-open>=1.3.1,<1.4',
     'mypy>=0.710,<0.8',
-    'pydocstyle==3.0.0',
+    'pydocstyle>=4.0.0,<5',
     'pylint==2.3.1',
     'pytest-cov>=2.6.1,<3',
     'pytest-sugar>=0.9.2,<0.10',
