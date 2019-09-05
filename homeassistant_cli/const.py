@@ -3,8 +3,6 @@ PACKAGE_NAME = 'homeassistant_cli'
 
 __version__ = '0.8.0.dev0'
 
-REQUIRED_PYTHON_VER = (3, 5, 3)
-
 AUTO_SERVER = 'auto'
 DEFAULT_SERVER = 'http://localhost:8123'
 DEFAULT_HASSIO_SERVER = 'http://hassio/homeassistant'
