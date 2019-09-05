@@ -96,8 +96,8 @@ REQUIRES = [
 TESTS_REQUIRE = [
     "black==19.3b0;python_version>'3.6'",
     'coveralls==1.2.0',
-    'flake8-docstrings==1.3.0',
-    'flake8==3.7.7',
+    'flake8-docstrings>=1.3.0,<2',
+    'flake8>=3.7.7,<4',
     'mock-open>=1.3.1,<1.4',
     'mypy>=0.710,<0.8',
     'pydocstyle==3.0.0',
