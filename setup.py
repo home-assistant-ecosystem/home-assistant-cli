@@ -98,7 +98,7 @@ TESTS_REQUIRE = [
     'coveralls==1.2.0',
     'flake8-docstrings==1.3.0',
     'flake8==3.7.7',
-    'mock-open==1.3.1',
+    'mock-open>=1.3.1,<1.4',
     'mypy>=0.710,<0.8',
     'pydocstyle==3.0.0',
     'pylint==2.3.1',
