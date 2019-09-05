@@ -95,7 +95,7 @@ REQUIRES = [
 # Should be as close to Home Assistant dev/master as possible
 TESTS_REQUIRE = [
     "black==19.3b0;python_version>'3.6'",
-    'coveralls==1.2.0',
+    'coveralls>=1.2.0,<2',
     'flake8-docstrings==1.3.0',
     'flake8==3.7.7',
     'mock-open>=1.3.1,<1.4',
@@ -108,7 +108,7 @@ TESTS_REQUIRE = [
     'pytest>=5.1.2,<6',
     'requests_mock==1.6.0',
     'wheel==0.33.1',  # Otherwise setup.py bdist_wheel does not work
-    'codecov==2.0.15',
+    'codecov>=2.0.15,<3',
     'twine==1.13.0',
 ]
 
