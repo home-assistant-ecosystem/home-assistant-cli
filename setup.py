@@ -103,7 +103,7 @@ TESTS_REQUIRE = [
     'pydocstyle==3.0.0',
     'pylint==2.3.1',
     'pytest-cov==2.6.1',
-    'pytest-sugar==0.9.2',
+    'pytest-sugar>=0.9.2,<0.10',
     'pytest-timeout>=1.3.3,<1.4',
     'pytest>=5.1.2,<6',
     'requests_mock==1.6.0',
