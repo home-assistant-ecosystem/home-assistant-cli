@@ -185,7 +185,7 @@ def _default_token() -> Optional[str]:
     default=None,
     help=(
         'Custom columns key=value list.'
-        ' Example: ENTITY=entity_name, NAME=attributes.friendly_name'
+        ' Example: ENTITY=entity_id, NAME=name'
     ),
 )
 @click.option(
