@@ -271,7 +271,7 @@ Listing devices and areas works similar to list Entities.
    ea63e86747104abdb26f6d6ea9d2ddef  Old Shed
    16bd0505030a430b91fcf331340090f8  Entrance
    81c28de473dd41a7846fc97fdcd3027b  Dinner Table
-   69fdd00e91614957980a8dc1a7f0f68a  Kids room  
+   69fdd00e91614957980a8dc1a7f0f68a  Kids room
 
 
 You can create and delete areas:
@@ -443,8 +443,8 @@ Help
                                      careful!
      --debug                         Enables debug mode.
      --columns TEXT                  Custom columns key=value list. Example:
-                                     ENTITY=entity_name,
-                                     NAME=attributes.friendly_name
+                                     ENTITY=entity_id,
+                                     NAME=name
      --no-headers                    When printing tables don't use headers
                                      (default: print headers)
      --table-format TEXT             Which table format to use.
