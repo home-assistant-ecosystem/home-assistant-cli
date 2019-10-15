@@ -120,6 +120,7 @@ class Configuration:
         self.session = None  # type: Optional[Session]
         self.cert = None  # type: Optional[str]
         self.columns = None  # type: Optional[List[Tuple[str, str]]]
+        self.columns_width = None  # type: Optional[int]
         self.no_headers = False
         self.table_format = 'plain'
         self.sort_by = None
