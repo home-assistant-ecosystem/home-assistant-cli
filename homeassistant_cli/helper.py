@@ -51,6 +51,7 @@ def raw_format_output(
     data: Union[Dict[str, Any], List[Dict[str, Any]]],
     yamlparser: YAML,
     columns: Optional[List] = None,
+    columns_width: Optional[int] = None,
     no_headers: bool = False,
     table_format: str = 'plain',
     sort_by: Optional[str] = None,
@@ -99,7 +100,20 @@ def raw_format_output(
                 val = [match.value for match in fmtpair[1].find(item)]
                 row.append(", ".join(map(str, val)))
             result.append(row)
-
+        # Truncates data
+        if columns_width:
+            max_str = columns_width - len(const.COLUMNS_WIDTH_STR)
+            result = [
+                [
+                    (
+                        c
+                        if len(c) < columns_width
+                        else c[:max_str] + const.COLUMNS_WIDTH_STR
+                    )
+                    for c in row
+                ]
+                for row in result
+            ]
         res = tabulate(
             result, headers=headers, tablefmt=table_format
         )  # type: str
@@ -130,6 +144,7 @@ def format_output(
     ctx: Configuration,
     data: List[Dict[str, Any]],
     columns: Optional[List] = None,
+    columns_width: Optional[int] = None,
 ) -> str:
     """Format data to output based on settings in ctx/Context."""
     return raw_format_output(
@@ -137,6 +152,7 @@ def format_output(
         data,
         ctx.yaml(),
         columns,
+        ctx.columns_width,
         ctx.no_headers,
         ctx.table_format,
         ctx.sort_by,

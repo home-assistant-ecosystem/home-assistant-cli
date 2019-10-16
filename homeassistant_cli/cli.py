@@ -189,6 +189,17 @@ def _default_token() -> Optional[str]:
     ),
 )
 @click.option(
+    '--columns-width',
+    default=None,
+    type=click.INT,
+    envvar='HASS_COL_WIDTH',
+    show_envvar=True,
+    help=(
+        'Columns custom width. '
+        'If specified truncates column values (default: auto)'
+    ),
+)
+@click.option(
     '--no-headers',
     default=False,
     is_flag=True,
@@ -220,6 +231,7 @@ def cli(
     showexceptions: bool,
     cert: str,
     columns: str,
+    columns_width: int,
     no_headers: bool,
     table_format: str,
     sort_by: Optional[str],
@@ -236,6 +248,7 @@ def cli(
     ctx.showexceptions = showexceptions
     ctx.cert = cert
     ctx.columns = to_tuples(columns)
+    ctx.columns_width = columns_width
     ctx.no_headers = no_headers
     ctx.table_format = table_format
     ctx.sort_by = sort_by  # type: ignore
