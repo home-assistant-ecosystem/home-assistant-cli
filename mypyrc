@@ -1,2 +1,3 @@
 homeassistant_cli
+homeassistant_cli/plugins
 tests
