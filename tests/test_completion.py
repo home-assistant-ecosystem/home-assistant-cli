@@ -1,8 +1,11 @@
 """Tests file for Home Assistant CLI (hass-cli)."""
+from typing import cast
+
 import requests_mock
 
 import homeassistant_cli.autocompletion as autocompletion
 import homeassistant_cli.cli as cli
+from homeassistant_cli.config import Configuration
 
 
 def test_entity_completion(basic_entities_text) -> None:
@@ -15,8 +18,8 @@ def test_entity_completion(basic_entities_text) -> None:
         )
 
         cfg = cli.cli.make_context('hass-cli', ['entity', 'get'])
-        result = autocompletion.entities(  # type: ignore
-            cfg, ["entity", "get"], ""
+        result = autocompletion.entities(
+            cast(cfg, Configuration), ["entity", "get"], ""  # type: ignore
         )
         assert len(result) == 3
 
@@ -37,8 +40,8 @@ def test_service_completion(default_services_text) -> None:
 
         cfg = cli.cli.make_context('hass-cli', ['service', 'list'])
 
-        result = autocompletion.services(  # type: ignore
-            cfg, ["service", "list"], ""
+        result = autocompletion.services(
+            cfg, ["service", "list"], ""  # type: ignore
         )
         assert len(result) == 12
 
@@ -60,8 +63,8 @@ def test_event_completion(default_events_text) -> None:
 
         cfg = cli.cli.make_context('hass-cli', ['events', 'list'])
 
-        result = autocompletion.events(  # type: ignore
-            cfg, ["events", "list"], ""
+        result = autocompletion.events(
+            cfg, ["events", "list"], ""  # type: ignore
         )
         assert len(result) == 11
 
@@ -82,8 +85,8 @@ def test_area_completion(default_events_text) -> None:
 
         cfg = cli.cli.make_context('hass-cli', ['events', 'list'])
 
-        result = autocompletion.events(  # type: ignore
-            cfg, ["events", "list"], ""
+        result = autocompletion.events(
+            cfg, ["events", "list"], ""  # type: ignore
         )
         assert len(result) == 11
 

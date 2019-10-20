@@ -23,8 +23,10 @@ def cli(ctx):
 
 
 @cli.command()
-@click.argument(  # type: ignore
-    'entity', required=True, autocompletion=autocompletion.entities
+@click.argument(
+    'entity',
+    required=True,
+    autocompletion=autocompletion.entities,  # type: ignore
 )
 @pass_context
 def get(ctx: Configuration, entity):
@@ -45,8 +47,10 @@ def get(ctx: Configuration, entity):
 
 
 @cli.command()
-@click.argument(  # type: ignore
-    'entity', required=True, autocompletion=autocompletion.entities
+@click.argument(
+    'entity',
+    required=True,
+    autocompletion=autocompletion.entities,  # type: ignore
 )
 @pass_context
 def delete(ctx: Configuration, entity):
@@ -87,8 +91,10 @@ def listcmd(ctx, entityfilter):
 
 
 @cli.command()
-@click.argument(  # type: ignore
-    'entity', required=True, autocompletion=autocompletion.entities
+@click.argument(
+    'entity',
+    required=True,
+    autocompletion=autocompletion.entities,  # type: ignore
 )
 @click.argument('newstate', required=False)
 @click.option(
@@ -194,8 +200,11 @@ def _homeassistant_cmd(ctx: Configuration, entities, cmd, action):
 
 
 @cli.command()
-@click.argument(  # type: ignore
-    'entities', nargs=-1, required=True, autocompletion=autocompletion.entities
+@click.argument(
+    'entities',
+    nargs=-1,
+    required=True,
+    autocompletion=autocompletion.entities,  # type: ignore
 )
 @pass_context
 def toggle(ctx: Configuration, entities):
@@ -205,8 +214,11 @@ def toggle(ctx: Configuration, entities):
 
 
 @cli.command('turn_off')
-@click.argument(  # type: ignore
-    'entities', nargs=-1, required=True, autocompletion=autocompletion.entities
+@click.argument(
+    'entities',
+    nargs=-1,
+    required=True,
+    autocompletion=autocompletion.entities,  # type: ignore
 )
 @pass_context
 def off_cmd(ctx: Configuration, entities):
@@ -216,8 +228,11 @@ def off_cmd(ctx: Configuration, entities):
 
 
 @cli.command('turn_on')
-@click.argument(  # type: ignore
-    'entities', nargs=-1, required=True, autocompletion=autocompletion.entities
+@click.argument(
+    'entities',
+    nargs=-1,
+    required=True,
+    autocompletion=autocompletion.entities,  # type: ignore
 )
 @pass_context
 def on_cmd(ctx: Configuration, entities):
@@ -227,8 +242,11 @@ def on_cmd(ctx: Configuration, entities):
 
 
 @cli.command()
-@click.argument(  # type: ignore
-    'entities', nargs=-1, required=True, autocompletion=autocompletion.entities
+@click.argument(
+    'entities',
+    nargs=-1,
+    required=True,
+    autocompletion=autocompletion.entities,  # type: ignore
 )
 @click.option(
     '--since',
