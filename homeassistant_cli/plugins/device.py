@@ -56,8 +56,10 @@ def listcmd(ctx: Configuration, devicefilter: str):
 
 
 @cli.command('assign')
-@click.argument(  # type: ignore
-    'area_id_or_name', required=True, autocompletion=autocompletion.areas
+@click.argument(
+    'area_id_or_name',
+    required=True,
+    autocompletion=autocompletion.areas,  # type: ignore
 )
 @click.argument('names', nargs=-1, required=False)
 @click.option(
@@ -98,12 +100,13 @@ def assign(
                     result.append(device)
 
     for id_or_name in names:
-        device = next(  # type: ignore
-            (x for x in devices if x['id'] == id_or_name), None
+        device = next(
+            (x for x in devices if x['id'] == id_or_name), None  # type: ignore
         )
         if not device:
-            device = next(  # type: ignore
-                (x for x in devices if x['name'] == id_or_name), None
+            device = next(
+                (x for x in devices if x['name'] == id_or_name),
+                None,  # type: ignore
             )
         if not device:
             _LOGGING.error(

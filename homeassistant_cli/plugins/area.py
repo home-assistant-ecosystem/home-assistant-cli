@@ -73,8 +73,11 @@ def create(ctx, names):
 
 
 @cli.command('delete')
-@click.argument(  # type: ignore
-    'names', nargs=-1, required=True, autocompletion=autocompletion.areas
+@click.argument(
+    'names',
+    nargs=-1,
+    required=True,
+    autocompletion=autocompletion.areas,  # type: ignore
 )
 @pass_context
 def delete(ctx, names):
@@ -108,8 +111,10 @@ def delete(ctx, names):
 
 
 @cli.command('rename')
-@click.argument(  # type: ignore
-    'oldname', required=True, autocompletion=autocompletion.areas
+@click.argument(
+    'oldname',
+    required=True,
+    autocompletion=autocompletion.areas,  # type: ignore
 )
 @click.argument('newname', required=True)
 @pass_context

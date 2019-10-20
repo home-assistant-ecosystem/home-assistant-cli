@@ -76,8 +76,10 @@ def list_cmd(ctx: Configuration, servicefilter):
 
 
 @cli.command('call')
-@click.argument(  # type: ignore
-    'service', required=True, autocompletion=autocompletion.services
+@click.argument(
+    'service',
+    required=True,
+    autocompletion=autocompletion.services,  # type: ignore
 )
 @click.option(
     '--arguments', help="Comma separated key/value pairs to use as arguments."
