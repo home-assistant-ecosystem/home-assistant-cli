@@ -93,7 +93,7 @@ class HomeAssistantCli(click.MultiCommand):
         except ImportError:
             # todo: print out issue of loading plugins?
             return None
-        return cast(Union[Group, Command], mod.cli)
+        return cast(Union[Group, Command], mod.cli)  # type: ignore
 
 
 def _default_token() -> Optional[str]:
@@ -185,7 +185,7 @@ def _default_token() -> Optional[str]:
     default=None,
     help=(
         'Custom columns key=value list.'
-        ' Example: ENTITY=entity_id, NAME=name'
+        ' Example: ENTITY=entity_id, NAME=attributes.friendly_name'
     ),
 )
 @click.option(

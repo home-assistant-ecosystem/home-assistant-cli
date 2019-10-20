@@ -444,7 +444,7 @@ Help
      --debug                         Enables debug mode.
      --columns TEXT                  Custom columns key=value list. Example:
                                      ENTITY=entity_id,
-                                     NAME=name
+                                     NAME=attributes.friendly_name
      --no-headers                    When printing tables don't use headers
                                      (default: print headers)
      --table-format TEXT             Which table format to use.
