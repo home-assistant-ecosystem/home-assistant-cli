@@ -190,14 +190,11 @@ def _default_token() -> Optional[str]:
 )
 @click.option(
     '--columns-width',
-    default=None,
+    default=-1,
     type=click.INT,
     envvar='HASS_COL_WIDTH',
-    show_envvar=True,
-    help=(
-        'Columns custom width. '
-        'If specified truncates column values (default: auto)'
-    ),
+    show_default=True,
+    help='Truncates column values (0: auto, -1: disable)',
 )
 @click.option(
     '--no-headers',

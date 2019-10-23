@@ -4,6 +4,7 @@ from http.client import HTTPConnection
 import json
 import logging
 import shlex
+import shutil
 from typing import Any, Dict, Generator, List, Optional, Tuple, Union, cast
 
 from ruamel.yaml import YAML
@@ -51,7 +52,7 @@ def raw_format_output(
     data: Union[Dict[str, Any], List[Dict[str, Any]]],
     yamlparser: YAML,
     columns: Optional[List] = None,
-    columns_width: Optional[int] = None,
+    columns_width: Optional[int] = -1,
     no_headers: bool = False,
     table_format: str = 'plain',
     sort_by: Optional[str] = None,
@@ -101,7 +102,14 @@ def raw_format_output(
                 row.append(", ".join(map(str, val)))
             result.append(row)
         # Truncates data
-        if columns_width:
+        if not columns_width:
+            columns_width = const.COLUMNS_WIDTH_DEFAULT
+
+        if columns_width > -1:
+            if columns_width == 0:  # calculate size
+                terminal_size = shutil.get_terminal_size()
+                number_c = min([len(r) for r in result])
+                columns_width = int(terminal_size.columns / number_c)
             max_str = columns_width - len(const.COLUMNS_WIDTH_STR)
             result = [
                 [
@@ -144,7 +152,6 @@ def format_output(
     ctx: Configuration,
     data: List[Dict[str, Any]],
     columns: Optional[List] = None,
-    columns_width: Optional[int] = None,
 ) -> str:
     """Format data to output based on settings in ctx/Context."""
     return raw_format_output(
