@@ -224,29 +224,48 @@ workflows:
       - pre-install-all-requirements:
           requires:
             - static-check
+          filters:
+            tags:
+              only: /[0-9]+(\.[0-9]+)*/
       - pylint:
           requires:
             - pre-install-all-requirements
+          filters:
+            tags:
+              only: /[0-9]+(\.[0-9]+)*/
       - pre-test:
           name: pre-test 3.6
           requires:
             - static-check
           python: 3.6-stretch
+          filters:
+            tags:
+              only: /[0-9]+(\.[0-9]+)*/
       - pre-test:
           name: pre-test 3.7
           requires:
             - static-check
           python: 3.7-stretch
+          filters:
+            tags:
+              only: /[0-9]+(\.[0-9]+)*/
       - test:
           name: test 3.6
           requires:
             - pre-test 3.6
           python: 3.6-stretch
+          filters:
+            tags:
+              only: /[0-9]+(\.[0-9]+)*/
       - test:
           name: test 3.7
           requires:
             - pre-test 3.7
           python: 3.7-stretch
+          filters:
+            tags:
+              only: /[0-9]+(\.[0-9]+)*/
+
       # CircleCI does not allow failure yet
       # - test:
       #     name: test 3.8
