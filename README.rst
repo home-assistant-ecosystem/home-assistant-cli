@@ -5,7 +5,7 @@ Home Assistant Command-line Interface (``hass-cli``)
 
 The Home Assistant Command-line interface (``hass-cli``) allows one to
 work with a local or a remote `Home Assistant <https://home-assistant.io>`_
-instance directly from the command-line.
+Core instance directly from the command-line.
 
 .. image:: https://asciinema.org/a/216235.png
       :alt: hass-cli screencast
@@ -64,7 +64,7 @@ Setup
 To get started you'll need to have or generate a long lasting token format
 on your Home Assistant profile page (i.e. https://localhost:8123/profile).
 
-Then you can use ``--server`` and ``--token`` paremeter on each call or as is
+Then you can use ``--server`` and ``--token`` parameter on each call or as is
 recommended setup ``HASS_SERVER`` and ``HASS_TOKEN`` environment variables.
 
 .. code:: bash
@@ -92,15 +92,15 @@ For example to get basic info about your Home Assistant server you use ``info``:
 .. code:: bash
 
    $ hass-cli  info
-     BASE_URL                   LOCATION         REQUIRES_API_PASWORD  VERSION
-     https://hassio.local:8123  Fort of Solitude False                 0.86.2
+     BASE_URL                           LOCATION         REQUIRES_API_PASWORD  VERSION
+     https://home-assistant.local:8123  Fort of Solitude False                 0.86.2
 
 If you prefer yaml you can use ``--output=yaml``:
 
 .. code:: bash
 
     $ hass-cli --output yaml info
-      base_url: https://hassio.local:8123
+      base_url: https://home-assistant.local:8123
       location_name: Wayne Manor
       requires_api_password: false
       version: 0.86.2
@@ -237,7 +237,7 @@ even if not included in the default output.
 Areas and Device Registry
 -------------------------
 
-Since v0.87 of Home Assistant there is a notion of Areas in the Device registry. hass-cli lets
+Since v0.87 of Home Assistant there is a notion of Areas in the Device registry. ``hass-cli`` lets
 you list devices and areas and assign areas to devices.
 
 Listing devices and areas works similar to list Entities.
@@ -407,7 +407,7 @@ is secured and not running on localhost:8123:
 
 .. code:: bash
 
-   export HASS_SERVER=https://hassio.local:8123
+   export HASS_SERVER=https://home-assistant.local:8123
    export HASS_TOKEN=<Bearer token from HASS_SERVER/profile>
 
 
