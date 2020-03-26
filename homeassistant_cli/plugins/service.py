@@ -22,12 +22,13 @@ def cli(ctx):
 
 
 @cli.command('list')
-@click.argument('service_filter', default=".*", required=False)
+@click.argument('servicefilter', default=".*", required=False)
 @pass_context
-def list_cmd(ctx: Configuration, service_filter):
+def list_cmd(ctx: Configuration, servicefilter):
     """Get list of services."""
     ctx.auto_output('table')
     services = api.get_services(ctx)
+    service_filter = servicefilter
 
     result = []  # type: List[Dict[Any,Any]]
     if service_filter == ".*":
