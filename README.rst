@@ -74,7 +74,7 @@ recommended setup ``HASS_SERVER`` and ``HASS_TOKEN`` environment variables.
 
 .. code:: bash
 
-    $ export HASS_SERVER=https://home-assistant.local:8123
+    $ export HASS_SERVER=https://homeassistant.local:8123
     $ export HASS_TOKEN=<secret>
 
 Once that is enabled and you are using either ``zsh`` or ``bash`` run
