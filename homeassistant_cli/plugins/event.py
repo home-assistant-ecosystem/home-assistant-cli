@@ -8,6 +8,7 @@ import click
 import homeassistant_cli.autocompletion as autocompletion
 from homeassistant_cli.cli import pass_context
 from homeassistant_cli.config import Configuration
+from homeassistant_cli.exceptions import HomeAssistantCliError
 from homeassistant_cli.helper import format_output, raw_format_output
 import homeassistant_cli.remote as api
 
@@ -78,6 +79,8 @@ def watch(ctx: Configuration, event_type):
                     columns=ctx.columns if ctx.columns else cols,
                 )
             )
+        elif msg['type'] == 'auth_invalid':
+            raise HomeAssistantCliError(msg.get('message'))
 
     if event_type:
         frame['event_type'] = event_type

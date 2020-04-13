@@ -67,19 +67,20 @@ def delete(ctx: Configuration, entity):
 @cli.command('list')
 @click.argument('entityfilter', default=".*", required=False)
 @pass_context
-def listcmd(ctx, entityfilter):
+def list(ctx, entityfilter):
     """List all state from Home Assistant."""
     ctx.auto_output("table")
     states = api.get_states(ctx)
+    entity_filter = entityfilter
 
     result = []  # type: List[Dict]
-    if entityfilter == ".*":
+    if entity_filter == ".*":
         result = states
     else:
-        entityfilterre = re.compile(entityfilter)  # type: Pattern
+        entity_filter_re = re.compile(entity_filter)  # type: Pattern
 
         for entity in states:
-            if entityfilterre.search(entity['entity_id']):
+            if entity_filter_re.search(entity['entity_id']):
                 result.append(entity)
     ctx.echo(
         helper.format_output(
@@ -118,12 +119,13 @@ def listcmd(ctx, entityfilter):
 def edit(ctx: Configuration, entity, newstate, attributes, merge, json):
     """Edit entity state from Home Assistant."""
     ctx.auto_output('data')
+    new_state = newstate
     if json:
         _LOGGING.debug(
             "JSON found overriding/creating new state for entity %s", entity
         )
         wanted_state = json_.loads(json)
-    elif newstate or attributes:
+    elif new_state or attributes:
         wanted_state = {}
         existing_state = api.get_state(ctx, entity)
 
@@ -137,10 +139,10 @@ def edit(ctx: Configuration, entity, newstate, attributes, merge, json):
         if attributes:
             attributes_dict = helper.to_attributes(attributes)
 
-            newattr = wanted_state.get('attributes', {})
-            newattr.update(attributes_dict)
-            # this is not hornoring merge!
-            wanted_state['attributes'] = newattr
+            new_attr = wanted_state.get('attributes', {})
+            new_attr.update(attributes_dict)
+            # This is not honoring merge!
+            wanted_state['attributes'] = new_attr
 
         if newstate:
             wanted_state['state'] = newstate
@@ -152,13 +154,13 @@ def edit(ctx: Configuration, entity, newstate, attributes, merge, json):
     else:
         existing = api.get_state(ctx, entity)
         if existing:
-            existingraw = helper.raw_format_output(
+            existing_raw = helper.raw_format_output(
                 ctx.output, existing, ctx.yaml()
             )
         else:
-            existingraw = helper.raw_format_output(ctx.output, {}, ctx.yaml())
+            existing_raw = helper.raw_format_output(ctx.output, {}, ctx.yaml())
 
-        new = click.edit(existingraw, extension='.{}'.format(ctx.output))
+        new = click.edit(existing_raw, extension='.{}'.format(ctx.output))
 
         if new is not None:
             ctx.echo("Updating '%s'", entity)
@@ -179,6 +181,7 @@ def edit(ctx: Configuration, entity, newstate, attributes, merge, json):
 
 
 def _report(ctx: Configuration, result: List[Dict[str, Any]], action: str):
+    """Create a report."""
     ctx.echo(
         helper.format_output(
             ctx,
@@ -191,7 +194,7 @@ def _report(ctx: Configuration, result: List[Dict[str, Any]], action: str):
 
 
 def _homeassistant_cmd(ctx: Configuration, entities, cmd, action):
-    """Run command on home assistant."""
+    """Run command on Home Assistant."""
     data = {'entity_id': entities}
     _LOGGING.debug("%s on %s", cmd, entities)
     result = api.call_service(ctx, 'homeassistant', cmd, data)
@@ -298,10 +301,10 @@ def history(ctx: Configuration, entities: List, since: str, end: str):
     data = api.get_history(ctx, list(entities), start_time, end_time)
 
     result = []  # type: List[Dict[str, Any]]
-    entitycount = 0
+    entity_count = 0
     for item in data:
         result.extend(item)  # type: ignore
-        entitycount = entitycount + 1
+        entity_count = entity_count + 1
 
     click.echo(
         helper.format_output(
@@ -314,6 +317,6 @@ def history(ctx: Configuration, entities: List, since: str, end: str):
     if ctx.verbose:
         click.echo(
             'History with {} rows from {} entities found.'.format(
-                len(result), entitycount
+                len(result), entity_count
             )
         )
