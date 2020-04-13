@@ -33,6 +33,12 @@ To use homebrew on Mac OSX:
 
    $ brew install homeassistant-cli
 
+To use ``dnf`` on Fedora for the installation:
+
+.. code:: bash
+
+   $ sudo  dnf -y install home-assistant-cli
+
 Docker
 -------
 
