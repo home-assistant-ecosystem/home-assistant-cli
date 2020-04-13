@@ -298,7 +298,7 @@ def core_update(ctx: Configuration):
     response = _handle_raw(ctx, 'core/info')
     data = response['data']
     current_version = data['version']
-    latest_version =data['version_latest']
+    latest_version = data['version_latest']
     if StrictVersion(current_version) == StrictVersion(latest_version):
         ctx.echo("Already running the latest release")
     else:
@@ -378,7 +378,7 @@ def core_websocket(ctx: Configuration):
     """Home Assistant core websocket."""
     try:
         _handle(ctx, 'core/websocket')
-    except  (HomeAssistantCliError, HTTPError):
+    except (HomeAssistantCliError, HTTPError):
         pass
 
 
@@ -467,7 +467,7 @@ def multicast_update(ctx: Configuration):
 
 @multicast.command('restart')
 @pass_context
-def dns_restart(ctx: Configuration):
+def multicast_restart(ctx: Configuration):
     """Home Assistant Multicast restart."""
     try:
         _handle(ctx, 'multicast/restart', 'post')
