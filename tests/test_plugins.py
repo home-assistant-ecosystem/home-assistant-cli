@@ -13,6 +13,7 @@ DFEAULT_PLUGINS = [
     'state',
     'entity',
     'event',
+    'ha',
     'info',
     'map',
     'raw',
