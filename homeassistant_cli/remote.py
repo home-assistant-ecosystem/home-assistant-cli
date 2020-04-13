@@ -129,6 +129,8 @@ def wsapi(
                             callback(mydata)
                         elif mydata['type'] == 'result':
                             return mydata
+                        elif mydata['type'] == 'auth_invalid':
+                            raise HomeAssistantCliError(mydata.get('message'))
         return None
 
     result = loop.run_until_complete(fetcher())
