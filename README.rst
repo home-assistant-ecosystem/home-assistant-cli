@@ -5,7 +5,7 @@ Home Assistant Command-line Interface (``hass-cli``)
 
 The Home Assistant Command-line interface (``hass-cli``) allows one to
 work with a local or a remote `Home Assistant <https://home-assistant.io>`_
-Core or HOme Assistant (former Hass.io) instance directly from the command-line.
+Core or Home Assistant (former Hass.io) instance directly from the command-line.
 
 .. image:: https://asciinema.org/a/216235.png
       :alt: hass-cli screencast
