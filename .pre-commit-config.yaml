@@ -50,9 +50,11 @@ repos:
       - id: check-json
       - id: no-commit-to-branch
         args:
-          - --branch=dev
+          #- --branch=dev
           - --branch=master
           - --branch=rc
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
   - repo: https://github.com/adrienverge/yamllint.git
     rev: v1.21.0
     hooks:
@@ -62,16 +64,3 @@ repos:
     hooks:
       - id: prettier
         stages: [manual]
-  - repo: local
-    hooks:
-      # Run mypy through our wrapper script in order to get the possible
-      # pyenv and/or virtualenv activated; it may not have been e.g. if
-      # committing from a GUI tool that was not launched from an activated
-      # shell.
-      - id: mypy
-        name: mypy
-        entry: script/run-in-env.sh mypy
-        language: script
-        types: [python]
-        require_serial: true
-        files: ^homeassistant_cli/.+\.py$
