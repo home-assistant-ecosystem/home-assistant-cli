@@ -22,7 +22,7 @@ def cli(ctx: Configuration):
 
 
 def _report(ctx, cmd, method, response) -> None:
-
+    """Create a report."""
     response.raise_for_status()
 
     if response.ok:

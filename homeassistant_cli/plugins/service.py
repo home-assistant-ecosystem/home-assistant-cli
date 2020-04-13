@@ -28,40 +28,41 @@ def list_cmd(ctx: Configuration, servicefilter):
     """Get list of services."""
     ctx.auto_output('table')
     services = api.get_services(ctx)
+    service_filter = servicefilter
 
     result = []  # type: List[Dict[Any,Any]]
-    if servicefilter == ".*":
+    if service_filter == ".*":
         result = services
     else:
         result = services
-        servicefilterre = reg.compile(servicefilter)  # type: Pattern
+        service_filter_re = reg.compile(service_filter)  # type: Pattern
 
         domains = []
         for domain in services:
             domain_name = domain['domain']
-            domaindata = {}
-            servicesdict = domain['services']
-            servicedata = {}
-            for service in servicesdict:
-                if servicefilterre.search(
+            domain_data = {}
+            services_dict = domain['services']
+            service_data = {}
+            for service in services_dict:
+                if service_filter_re.search(
                     "{}.{}".format(domain_name, service)
                 ):
-                    servicedata[service] = servicesdict[service]
+                    service_data[service] = services_dict[service]
 
-            if servicedata:
-                domaindata["services"] = servicedata
-                domaindata["domain"] = domain_name
-                domains.append(domaindata)
+            if service_data:
+                domain_data["services"] = service_data
+                domain_data["domain"] = domain_name
+                domains.append(domain_data)
         result = domains
 
-    flattenresult = []  # type: List[Dict[str,Any]]
+    flatten_result = []  # type: List[Dict[str,Any]]
     for domain in result:
         for service in domain['services']:
             item = {}
             item['domain'] = domain['domain']
             item['service'] = service
             item = {**item, **domain['services'][service]}
-            flattenresult.append(item)
+            flatten_result.append(item)
 
     cols = [
         ('DOMAIN', 'domain'),
@@ -70,7 +71,7 @@ def list_cmd(ctx: Configuration, servicefilter):
     ]
     ctx.echo(
         format_output(
-            ctx, flattenresult, columns=ctx.columns if ctx.columns else cols
+            ctx, flatten_result, columns=ctx.columns if ctx.columns else cols
         )
     )
 
