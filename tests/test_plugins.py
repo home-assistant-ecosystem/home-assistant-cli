@@ -28,7 +28,7 @@ DFEAULT_PLUGINS.sort()
 
 @pytest.fixture(name="defaultplugins_sorted")
 def defaultplugins_fixture() -> List[str]:
-    """Return the exepcted default list of plugins."""
+    """Return the expected default list of plugins."""
     return DFEAULT_PLUGINS
 
 
