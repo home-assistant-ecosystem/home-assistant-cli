@@ -1,16 +1,17 @@
 """Home Assistant (former Hass.io) plugin for Home Assistant CLI (hass-cli)."""
+from distutils.version import StrictVersion
 import json as json_
 import logging
 from typing import Any, Dict, List, cast  # noqa: F401
 
 import click
 from requests.exceptions import HTTPError
-from distutils.version import StrictVersion
+
 from homeassistant_cli.cli import pass_context
 from homeassistant_cli.config import Configuration
+from homeassistant_cli.exceptions import HomeAssistantCliError
 from homeassistant_cli.helper import format_output
 import homeassistant_cli.remote as api
-from homeassistant_cli.exceptions import HomeAssistantCliError
 
 _LOGGING = logging.getLogger(__name__)
 
@@ -242,18 +243,28 @@ def hardware(ctx: Configuration):
     ctx.auto_output('data')
 
 
-@hardware.command()
+@hardware.command('info')
 @pass_context
-def audio(ctx: Configuration):
+def hardware_info(ctx: Configuration):
+    """Home Assistant hardware audio."""
+    _handle(ctx, 'hardware/info')
+
+
+@hardware.command('audio')
+@pass_context
+def hardware_audio(ctx: Configuration):
     """Home Assistant hardware audio."""
     _handle(ctx, 'hardware/audio')
 
 
-@hardware.command()
+@hardware.command('trigger')
 @pass_context
-def trigger(ctx: Configuration):
+def hardware_trigger(ctx: Configuration):
     """Home Assistant hardware trigger."""
-    _handle(ctx, 'hardware/tripper')
+    try:
+        _handle(ctx, 'hardware/trigger', 'post')
+    except (HomeAssistantCliError, HTTPError):
+        pass
 
 
 @cli.group('addons')
