@@ -37,4 +37,5 @@ jobs:
     - name: Test with pytest
       run: |
         pip install pytest
+        pip install -r requirements_test_all.txt
         pytest
