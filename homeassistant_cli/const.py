@@ -1,7 +1,7 @@
 """Constants used by Home Assistant CLI (hass-cli)."""
 PACKAGE_NAME = 'homeassistant_cli'
 
-__version__ = '0.9.0'
+__version__ = '0.9.1'
 
 AUTO_SERVER = 'auto'
 DEFAULT_SERVER = 'http://localhost:8123'
