@@ -1,16 +1,17 @@
 """Home Assistant (former Hass.io) plugin for Home Assistant CLI (hass-cli)."""
+from distutils.version import StrictVersion
 import json as json_
 import logging
 from typing import Any, Dict, List, cast  # noqa: F401
 
 import click
 from requests.exceptions import HTTPError
-from distutils.version import StrictVersion
+
 from homeassistant_cli.cli import pass_context
 from homeassistant_cli.config import Configuration
+from homeassistant_cli.exceptions import HomeAssistantCliError
 from homeassistant_cli.helper import format_output
 import homeassistant_cli.remote as api
-from homeassistant_cli.exceptions import HomeAssistantCliError
 
 _LOGGING = logging.getLogger(__name__)
 
@@ -332,7 +333,7 @@ def core_check(ctx: Configuration):
     try:
         _handle(ctx, 'core/check', 'post')
     except (HomeAssistantCliError, HTTPError):
-        _handle(ctx, 'supervisor/logs')
+        _handle(ctx, 'core/logs')
 
 
 @core.command('start')
@@ -451,7 +452,7 @@ def multicast_info(ctx: Configuration):
 @multicast.command('update')
 @pass_context
 def multicast_update(ctx: Configuration):
-    """Home Assistant supervisor update."""
+    """Home Assistant Multicast update."""
     response = _handle_raw(ctx, 'multicast/info')
     data = response['data']
     current_version = int(data['version'])
@@ -506,7 +507,7 @@ def ha_info(ctx: Configuration):
 @ha_cli.command('update')
 @pass_context
 def ha_update(ctx: Configuration):
-    """Home Assistant supervisor update."""
+    """Home Assistant ha-cli update."""
     response = _handle_raw(ctx, 'cli/info')
     data = response['data']
     current_version = int(data['version'])
