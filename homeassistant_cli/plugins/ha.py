@@ -243,18 +243,28 @@ def hardware(ctx: Configuration):
     ctx.auto_output('data')
 
 
-@hardware.command()
+@hardware.command('info')
 @pass_context
-def audio(ctx: Configuration):
+def hardware_info(ctx: Configuration):
+    """Home Assistant hardware audio."""
+    _handle(ctx, 'hardware/info')
+
+
+@hardware.command('audio')
+@pass_context
+def hardware_audio(ctx: Configuration):
     """Home Assistant hardware audio."""
     _handle(ctx, 'hardware/audio')
 
 
-@hardware.command()
+@hardware.command('trigger')
 @pass_context
-def trigger(ctx: Configuration):
+def hardware_trigger(ctx: Configuration):
     """Home Assistant hardware trigger."""
-    _handle(ctx, 'hardware/tripper')
+    try:
+        _handle(ctx, 'hardware/trigger', 'post')
+    except (HomeAssistantCliError, HTTPError):
+        pass
 
 
 @cli.group('addons')
