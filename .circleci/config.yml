@@ -2,6 +2,7 @@
 #
 # Check https://circleci.com/docs/2.0/language-python/ for more details
 # Initially made by copying homeassistant circleci config.
+# yamllint disable rule:line-length rule:document-start
 version: 2.1
 
 executors:
@@ -87,7 +88,7 @@ jobs:
           name: run static check
           command: |
             . venv/bin/activate
-            flake8 homeassistant_cli tests script
+            black homeassistant_cli tests script
 
       - run:
           name: run static type check
@@ -111,7 +112,7 @@ jobs:
           all: true
           test: true
 
-  pylint:
+  black:
     executor:
       name: python
       tag: 3.6-stretch
@@ -127,11 +128,11 @@ jobs:
       - install
 
       - run:
-          name: run pylint
+          name: run black
           command: |
             . venv/bin/activate
             PYFILES=$(circleci tests glob "homeassistant_cli/**/*.py" | circleci tests split)
-            pylint ${PYFILES}
+            black ${PYFILES}
           no_output_timeout: 15m
 
   pre-test:
@@ -227,7 +228,7 @@ workflows:
           filters:
             tags:
               only: /[0-9]+(\.[0-9]+)*/
-      - pylint:
+      - black:
           requires:
             - pre-install-all-requirements
           filters:
@@ -273,7 +274,7 @@ workflows:
       - deploy:
           requires:
             - test 3.6
-            - pylint
+            - black
             - test 3.7
           filters:
             tags:
