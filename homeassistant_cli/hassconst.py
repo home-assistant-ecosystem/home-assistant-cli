@@ -1,4 +1,3 @@
-# coding: utf-8
 """Constants used by Home Assistant components.
 
 Copy of recent homeassistant.const to make hass-cli run
@@ -561,3 +560,15 @@ PRECISION_TENTHS = 0.1
 # Static list of entities that will never be exposed to
 # cloud, alexa, or google_home components
 CLOUD_NEVER_EXPOSED_ENTITIES = ["group.all_locks"]
+
+# Websocket API
+WS_TYPE_DEVICE_REGISTRY_LIST = 'config/device_registry/list'
+WS_TYPE_AREA_REGISTRY_LIST = 'config/area_registry/list'
+WS_TYPE_AREA_REGISTRY_CREATE = 'config/area_registry/create'
+WS_TYPE_AREA_REGISTRY_DELETE = 'config/area_registry/delete'
+WS_TYPE_AREA_REGISTRY_UPDATE = 'config/area_registry/update'
+WS_TYPE_DEVICE_REGISTRY_UPDATE = 'config/device_registry/update'
+WS_TYPE_ENTITY_REGISTRY_LIST = 'config/entity_registry/list'
+WS_TYPE_ENTITY_REGISTRY_GET = 'config/entity_registry/get'
+WS_TYPE_ENTITY_REGISTRY_UPDATE = 'config/entity_registry/update'
+WS_TYPE_ENTITY_REGISTRY_REGISTRY = 'config/entity_registry/remove'
