@@ -531,9 +531,6 @@ directly:
     $ hass-cli
 
 
-.. |Build Status| image:: https://circleci.com/gh/home-assistant/home-assistant-cli/tree/dev.svg?style=svg
-    :target: https://circleci.com/gh/home-assistant/home-assistant-cli/tree/dev
-
 .. |Chat Status| image:: https://img.shields.io/discord/330944238910963714.svg
    :target: https://discord.gg/c5DvZ4e
 .. |License| image:: https://img.shields.io/badge/License-Apache%202.0-blue.svg
