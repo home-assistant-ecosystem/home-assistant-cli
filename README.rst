@@ -27,17 +27,19 @@ To use latest pre-release from ``dev`` branch:
 
    $ pip install git+https://github.com/home-assistant/home-assistant-cli@dev
 
-To use homebrew on Mac OSX:
+The developers of `hass-cli` usually provide up-to-date packages for recent Fedora and EPEL releases. Use ``dnf`` for the installation:
+
+.. code:: bash
+
+   $ sudo  dnf -y install home-assistant-cli
+
+The community is providing support for macOS through homebew.
 
 .. code:: bash
 
    $ brew install homeassistant-cli
 
-To use ``dnf`` on Fedora for the installation:
-
-.. code:: bash
-
-   $ sudo  dnf -y install home-assistant-cli
+Keep in mind that the available releases in the distribution could be out-dated.
 
 Docker
 -------
