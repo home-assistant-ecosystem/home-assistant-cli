@@ -56,10 +56,10 @@ PROJECT_PACKAGE_NAME = 'homeassistant-cli'
 PROJECT_LICENSE = 'Apache License 2.0'
 PROJECT_AUTHOR = 'The Home Assistant CLI Authors'
 PROJECT_COPYRIGHT = ' 2018-{}, {}'.format(dt.now().year, PROJECT_AUTHOR)
-PROJECT_URL = 'https://github.com/home-assistant/home-assistant-cli/'
-PROJECT_EMAIL = 'hello@home-assistant.io'
+PROJECT_URL = 'https://github.com/home-assistant-ecosystem/home-assistant-cli'
+PROJECT_EMAIL = 'fabian@affolter-engineering.ch'
 
-PROJECT_GITHUB_USERNAME = 'home-assistant'
+PROJECT_GITHUB_USERNAME = 'home-assistant-ecosystem'
 PROJECT_GITHUB_REPOSITORY = 'home-assistant-cli'
 
 PYPI_URL = 'https://pypi.python.org/pypi/{}'.format(PROJECT_PACKAGE_NAME)
