@@ -37,9 +37,9 @@ def listcmd(ctx: Configuration, areafilter: str):
     else:
         areafilterre = re.compile(areafilter)  # type: Pattern
 
-        for device in areas:
-            if areafilterre.search(device['name']):
-                result.append(device)
+        for area in areas:
+            if areafilterre.search(area['name']):
+                result.append(area)
 
     cols = [('ID', 'area_id'), ('NAME', 'name')]
 
