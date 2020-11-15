@@ -41,6 +41,8 @@ The community is providing support for macOS through _`homebew <https://formulae
 
 Keep in mind that the available releases in the distribution could be out-dated.
 
+``home-assistant-cli`` is also available for NixOS.
+
 Docker
 -------
 
