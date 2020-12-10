@@ -577,7 +577,9 @@ def call_service(
     return cast(List[Dict[str, Any]], req.json())
 
 
-def get_services(ctx: Configuration,) -> List[Dict[str, Any]]:
+def get_services(
+    ctx: Configuration,
+) -> List[Dict[str, Any]]:
     """Get list of services."""
     try:
         req = restapi(ctx, METH_GET, hass.URL_API_SERVICES)
