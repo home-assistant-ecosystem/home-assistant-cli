@@ -130,8 +130,9 @@ def assign(
 
             ctx.echo(str(output))
 
+
 @cli.command('rename')
-@click.argument( 'device_id_or_name', required=True)
+@click.argument('device_id_or_name', required=True)
 @click.argument('new_name', required=True)
 @pass_context
 def rename(
@@ -139,9 +140,7 @@ def rename(
     device_id_or_name,
     new_name,
 ):
-    """Update name of specified device
-
-    """
+    """Update name of specified device"""
     ctx.auto_output("data")
 
     devices = api.get_devices(ctx)
