@@ -225,6 +225,19 @@ def rename_entity(
     return cast(Dict[str, Any], wsapi(ctx, frame))
 
 
+def rename_device(
+    ctx: Configuration, device_id: str, new_name: str
+) -> Dict[str, Any]:
+    """Rename device."""
+    frame = {
+        'type': hass.WS_TYPE_DEVICE_REGISTRY_UPDATE,
+        'device_id': device_id,
+        'name_by_user': new_name,
+    }
+
+    return cast(Dict[str, Any], wsapi(ctx, frame))
+
+
 def assign_area(
     ctx: Configuration, device_id: str, area_id: str
 ) -> Dict[str, Any]:

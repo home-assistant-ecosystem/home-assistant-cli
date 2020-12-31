@@ -129,3 +129,44 @@ def assign(
             )
 
             ctx.echo(str(output))
+
+
+@cli.command('rename')
+@click.argument('device_id_or_name', required=True)
+@click.argument('new_name', required=True)
+@pass_context
+def rename(
+    ctx: Configuration, device_id_or_name, new_name,
+):
+    """Update name of specified device."""
+    ctx.auto_output("data")
+
+    devices = api.get_devices(ctx)
+
+    device = next(
+        (x for x in devices if x['id'] == device_id_or_name), None  # type: ignore
+    )
+    if not device:
+        device = next(
+            (x for x in devices if x['name'] == device_id_or_name),
+            None,  # type: ignore
+        )
+    if not device:
+        _LOGGING.error(
+            "Could not find device with id or name: %s", device_id_or_name
+        )
+        sys.exit(1)
+
+    output = api.rename_device(ctx, device['id'], new_name)
+    if output['success']:
+        ctx.echo(
+            "Successfully renamed '{}' from {} to '{}'".format(
+                device_id_or_name, device['name_by_user'], new_name
+            )
+        )
+    else:
+        _LOGGING.error(
+            "Failed to rename '%s' to '%s'", device_id_or_name, new_name
+        )
+
+        ctx.echo(str(output))
