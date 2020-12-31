@@ -460,7 +460,7 @@ Help
                                       environment variable HASS_PASSWORD.
       --timeout INTEGER               Timeout for network operations.  [default:
                                       5]
-      -o, --output [json|yaml|table|auto]
+      -o, --output [json|yaml|table|ndjson|auto]
                                       Output format.  [default: auto]
       -v, --verbose                   Enables verbose mode.
       -x                              Print backtraces when exception occurs.
