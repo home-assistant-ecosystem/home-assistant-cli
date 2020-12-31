@@ -138,7 +138,7 @@ def assign(
 def rename(
     ctx: Configuration, device_id_or_name, new_name,
 ):
-    """Update name of specified device"""
+    """Update name of specified device."""
     ctx.auto_output("data")
 
     devices = api.get_devices(ctx)
