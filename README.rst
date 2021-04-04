@@ -43,6 +43,13 @@ Keep in mind that the available releases in the distribution could be out-dated.
 
 ``home-assistant-cli`` is also available for NixOS.
 
+To use the tool on NixOS. Keep in mind that the latest release could only
+be available in the ``unstable`` channel.
+
+.. code:: bash
+
+   nix-env -iA nixos.home-assistant-cli
+
 Docker
 -------
 
