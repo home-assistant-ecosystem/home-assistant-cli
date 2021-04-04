@@ -15,7 +15,7 @@ pip>=8.0.3,<20.3
 pytz>=2021.1
 pyyaml==5.4.1
 requests==2.25.1
-ruamel.yaml==0.15.100
+ruamel.yaml<=0.17
 voluptuous-serialize==2.4.0
 voluptuous==0.12.1
 yarl==1.6.3
