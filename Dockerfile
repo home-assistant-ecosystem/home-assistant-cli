@@ -1,4 +1,4 @@
-FROM python:3.7-alpine
+FROM python:3.8-alpine
 LABEL maintainer="Max Rydahl Andersen <max@xam.dk>"
 
 WORKDIR /usr/src/app

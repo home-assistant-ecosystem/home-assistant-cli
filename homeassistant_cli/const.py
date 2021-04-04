@@ -1,11 +1,11 @@
 """Constants used by Home Assistant CLI (hass-cli)."""
 PACKAGE_NAME = 'homeassistant_cli'
 
-__version__ = '0.9.1'
+__version__ = '0.9.2'
 
 AUTO_SERVER = 'auto'
 DEFAULT_SERVER = 'http://localhost:8123'
-DEFAULT_HASSIO_SERVER = 'http://hassio/homeassistant'
+DEFAULT_HASSIO_SERVER = 'http://homeassistant:8123'
 DEFAULT_TIMEOUT = 5
 DEFAULT_OUTPUT = 'json'  # TODO: Have default be human table relevant output
 

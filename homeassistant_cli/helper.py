@@ -68,13 +68,18 @@ def raw_format_output(
             return json.dumps(data, indent=2, sort_keys=False)
         except ValueError:
             return str(data)
+    elif output == 'ndjson':
+        try:
+            return json.dumps(data)
+        except ValueError:
+            return str(data)
     elif output == 'yaml':
         try:
             return cast(str, yaml.dumpyaml(yamlparser, data))
         except ValueError:
             return str(data)
     elif output == 'table':
-        from jsonpath_rw import parse
+        from jsonpath_ng import parse
 
         if not columns:
             columns = const.COLUMNS_DEFAULT
@@ -114,7 +119,7 @@ def raw_format_output(
 
 def _sort_table(result: List[Any], sort_by: str) -> List[Any]:
     """Sort the content of a table."""
-    from jsonpath_rw import parse
+    from jsonpath_ng import parse
 
     expr = parse(sort_by)
 

@@ -302,14 +302,14 @@ ATTR_ARMED = "device_armed"
 # For devices which support a locked state
 ATTR_LOCKED = "locked"
 
-# For sensors that support 'tripping', eg. motion and door sensors
+# For sensors that support "tripping", eg. motion and door sensors
 ATTR_TRIPPED = "device_tripped"
 
-# For sensors that support 'tripping' this holds the most recent
+# For sensors that support "tripping" this holds the most recent
 # time the device was tripped
 ATTR_LAST_TRIP_TIME = "last_tripped_time"
 
-# For all entity's, this hold whether or not it should be hidden
+# For all entity"s, this hold whether or not it should be hidden
 ATTR_HIDDEN = "hidden"
 
 # Location of the entity
@@ -405,8 +405,12 @@ UNIT_PERCENTAGE = "%"
 IRRADIATION_WATTS_PER_SQUARE_METER = f"{POWER_WATT}/{AREA_SQUARE_METERS}"
 
 # Concentration units
-CONCENTRATION_MICROGRAMS_PER_CUBIC_METER = f"{MASS_MICROGRAMS}/{VOLUME_CUBIC_METERS}"
-CONCENTRATION_MILLIGRAMS_PER_CUBIC_METER = f"{MASS_MILLIGRAMS}/{VOLUME_CUBIC_METERS}"
+CONCENTRATION_MICROGRAMS_PER_CUBIC_METER = (
+    f"{MASS_MICROGRAMS}/{VOLUME_CUBIC_METERS}"
+)
+CONCENTRATION_MILLIGRAMS_PER_CUBIC_METER = (
+    f"{MASS_MILLIGRAMS}/{VOLUME_CUBIC_METERS}"
+)
 CONCENTRATION_PARTS_PER_MILLION = "ppm"
 CONCENTRATION_PARTS_PER_BILLION = "ppb"
 
@@ -562,13 +566,13 @@ PRECISION_TENTHS = 0.1
 CLOUD_NEVER_EXPOSED_ENTITIES = ["group.all_locks"]
 
 # Websocket API
-WS_TYPE_DEVICE_REGISTRY_LIST = 'config/device_registry/list'
-WS_TYPE_AREA_REGISTRY_LIST = 'config/area_registry/list'
-WS_TYPE_AREA_REGISTRY_CREATE = 'config/area_registry/create'
-WS_TYPE_AREA_REGISTRY_DELETE = 'config/area_registry/delete'
-WS_TYPE_AREA_REGISTRY_UPDATE = 'config/area_registry/update'
-WS_TYPE_DEVICE_REGISTRY_UPDATE = 'config/device_registry/update'
-WS_TYPE_ENTITY_REGISTRY_LIST = 'config/entity_registry/list'
-WS_TYPE_ENTITY_REGISTRY_GET = 'config/entity_registry/get'
-WS_TYPE_ENTITY_REGISTRY_UPDATE = 'config/entity_registry/update'
-WS_TYPE_ENTITY_REGISTRY_REGISTRY = 'config/entity_registry/remove'
+WS_TYPE_DEVICE_REGISTRY_LIST = "config/device_registry/list"
+WS_TYPE_AREA_REGISTRY_LIST = "config/area_registry/list"
+WS_TYPE_AREA_REGISTRY_CREATE = "config/area_registry/create"
+WS_TYPE_AREA_REGISTRY_DELETE = "config/area_registry/delete"
+WS_TYPE_AREA_REGISTRY_UPDATE = "config/area_registry/update"
+WS_TYPE_DEVICE_REGISTRY_UPDATE = "config/device_registry/update"
+WS_TYPE_ENTITY_REGISTRY_LIST = "config/entity_registry/list"
+WS_TYPE_ENTITY_REGISTRY_GET = "config/entity_registry/get"
+WS_TYPE_ENTITY_REGISTRY_UPDATE = "config/entity_registry/update"
+WS_TYPE_ENTITY_REGISTRY_REGISTRY = "config/entity_registry/remove"

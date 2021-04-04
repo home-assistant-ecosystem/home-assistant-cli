@@ -37,7 +37,7 @@ def get_git_commit_datetime() -> str:
             "git show -s --format=%ct", shell=True, stderr=subprocess.STDOUT
         )
         datetime_object = dt.fromtimestamp(int(commit_timestamp))
-        return "{:%Y%m%d%H%M%S}".format(datetime_object)
+        return f"{datetime_object:%Y%m%d%H%M%S}"
     except subprocess.CalledProcessError as cpe:
         print(cpe.output)
         return "00000000000000"
@@ -46,31 +46,31 @@ def get_git_commit_datetime() -> str:
 __VERSION__ = find_version("homeassistant_cli", "const.py")  # type: ignore
 # Append a suffix to the version for dev builds
 if 'dev' in __VERSION__:
-    __VERSION__ = '{v}{s}'.format(v=__VERSION__, s=get_git_commit_datetime())
+    __VERSION__ = f'{__VERSION__}{get_git_commit_datetime()}'
 
-REQUIRED_PYTHON_VER = (3, 6, 0)
+REQUIRED_PYTHON_VER = (3, 7, 0)
 
 
 PROJECT_NAME = 'Home Assistant CLI'
 PROJECT_PACKAGE_NAME = 'homeassistant-cli'
 PROJECT_LICENSE = 'Apache License 2.0'
 PROJECT_AUTHOR = 'The Home Assistant CLI Authors'
-PROJECT_COPYRIGHT = ' 2018-{}, {}'.format(dt.now().year, PROJECT_AUTHOR)
-PROJECT_URL = 'https://github.com/home-assistant/home-assistant-cli/'
-PROJECT_EMAIL = 'hello@home-assistant.io'
+PROJECT_COPYRIGHT = f' 2018-{dt.now().year}, {PROJECT_AUTHOR}'
+PROJECT_URL = 'https://github.com/home-assistant-ecosystem/home-assistant-cli'
+PROJECT_EMAIL = 'fabian@affolter-engineering.ch'
 
-PROJECT_GITHUB_USERNAME = 'home-assistant'
+PROJECT_GITHUB_USERNAME = 'home-assistant-ecosystem'
 PROJECT_GITHUB_REPOSITORY = 'home-assistant-cli'
 
-PYPI_URL = 'https://pypi.python.org/pypi/{}'.format(PROJECT_PACKAGE_NAME)
+PYPI_URL = f'https://pypi.python.org/pypi/{PROJECT_PACKAGE_NAME}'
 GITHUB_PATH = '{}/{}'.format(
     PROJECT_GITHUB_USERNAME, PROJECT_GITHUB_REPOSITORY
 )
-GITHUB_URL = 'https://github.com/{}'.format(GITHUB_PATH)
+GITHUB_URL = f'https://github.com/{GITHUB_PATH}'
 
-DOWNLOAD_URL = '{}/archive/{}.zip'.format(GITHUB_URL, __VERSION__)
+DOWNLOAD_URL = f'{GITHUB_URL}/archive/{__VERSION__}.zip'
 PROJECT_URLS = {
-    'Bug Reports': '{}/issues'.format(GITHUB_URL),
+    'Bug Reports': f'{GITHUB_URL}/issues',
     'Dev Docs': 'https://developers.home-assistant.io/',
     'Discord': 'https://discordapp.com/invite/c5DvZ4e',
     'Forum': 'https://community.home-assistant.io/',
@@ -79,14 +79,14 @@ PROJECT_URLS = {
 PACKAGES = find_packages(exclude=['tests', 'tests.*'])
 
 REQUIRES = [
-    'aiohttp>=3.5.4,<4',
+    'aiohttp>=3.7.4,<4',
     'click-log>=0.3.2,<0.4',
     'click>=7.0,<8',
     'dateparser>=0.7.1,<0.8',
     'jinja2>=2.10',
-    'jsonpath-rw>=1.4.0,<2',
+    'jsonpath-ng>=1.5.1,<2',
     'netdisco>=2.6.0,<3',
-    'regex>=2019.08.19',
+    'regex>=2021.4.4',
     'ruamel.yaml>=0.16.5,<0.17',
     'requests>=2.22.0,<3',
     'tabulate>=0.8.3,<0.9',
@@ -94,20 +94,20 @@ REQUIRES = [
 
 # Should be as close to Home Assistant dev/master as possible
 TESTS_REQUIRE = [
-    "black>=19.10b0,<20;python_version>'3.6'",
+    "black>=20.8b1,<21;python_version>'3.6'",
     'codecov>=2.0.15,<3',
     'coveralls>=1.2.0,<2',
-    'flake8>=3.7.7,<4',
+    'flake8>=3.9,<4',
     'flake8-docstrings>=1.3.0,<2',
-    'mock-open>=1.3.1,<1.4',
-    'mypy>=0.710,<0.800',
-    'pydocstyle>=4.0.0,<5',
-    'pylint>=2.3.1,<2.4',
-    'pytest>=5.1.2,<6',
-    'pytest-cov>=2.6.1,<3',
-    'pytest-sugar>=0.9.2,<0.10',
-    'pytest-timeout>=1.3.3,<1.4',
-    'requests_mock>=1.6.0,<2',
+    'mock-open>=1.4,<1.5',
+    'mypy>=0.800,<0.900',
+    'pydocstyle>=6,<7',
+    'pylint>=2.7,<3',
+    'pytest>=6,<7',
+    'pytest-cov>=2.11,<3',
+    'pytest-sugar>=0.9.4,<0.10',
+    'pytest-timeout>=1.4,<2',
+    'requests_mock>=1.8.0,<2',
     'twine>=1.13.0,<2',
     'wheel>=0.33.1,<0.40',  # Otherwise setup.py bdist_wheel does not work
 ]
@@ -131,7 +131,7 @@ setup(
     install_requires=REQUIRES,
     tests_require=TESTS_REQUIRE,
     extras_require=EXTRAS_REQUIRE,
-    python_requires='>={}'.format(MIN_PY_VERSION),
+    python_requires=f'>={MIN_PY_VERSION}',
     test_suite='tests',
     entry_points={'console_scripts': ['hass-cli = homeassistant_cli.cli:run']},
 )

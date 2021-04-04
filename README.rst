@@ -27,17 +27,28 @@ To use latest pre-release from ``dev`` branch:
 
    $ pip install git+https://github.com/home-assistant/home-assistant-cli@dev
 
-To use homebrew on Mac OSX:
+The developers of `hass-cli` usually provide up-to-date `packages <https://src.fedoraproject.org/rpms/home-assistant-cli>`_ for recent Fedora and EPEL releases. Use ``dnf`` for the installation:
+
+.. code:: bash
+
+   $ sudo  dnf -y install home-assistant-cli
+
+The community is providing support for macOS through _`homebew <https://formulae.brew.sh/formula/homeassistant-cli#default>`_.
 
 .. code:: bash
 
    $ brew install homeassistant-cli
 
-To use ``dnf`` on Fedora for the installation:
+Keep in mind that the available releases in the distribution could be out-dated.
+
+``home-assistant-cli`` is also available for NixOS.
+
+To use the tool on NixOS. Keep in mind that the latest release could only
+be available in the ``unstable`` channel.
 
 .. code:: bash
 
-   $ sudo  dnf -y install home-assistant-cli
+   nix-env -iA nixos.home-assistant-cli
 
 Docker
 -------
@@ -458,7 +469,7 @@ Help
                                       environment variable HASS_PASSWORD.
       --timeout INTEGER               Timeout for network operations.  [default:
                                       5]
-      -o, --output [json|yaml|table|auto]
+      -o, --output [json|yaml|table|ndjson|auto]
                                       Output format.  [default: auto]
       -v, --verbose                   Enables verbose mode.
       -x                              Print backtraces when exception occurs.
