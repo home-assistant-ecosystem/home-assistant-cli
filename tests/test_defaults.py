@@ -8,7 +8,7 @@ import requests_mock
 
 import homeassistant_cli.cli as cli
 
-HASSIO_SERVER_FALLBACK = "http://hassio/homeassistant"
+HASSIO_SERVER_FALLBACK = "http://homeassistant:8123"
 HASS_SERVER = "http://localhost:8123"
 
 
