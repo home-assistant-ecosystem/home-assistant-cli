@@ -33,7 +33,7 @@ The developers of `hass-cli` usually provide up-to-date `packages <https://src.f
 
    $ sudo  dnf -y install home-assistant-cli
 
-The community is providing support for macOS through _`homebew <https://formulae.brew.sh/formula/homeassistant-cli#default>`_.
+The community is providing support for macOS through `homebew <https://formulae.brew.sh/formula/homeassistant-cli#default>`_.
 
 .. code:: bash
 
@@ -48,7 +48,7 @@ be available in the ``unstable`` channel.
 
 .. code:: bash
 
-   nix-env -iA nixos.home-assistant-cli
+   $ nix-env -iA nixos.home-assistant-cli
 
 Docker
 -------
