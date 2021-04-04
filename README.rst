@@ -48,7 +48,7 @@ be available in the ``unstable`` channel.
 
 .. code:: bash
 
-   nix-env -iA nixos.home-assistant-cli
+   $ nix-env -iA nixos.home-assistant-cli
 
 Docker
 -------
