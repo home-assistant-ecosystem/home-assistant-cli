@@ -28,6 +28,8 @@ def listcmd(ctx: Configuration, devicefilter: str):
     """List all devices from Home Assistant."""
     ctx.auto_output("table")
 
+    areas = api.get_areas(ctx)
+
     devices = api.get_devices(ctx)
 
     result = []  # type: List[Dict]
@@ -40,12 +42,19 @@ def listcmd(ctx: Configuration, devicefilter: str):
             if devicefilterre.search(device['name']):
                 result.append(device)
 
+    for device in devices:
+        area = next(
+            (a for a in areas if a['area_id'] == device['area_id']), None
+        )
+        if area:
+            device['area_name'] = area['name']
+
     cols = [
         ('ID', 'id'),
         ('NAME', 'name'),
         ('MODEL', 'model'),
         ('MANUFACTURER', 'manufacturer'),
-        ('AREA', 'area_id'),
+        ('AREA', 'area_name'),
     ]
 
     ctx.echo(
