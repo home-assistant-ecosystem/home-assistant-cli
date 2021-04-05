@@ -8,7 +8,7 @@ import requests_mock
 
 import homeassistant_cli.cli as cli
 
-HASSIO_SERVER_FALLBACK = "http://homeassistant:8123"
+MDNS_SERVER_FALLBACK = "http://homeassistant.local:8123"
 HASS_SERVER = "http://localhost:8123"
 
 
@@ -28,7 +28,7 @@ HASS_SERVER = "http://localhost:8123"
             "If only HASSIO_TOKEN, use default hassio",
             {'HASSIO_TOKEN': 'supersecret'},
             'auto',
-            HASSIO_SERVER_FALLBACK,
+            MDNS_SERVER_FALLBACK,
             "supersecret",
             None,
         ),
