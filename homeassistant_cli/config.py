@@ -53,7 +53,7 @@ def _locate_ha() -> Optional[str]:
     if listener.services:
         if len(listener.services) > 1:
             _LOGGING.warning(
-                "Found multiple Home Assistants at %s",
+                "Found multiple Home Assistant instances at %s",
                 ", ".join(listener.services),
             )
             _LOGGING.warning("Use --server to explicitly specify one.")
@@ -152,7 +152,7 @@ class Configuration:
             "verbose": self.verbose,
         }
 
-        return "<Configuration({})".format(view)
+        return f"<Configuration({view})"
 
     def resolve_server(self) -> str:
         """Return resolved server (after resolving if needed)."""
