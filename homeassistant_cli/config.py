@@ -53,7 +53,7 @@ def _locate_ha() -> Optional[str]:
     if listener.services:
         if len(listener.services) > 1:
             _LOGGING.warning(
-                "Found multiple Home Assistants at %s",
+                "Found multiple Home Assistant instances at %s",
                 ", ".join(listener.services),
             )
             _LOGGING.warning("Use --server to explicitly specify one.")
@@ -85,7 +85,7 @@ def resolve_server(ctx: Any) -> str:  # noqa: F821
         if ctx.server == "auto":
 
             if "HASSIO_TOKEN" in os.environ and "HASS_TOKEN" not in os.environ:
-                ctx.resolved_server = const.DEFAULT_HASSIO_SERVER
+                ctx.resolved_server = const.DEFAULT_SERVER_MDNS
             else:
                 if not ctx.resolved_server and "pytest" in sys.modules:
                     ctx.resolved_server = const.DEFAULT_SERVER
@@ -152,7 +152,7 @@ class Configuration:
             "verbose": self.verbose,
         }
 
-        return "<Configuration({})".format(view)
+        return f"<Configuration({view})"
 
     def resolve_server(self) -> str:
         """Return resolved server (after resolving if needed)."""
