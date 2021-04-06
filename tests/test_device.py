@@ -8,42 +8,48 @@ from click.testing import CliRunner
 import homeassistant_cli.cli as cli
 
 
-def test_device_list(default_devices) -> None:
+def test_device_list(default_devices, default_areas) -> None:
     """Test Device List."""
     with mock.patch(
         'homeassistant_cli.remote.get_devices', return_value=default_devices
     ):
+        with mock.patch(
+            'homeassistant_cli.remote.get_areas', return_value=default_areas
+        ):
 
-        runner = CliRunner()
-        result = runner.invoke(
-            cli.cli,
-            ["--output=json", "device", "list"],
-            catch_exceptions=False,
-        )
-        assert result.exit_code == 0
+            runner = CliRunner()
+            result = runner.invoke(
+                cli.cli,
+                ["--output=json", "device", "list"],
+                catch_exceptions=False,
+            )
+            assert result.exit_code == 0
 
-        data = json.loads(result.output)
-        assert len(data) == 23
+            data = json.loads(result.output)
+            assert len(data) == 9
 
 
-def test_device_list_filter(default_devices) -> None:
+def test_device_list_filter(default_devices, default_areas) -> None:
     """Test Device List."""
     with mock.patch(
         'homeassistant_cli.remote.get_devices', return_value=default_devices
     ):
+        with mock.patch(
+            'homeassistant_cli.remote.get_areas', return_value=default_areas
+        ):
 
-        runner = CliRunner()
-        result = runner.invoke(
-            cli.cli,
-            ["--output=json", "device", "list", "table"],
-            catch_exceptions=False,
-        )
-        assert result.exit_code == 0
+            runner = CliRunner()
+            result = runner.invoke(
+                cli.cli,
+                ["--output=json", "device", "list", "table"],
+                catch_exceptions=False,
+            )
+            assert result.exit_code == 0
 
-        data = json.loads(result.output)
-        assert len(data) == 2
-        assert data[0]['name'] == "Kitchen table left"
-        assert data[1]['name'] == "Kitchen table right"
+            data = json.loads(result.output)
+            assert len(data) == 2
+            assert data[0]['name'] == "Kitchen table left"
+            assert data[1]['name'] == "Kitchen front right at table"
 
 
 def test_device_assign(default_areas, default_devices) -> None:
@@ -65,10 +71,9 @@ def test_device_assign(default_areas, default_devices) -> None:
                     ["device", "assign", "Kitchen", "Kitchen table left"],
                     catch_exceptions=False,
                 )
-                print(result.output)
+                # print(result.output)
                 assert result.exit_code == 0
                 expected = (
-                    "Successfully assigned 'Kitchen'"
-                    " to 'Kitchen table left'\n"
+                    "Successfully assigned 'Kitchen' to 'Kitchen table left'\n"
                 )
                 assert result.output == expected
