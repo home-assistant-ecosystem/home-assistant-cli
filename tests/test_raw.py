@@ -63,18 +63,18 @@ def test_apimethod_completion(default_services) -> None:
     assert "/api/discovery_info" in resultdict
 
 
-# def test_wsapimethod_completion(default_services) -> None:
-#     """Test completion for raw ws API methods."""
-#     cfg = Configuration()
+def test_wsapimethod_completion(default_services) -> None:
+    """Test completion for raw ws API methods."""
+    cfg = Configuration()
 
-#     result = autocompletion.wsapi_methods(
-#         cfg, ["raw", "get"], "config/device_registry/l"
-#     )
-#     assert len(result) == 1
+    result = autocompletion.wsapi_methods(
+        cfg, ["raw", "get"], "config/device_registry/l"
+    )
+    assert len(result) == 1
 
-#     resultdict = dict(result)
+    resultdict = dict(result)
 
-#     assert "config/device_registry/list" in resultdict
+    assert "config/device_registry/list" in resultdict
 
 
 def test_raw_ws() -> None:
