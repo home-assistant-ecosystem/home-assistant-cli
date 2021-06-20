@@ -23,6 +23,7 @@ DFEAULT_PLUGINS = [
     'area',
     'device',
 ]
+
 DFEAULT_PLUGINS.sort()
 
 
@@ -47,9 +48,17 @@ def test_commands_match_expected(defaultplugins_sorted) -> None:
     assert not diff
 
 
-@pytest.mark.parametrize("plugin", DFEAULT_PLUGINS)
+@pytest.mark.parametrize(
+    "plugin",
+    [
+        'service',
+        'state',
+        'system',
+        'template',
+    ],
+)
 def test_commands_loads(plugin) -> None:
-    """Test plugin discovery."""
+    """Test loading of command."""
     hac = HomeAssistantCli()
 
     ctx = cli.make_context('hass-cli', ['info'])
@@ -57,3 +66,20 @@ def test_commands_loads(plugin) -> None:
     cmd = hac.get_command(ctx, plugin)
 
     assert cmd
+
+
+@pytest.mark.parametrize(
+    "plugin",
+    [
+        'completion',
+    ],
+)
+def test_commands_not_loads(plugin) -> None:
+    """Test loading of command."""
+    hac = HomeAssistantCli()
+
+    ctx = cli.make_context('hass-cli', ['info'])
+
+    cmd = hac.get_command(ctx, plugin)
+
+    assert not cmd
