@@ -87,7 +87,7 @@ REQUIRES = [
     'jsonpath-ng>=1.5.1,<2',
     'netdisco>=2.8.3,<3',
     'regex>=2021.4.4',
-    'ruamel.yaml>=0.16.5,<0.17',
+    'ruamel.yaml>=0.16.5,<0.18',
     'requests>=2.22.0,<3',
     'tabulate>=0.8.3,<0.9',
 ]
