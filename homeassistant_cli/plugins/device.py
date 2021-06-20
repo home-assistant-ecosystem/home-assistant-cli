@@ -145,7 +145,9 @@ def assign(
 @click.argument('new_name', required=True)
 @pass_context
 def rename(
-    ctx: Configuration, device_id_or_name, new_name,
+    ctx: Configuration,
+    device_id_or_name,
+    new_name,
 ):
     """Update name of specified device."""
     ctx.auto_output("data")
@@ -153,7 +155,8 @@ def rename(
     devices = api.get_devices(ctx)
 
     device = next(
-        (x for x in devices if x['id'] == device_id_or_name), None  # type: ignore
+        (x for x in devices if x['id'] == device_id_or_name),
+        None,  # type: ignore
     )
     if not device:
         device = next(

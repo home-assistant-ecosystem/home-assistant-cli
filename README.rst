@@ -78,7 +78,8 @@ Setup
 ======
 
 To get started you'll need to have or generate a long lasting token format
-on your Home Assistant profile page (i.e. https://localhost:8123/profile).
+on your Home Assistant profile page (i.e. https://localhost:8123/profile
+then scroll down to "Long-Lived Access Tokens").
 
 Then you can use ``--server`` and ``--token`` parameter on each call or as is
 recommended setup ``HASS_SERVER`` and ``HASS_TOKEN`` environment variables.

@@ -48,7 +48,7 @@ __VERSION__ = find_version("homeassistant_cli", "const.py")  # type: ignore
 if 'dev' in __VERSION__:
     __VERSION__ = f'{__VERSION__}{get_git_commit_datetime()}'
 
-REQUIRED_PYTHON_VER = (3, 7, 0)
+REQUIRED_PYTHON_VER = (3, 8, 0)
 
 
 PROJECT_NAME = 'Home Assistant CLI'
@@ -81,20 +81,20 @@ PACKAGES = find_packages(exclude=['tests', 'tests.*'])
 REQUIRES = [
     'aiohttp>=3.7.4,<4',
     'click-log>=0.3.2,<0.4',
-    'click>=7.0,<8',
+    'click>=8,<9',
     'dateparser>=0.7.1,<0.8',
     'jinja2>=2.10',
     'jsonpath-ng>=1.5.1,<2',
-    'netdisco>=2.6.0,<3',
+    'netdisco>=2.8.3,<3',
     'regex>=2021.4.4',
-    'ruamel.yaml>=0.16.5,<0.17',
+    'ruamel.yaml>=0.16.5,<0.18',
     'requests>=2.22.0,<3',
     'tabulate>=0.8.3,<0.9',
 ]
 
 # Should be as close to Home Assistant dev/master as possible
 TESTS_REQUIRE = [
-    "black>=20.8b1,<21;python_version>'3.6'",
+    'black>=20.8b1,<21',
     'codecov>=2.0.15,<3',
     'coveralls>=1.2.0,<2',
     'flake8>=3.9,<4',
