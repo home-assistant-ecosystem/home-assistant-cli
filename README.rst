@@ -488,7 +488,6 @@ Help
       --table-format TEXT             Which table format to use.
       --sort-by TEXT                  Sort table by the jsonpath expression.
                                       Example: last_changed
-      --version                       Show the version and exit.
       --help                          Show this message and exit.
 
     Commands:

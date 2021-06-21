@@ -205,7 +205,6 @@ def _default_token() -> Optional[str]:
     default=None,
     help='Sort table by the jsonpath expression. Example: last_changed',
 )
-@click.version_option()
 @pass_context
 def cli(
     ctx: Configuration,
