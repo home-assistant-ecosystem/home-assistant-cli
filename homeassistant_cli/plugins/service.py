@@ -80,7 +80,7 @@ def list_cmd(ctx: Configuration, servicefilter):
 @click.argument(
     'service',
     required=True,
-    autocompletion=autocompletion.services,  # type: ignore
+    shell_complete=autocompletion.services,  # type: ignore
 )
 @click.option(
     '--arguments', help="Comma separated key/value pairs to use as arguments."

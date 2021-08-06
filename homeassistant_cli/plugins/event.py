@@ -25,7 +25,7 @@ def cli(ctx):
 @click.argument(
     'event',
     required=True,
-    autocompletion=autocompletion.events,  # type: ignore
+    shell_complete=autocompletion.events,  # type: ignore
 )
 @click.option(
     '--json',

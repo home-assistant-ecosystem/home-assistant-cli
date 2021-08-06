@@ -61,13 +61,13 @@ def listcmd(ctx: Configuration, entityfilter: str):
 @click.argument(
     'oldid',
     required=True,
-    autocompletion=autocompletion.entities,  # type: ignore
+    shell_complete=autocompletion.entities,  # type: ignore
 )
 @click.option('--name', required=False)
 @click.argument(
     'newid',
     required=False,
-    autocompletion=autocompletion.entities,  # type: ignore
+    shell_complete=autocompletion.entities,  # type: ignore
 )
 @pass_context
 def rename(ctx, oldid, newid, name):

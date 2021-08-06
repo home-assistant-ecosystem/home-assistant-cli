@@ -89,13 +89,14 @@ recommended setup ``HASS_SERVER`` and ``HASS_TOKEN`` environment variables.
     $ export HASS_SERVER=https://homeassistant.local:8123
     $ export HASS_TOKEN=<secret>
 
-Once that is enabled and you are using either ``zsh`` or ``bash`` run
-the following to enable autocompletion for ``hass-cli`` commands.
+Once that is enabled, run one of the following commands to enable
+autocompletion for ``hass-cli`` commands.
 
 .. code:: bash
 
-  $  source <(hass-cli completion zsh)
-
+  $  source <(_HASS_CLI_COMPLETE=bash_source hass-cli) # for bash
+  $  source <(_HASS_CLI_COMPLETE=zsh_source hass-cli)  # for zsh
+  $  eval (_HASS_CLI_COMPLETE=fish_source hass-cli)    # for fish
 
 Usage
 =======
@@ -492,7 +493,6 @@ Help
 
     Commands:
       area        Get info and operate on areas from Home Assistant...
-      completion  Output shell completion code for the specified shell (bash or...
       config      Get configuration from a Home Assistant instance.
       device      Get info and operate on devices from Home Assistant...
       discover    Discovery for the local network.
