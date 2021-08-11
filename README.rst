@@ -25,7 +25,7 @@ To use latest pre-release from ``dev`` branch:
 
 .. code:: bash
 
-   $ pip install git+https://github.com/home-assistant/home-assistant-cli@dev
+   $ pip install git+https://github.com/home-assistant-ecosystem/home-assistant-cli@dev
 
 The developers of `hass-cli` usually provide up-to-date `packages <https://src.fedoraproject.org/rpms/home-assistant-cli>`_ for recent Fedora and EPEL releases. Use ``dnf`` for the installation:
 
