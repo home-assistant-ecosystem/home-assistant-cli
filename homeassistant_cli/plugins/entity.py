@@ -2,7 +2,7 @@
 import logging
 import re
 import sys
-from typing import Any, Dict, List, Pattern  # noqa
+from typing import Any, Dict, List, Optional, Pattern  # noqa
 
 import click
 
@@ -29,6 +29,8 @@ def listcmd(ctx: Configuration, entityfilter: str):
     """List all entities from Home Assistant."""
     ctx.auto_output("table")
 
+    areas = api.get_areas(ctx)
+
     entities = api.get_entities(ctx)
 
     result = []  # type: List[Dict]
@@ -41,11 +43,19 @@ def listcmd(ctx: Configuration, entityfilter: str):
             if entityfilterre.search(entity['entity_id']):
                 result.append(entity)
 
+    for entity in entities:
+        area = next(
+            (a for a in areas if a['area_id'] == entity['area_id']), None
+        )
+        if area:
+            entity['area_name'] = area['name']
+
     cols = [
         ('ENTITY_ID', 'entity_id'),
         ('NAME', 'name'),
         ('DEVICE_ID', 'device_id'),
         ('PLATFORM', 'platform'),
+        ('AREA', 'area_name'),
         ('CONFIG_ENTRY_ID', 'config_entry_id'),
         ('DISABLED_BY', 'disabled_by'),
     ]
