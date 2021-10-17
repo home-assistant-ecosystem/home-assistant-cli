@@ -57,6 +57,82 @@ def listcmd(ctx: Configuration, entityfilter: str):
     )
 
 
+@cli.command('assign')
+@click.argument(
+    'area_id_or_name',
+    required=True,
+    autocompletion=autocompletion.areas,  # type: ignore
+)
+@click.argument('names', nargs=-1, required=False)
+@click.option(
+    '--match', help="Expression used to find entities matching that name"
+)
+@pass_context
+def assign(
+    ctx: Configuration,
+    area_id_or_name,
+    names: List[str],
+    match: Optional[str] = None,
+):
+    """Update area on one or more entities.
+
+    NAMES - one or more name or id (Optional)
+    """
+    ctx.auto_output("data")
+
+    entities = api.get_entities(ctx)
+
+    result = []  # type: List[Dict]
+
+    area = api.find_area(ctx, area_id_or_name)
+    if not area:
+        _LOGGING.error(
+            "Could not find area with id or name: %s", area_id_or_name
+        )
+        sys.exit(1)
+
+    if match:
+        if match == ".*":
+            result = entities
+        else:
+            entityfilterre = re.compile(match)  # type: Pattern
+
+            for entity in entities:
+                if entityfilterre.search(entity['name']):
+                    result.append(entity)
+
+    for id_or_name in names:
+        entity = next(
+            (x for x in entities if x['entity_id'] == id_or_name), None  # type: ignore
+        )
+        if not entity:
+            entity = next(
+                (x for x in entities if x['name'] == id_or_name),
+                None,  # type: ignore
+            )
+        if not entity:
+            _LOGGING.error(
+                "Could not find entity with id or name: %s", id_or_name
+            )
+            sys.exit(1)
+        result.append(entity)
+
+    for entity in result:
+        output = api.assign_area(ctx, entity['entity_id'], area['area_id'])
+        if output['success']:
+            ctx.echo(
+                "Successfully assigned '{}' to '{}'".format(
+                    area['name'], entity['entity_id']
+                )
+            )
+        else:
+            _LOGGING.error(
+                "Failed to assign '%s' to '%s'", area['name'], entity['entity_id']
+            )
+
+            ctx.echo(str(output))
+
+
 @cli.command('rename')
 @click.argument(
     'oldid',

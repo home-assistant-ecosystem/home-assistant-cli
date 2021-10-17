@@ -251,6 +251,19 @@ def assign_area(
     return cast(Dict[str, Any], wsapi(ctx, frame))
 
 
+def assign_entity_area(
+    ctx: Configuration, entity_id: str, area_id: str
+) -> Dict[str, Any]:
+    """Assign area."""
+    frame = {
+        'type': hass.WS_TYPE_DEVICE_REGISTRY_UPDATE,
+        'area_id': area_id,
+        'entity_id': entity_id,
+    }
+
+    return cast(Dict[str, Any], wsapi(ctx, frame))
+
+
 def get_health(ctx: Configuration) -> Dict[str, Any]:
     """Get system Health."""
     frame = {'type': 'system_health/info'}
