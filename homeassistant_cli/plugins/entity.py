@@ -128,7 +128,9 @@ def assign(
         result.append(entity)
 
     for entity in result:
-        output = api.assign_entity_area(ctx, entity['entity_id'], area['area_id'])
+        output = api.assign_entity_area(
+            ctx, entity['entity_id'], area['area_id']
+        )
         if output['success']:
             ctx.echo(
                 "Successfully assigned '{}' to '{}'".format(
@@ -137,7 +139,9 @@ def assign(
             )
         else:
             _LOGGING.error(
-                "Failed to assign '%s' to '%s'", area['name'], entity['entity_id']
+                "Failed to assign '%s' to '%s'",
+                area['name'],
+                entity['entity_id'],
             )
 
             ctx.echo(str(output))
