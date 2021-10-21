@@ -254,9 +254,9 @@ def assign_area(
 def assign_entity_area(
     ctx: Configuration, entity_id: str, area_id: str
 ) -> Dict[str, Any]:
-    """Assign area."""
+    """Assign area to entity."""
     frame = {
-        'type': hass.WS_TYPE_DEVICE_REGISTRY_UPDATE,
+        'type': hass.WS_TYPE_ENTITY_REGISTRY_UPDATE,
         'area_id': area_id,
         'entity_id': entity_id,
     }
