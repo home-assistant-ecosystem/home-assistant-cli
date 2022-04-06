@@ -67,7 +67,7 @@ def delete(ctx: Configuration, entity):
 @cli.command('list')
 @click.argument('entityfilter', default=".*", required=False)
 @pass_context
-def list(ctx, entityfilter):
+def list_command(ctx, entityfilter):
     """List all state from Home Assistant."""
     ctx.auto_output("table")
     states = api.get_states(ctx)
