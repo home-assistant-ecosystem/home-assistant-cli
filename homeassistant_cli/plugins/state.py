@@ -26,7 +26,7 @@ def cli(ctx):
 @click.argument(
     'entity',
     required=True,
-    autocompletion=autocompletion.entities,  # type: ignore
+    shell_complete=autocompletion.entities,  # type: ignore
 )
 @pass_context
 def get(ctx: Configuration, entity):
@@ -50,7 +50,7 @@ def get(ctx: Configuration, entity):
 @click.argument(
     'entity',
     required=True,
-    autocompletion=autocompletion.entities,  # type: ignore
+    shell_complete=autocompletion.entities,  # type: ignore
 )
 @pass_context
 def delete(ctx: Configuration, entity):
@@ -95,7 +95,7 @@ def list_command(ctx, entityfilter):
 @click.argument(
     'entity',
     required=True,
-    autocompletion=autocompletion.entities,  # type: ignore
+    shell_complete=autocompletion.entities,  # type: ignore
 )
 @click.argument('newstate', required=False)
 @click.option(
@@ -207,7 +207,7 @@ def _homeassistant_cmd(ctx: Configuration, entities, cmd, action):
     'entities',
     nargs=-1,
     required=True,
-    autocompletion=autocompletion.entities,  # type: ignore
+    shell_complete=autocompletion.entities,  # type: ignore
 )
 @pass_context
 def toggle(ctx: Configuration, entities):
@@ -221,7 +221,7 @@ def toggle(ctx: Configuration, entities):
     'entities',
     nargs=-1,
     required=True,
-    autocompletion=autocompletion.entities,  # type: ignore
+    shell_complete=autocompletion.entities,  # type: ignore
 )
 @pass_context
 def off_cmd(ctx: Configuration, entities):
@@ -235,7 +235,7 @@ def off_cmd(ctx: Configuration, entities):
     'entities',
     nargs=-1,
     required=True,
-    autocompletion=autocompletion.entities,  # type: ignore
+    shell_complete=autocompletion.entities,  # type: ignore
 )
 @pass_context
 def on_cmd(ctx: Configuration, entities):
@@ -249,7 +249,7 @@ def on_cmd(ctx: Configuration, entities):
     'entities',
     nargs=-1,
     required=True,
-    autocompletion=autocompletion.entities,  # type: ignore
+    shell_complete=autocompletion.entities,  # type: ignore
 )
 @click.option(
     '--since',

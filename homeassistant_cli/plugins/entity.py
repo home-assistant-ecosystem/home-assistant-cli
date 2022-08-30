@@ -71,7 +71,7 @@ def listcmd(ctx: Configuration, entityfilter: str):
 @click.argument(
     'area_id_or_name',
     required=True,
-    autocompletion=autocompletion.areas,  # type: ignore
+    shell_complete=autocompletion.areas,  # type: ignore
 )
 @click.argument('names', nargs=-1, required=False)
 @click.option(
@@ -151,13 +151,13 @@ def assign(
 @click.argument(
     'oldid',
     required=True,
-    autocompletion=autocompletion.entities,  # type: ignore
+    shell_complete=autocompletion.entities,  # type: ignore
 )
 @click.option('--name', required=False)
 @click.argument(
     'newid',
     required=False,
-    autocompletion=autocompletion.entities,  # type: ignore
+    shell_complete=autocompletion.entities,  # type: ignore
 )
 @pass_context
 def rename(ctx, oldid, newid, name):
