@@ -28,7 +28,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     - name: Black Check
-      uses: jpetrucciani/black-check@master
+      uses: jpetrucciani/black-check@22.8
     - name: Lint with flake8
       run: |
         pip install flake8
