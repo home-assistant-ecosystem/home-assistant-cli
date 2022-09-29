@@ -44,7 +44,7 @@ HASS_SERVER = "http://localhost:8123"
             None,
         ),
         (
-            "HASS_TOKEN should win over HASIO_TOKEN",
+            "HASS_TOKEN should win over HASSIO_TOKEN",
             {'HASSIO_TOKEN': 'supersecret', 'HASS_TOKEN': 'I Win!'},
             'auto',
             HASS_SERVER,
