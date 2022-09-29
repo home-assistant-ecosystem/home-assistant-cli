@@ -198,7 +198,7 @@ def _default_token() -> Optional[str]:
     '--table-format',
     default='plain',
     help="Which table format to use.",
-    autocompletion=autocompletion.table_formats,
+    shell_complete=autocompletion.table_formats,
 )
 @click.option(
     '--sort-by',

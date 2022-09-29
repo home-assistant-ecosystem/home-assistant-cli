@@ -68,7 +68,7 @@ def listcmd(ctx: Configuration, devicefilter: str):
 @click.argument(
     'area_id_or_name',
     required=True,
-    autocompletion=autocompletion.areas,  # type: ignore
+    shell_complete=autocompletion.areas,  # type: ignore
 )
 @click.argument('names', nargs=-1, required=False)
 @click.option(
