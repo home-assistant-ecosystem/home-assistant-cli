@@ -77,7 +77,7 @@ def create(ctx, names):
     'names',
     nargs=-1,
     required=True,
-    autocompletion=autocompletion.areas,  # type: ignore
+    shell_complete=autocompletion.areas,  # type: ignore
 )
 @pass_context
 def delete(ctx, names):
@@ -114,7 +114,7 @@ def delete(ctx, names):
 @click.argument(
     'oldname',
     required=True,
-    autocompletion=autocompletion.areas,  # type: ignore
+    shell_complete=autocompletion.areas,  # type: ignore
 )
 @click.argument('newname', required=True)
 @pass_context

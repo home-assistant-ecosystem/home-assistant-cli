@@ -42,7 +42,7 @@ def _report(ctx, cmd, method, response) -> None:
 
 @cli.command()
 @click.argument(
-    'method', autocompletion=autocompletion.api_methods  # type: ignore
+    'method', shell_complete=autocompletion.api_methods  # type: ignore
 )
 @pass_context
 def get(ctx: Configuration, method):
@@ -54,7 +54,7 @@ def get(ctx: Configuration, method):
 
 @cli.command()
 @click.argument(
-    'method', autocompletion=autocompletion.api_methods  # type: ignore
+    'method', shell_complete=autocompletion.api_methods  # type: ignore
 )
 @click.option('--json')
 @pass_context
@@ -72,7 +72,7 @@ def post(ctx: Configuration, method, json):
 
 @cli.command("ws")
 @click.argument(
-    'wstype', autocompletion=autocompletion.wsapi_methods  # type: ignore
+    'wstype', shell_complete=autocompletion.wsapi_methods  # type: ignore
 )
 @click.option('--json')
 @pass_context

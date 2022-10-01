@@ -23,7 +23,7 @@ SERVICE = {
 @click.argument(
     'entity',
     required=False,
-    autocompletion=autocompletion.entities,  # type: ignore
+    shell_complete=autocompletion.entities,  # type: ignore
 )
 @click.option(
     '--service', default='openstreetmap', type=click.Choice(SERVICE.keys())

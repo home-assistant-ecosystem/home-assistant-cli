@@ -25,7 +25,7 @@ def cli(ctx):
 @click.argument(
     'event',
     required=True,
-    autocompletion=autocompletion.events,  # type: ignore
+    shell_complete=autocompletion.events,  # type: ignore
 )
 @click.option(
     '--json',
@@ -37,7 +37,7 @@ def fire(ctx: Configuration, event, json):
     """Fire event in Home Assistant."""
     if json:
         click.echo("Fire {}".format(event))
-        response = api.fire_event(ctx, event, json)
+        response = api.fire_event(ctx, event, json_.loads(json))
     else:
         existing = raw_format_output(ctx.output, [{}], ctx.yaml())
         new = click.edit(existing, extension='.{}'.format(ctx.output))

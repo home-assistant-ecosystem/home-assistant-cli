@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [ 3.8, 3.9 ]
+        python-version: [ 3.9, "3.10" ]
 
     steps:
     - uses: actions/checkout@v2
@@ -28,7 +28,9 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt
     - name: Black Check
-      uses: jpetrucciani/black-check@20.8b1
+      uses: jpetrucciani/black-check@22.8.0
+      with:
+        path: homeassistant_cli
     - name: Lint with flake8
       run: |
         pip install flake8

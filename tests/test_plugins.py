@@ -66,20 +66,3 @@ def test_commands_loads(plugin) -> None:
     cmd = hac.get_command(ctx, plugin)
 
     assert cmd
-
-
-@pytest.mark.parametrize(
-    "plugin",
-    [
-        'completion',
-    ],
-)
-def test_commands_not_loads(plugin) -> None:
-    """Test loading of command."""
-    hac = HomeAssistantCli()
-
-    ctx = cli.make_context('hass-cli', ['info'])
-
-    cmd = hac.get_command(ctx, plugin)
-
-    assert not cmd

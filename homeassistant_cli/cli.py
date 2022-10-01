@@ -198,14 +198,13 @@ def _default_token() -> Optional[str]:
     '--table-format',
     default='plain',
     help="Which table format to use.",
-    autocompletion=autocompletion.table_formats,
+    shell_complete=autocompletion.table_formats,
 )
 @click.option(
     '--sort-by',
     default=None,
     help='Sort table by the jsonpath expression. Example: last_changed',
 )
-@click.version_option()
 @pass_context
 def cli(
     ctx: Configuration,

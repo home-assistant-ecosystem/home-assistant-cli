@@ -25,7 +25,7 @@ To use latest pre-release from ``dev`` branch:
 
 .. code:: bash
 
-   $ pip install git+https://github.com/home-assistant/home-assistant-cli@dev
+   $ pip install git+https://github.com/home-assistant-ecosystem/home-assistant-cli@dev
 
 The developers of `hass-cli` usually provide up-to-date `packages <https://src.fedoraproject.org/rpms/home-assistant-cli>`_ for recent Fedora and EPEL releases. Use ``dnf`` for the installation:
 
@@ -89,13 +89,14 @@ recommended setup ``HASS_SERVER`` and ``HASS_TOKEN`` environment variables.
     $ export HASS_SERVER=https://homeassistant.local:8123
     $ export HASS_TOKEN=<secret>
 
-Once that is enabled and you are using either ``zsh`` or ``bash`` run
-the following to enable autocompletion for ``hass-cli`` commands.
+Once that is enabled, run one of the following commands to enable
+autocompletion for ``hass-cli`` commands.
 
 .. code:: bash
 
-  $  source <(hass-cli completion zsh)
-
+  $ source <(_HASS_CLI_COMPLETE=bash_source hass-cli) # for bash
+  $ source <(_HASS_CLI_COMPLETE=zsh_source hass-cli)  # for zsh
+  $ eval (_HASS_CLI_COMPLETE=fish_source hass-cli)    # for fish
 
 Usage
 =======
@@ -488,7 +489,6 @@ Help
       --table-format TEXT             Which table format to use.
       --sort-by TEXT                  Sort table by the jsonpath expression.
                                       Example: last_changed
-      --version                       Show the version and exit.
       --help                          Show this message and exit.
 
     Commands:

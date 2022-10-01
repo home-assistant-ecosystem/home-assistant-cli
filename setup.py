@@ -79,22 +79,22 @@ PROJECT_URLS = {
 PACKAGES = find_packages(exclude=['tests', 'tests.*'])
 
 REQUIRES = [
-    'aiohttp>=3.7.4,<4',
+    'aiohttp>=3.8,<4',
     'click-log>=0.3.2,<0.4',
     'click>=8,<9',
     'dateparser>=0.7.1,<0.8',
     'jinja2>=2.10',
     'jsonpath-ng>=1.5.1,<2',
-    'netdisco>=2.8.3,<3',
-    'regex>=2021.4.4',
-    'ruamel.yaml>=0.16.5,<0.18',
-    'requests>=2.22.0,<3',
+    'netdisco>=3.0.0,<4',
+    'regex>=2022.9',
+    'ruamel.yaml>=0.17,<0.18',
+    'requests>=2.28.0,<3',
     'tabulate>=0.8.3,<0.9',
 ]
 
 # Should be as close to Home Assistant dev/master as possible
 TESTS_REQUIRE = [
-    'black>=20.8b1,<21',
+    'black>=22.8,<30',
     'codecov>=2.0.15,<3',
     'coveralls>=1.2.0,<2',
     'flake8>=3.9,<4',
@@ -103,7 +103,7 @@ TESTS_REQUIRE = [
     'mypy>=0.800,<0.900',
     'pydocstyle>=6,<7',
     'pylint>=2.7,<3',
-    'pytest>=6,<7',
+    'pytest>=7,<8',
     'pytest-cov>=2.11,<3',
     'pytest-sugar>=0.9.4,<0.10',
     'pytest-timeout>=1.4,<2',
