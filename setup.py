@@ -80,7 +80,7 @@ PACKAGES = find_packages(exclude=['tests', 'tests.*'])
 
 REQUIRES = [
     'aiohttp>=3.8,<4',
-    'click-log>=0.3.2,<0.4',
+    'click-log>=0.4,<0.5',
     'click>=8,<9',
     'dateparser>=0.7.1,<0.8',
     'jinja2>=2.10',
