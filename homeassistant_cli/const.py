@@ -1,7 +1,7 @@
 """Constants used by Home Assistant CLI (hass-cli)."""
 PACKAGE_NAME = 'homeassistant_cli'
 
-__version__ = '0.9.5'
+__version__ = '0.9.6'
 # __version__ = '0.10.0.dev0'
 
 AUTO_SERVER = 'auto'
