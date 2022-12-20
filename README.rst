@@ -521,7 +521,7 @@ Development
 ###########
 
 Developing is (re)using as much as possible from
-[Home Assistant development setup](https://developers.home-assistant.io/docs/en/development_environment.html).
+`Home Assistant development setup <https://developers.home-assistant.io/docs/en/development_environment.html>`_.
 
 Recommended way to develop is to use virtual environment to ensure isolation
 from rest of your system using the following steps:
