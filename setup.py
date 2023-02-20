@@ -48,7 +48,7 @@ __VERSION__ = find_version("homeassistant_cli", "const.py")  # type: ignore
 if 'dev' in __VERSION__:
     __VERSION__ = f'{__VERSION__}{get_git_commit_datetime()}'
 
-REQUIRED_PYTHON_VER = (3, 8, 0)
+REQUIRED_PYTHON_VER = (3, 9, 0)
 
 
 PROJECT_NAME = 'Home Assistant CLI'
