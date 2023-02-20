@@ -61,7 +61,9 @@ def get(ctx: Configuration, method):
 def post(ctx: Configuration, method, json):
     """Do a POST request against api/<method>."""
     if json:
-        data = json_.loads(json)
+        data = json_.loads(
+            json if json != "-" else click.get_text_stream('stdin').read()
+        )
     else:
         data = {}
 
@@ -86,7 +88,9 @@ def websocket(ctx: Configuration, wstype, json):  # noqa: D301
            Example: --json='{ "area_id":"2c8bf93c8082492f99c989896962f207" }'
     """
     if json:
-        data = json_.loads(json)
+        data = json_.loads(
+            json if json != "-" else click.get_text_stream('stdin').read()
+        )
     else:
         data = {}
 
