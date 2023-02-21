@@ -2,6 +2,7 @@
 import os
 from typing import Any, Dict, List, Tuple  # NOQA
 
+from click.shell_completion import CompletionItem
 from requests.exceptions import HTTPError
 
 from homeassistant_cli import const, hassconst
@@ -52,30 +53,31 @@ def services(
     except HTTPError:
         response = []
 
-    completions = []  # type: List[Tuple[str, str]]
+    completions = []  # type List[CompletionItem]
     if response:
         for domain in response:
             domain_name = domain['domain']
             servicesdict = domain['services']
 
             for service in servicesdict:
+                description = servicesdict[service].get('description', '')
                 completions.append(
-                    (
-                        "{}.{}".format(domain_name, service),
-                        servicesdict[service]['description'],
+                    CompletionItem(
+                        value=f"{domain_name}.{service}", help=description
                     )
                 )
 
-        completions.sort()
+        # Sort by service name
+        completions.sort(key=lambda x: x.value)
 
-        return [c for c in completions if incomplete in c[0]]
+        return [c for c in completions if incomplete in c.value]
 
     return completions
 
 
 def entities(
     ctx: Configuration, args: List, incomplete: str
-) -> List[Tuple[str, str]]:
+) -> List[CompletionItem]:
     """Entities."""
     _init_ctx(ctx)
     try:
@@ -83,23 +85,30 @@ def entities(
     except HTTPError:
         response = []
 
-    completions = []  # type List[Tuple[str, str]]
+    completions = []  # type List[CompletionItem]
 
     if response:
         for entity in response:
+            state = entity.get('state', '')
             friendly_name = entity['attributes'].get('friendly_name', '')
-            completions.append((entity['entity_id'], friendly_name))
+            completions.append(
+                CompletionItem(
+                    value=entity['entity_id'],
+                    help=f'{friendly_name} [{state}]',
+                )
+            )
 
-        completions.sort()
+        # Sort by entity_id
+        completions.sort(key=lambda x: x.value)
 
-        return [c for c in completions if incomplete in c[0]]
+        return [c for c in completions if incomplete in c.value]
 
     return completions
 
 
 def events(
     ctx: Configuration, args: List, incomplete: str
-) -> List[Tuple[str, str]]:
+) -> List[CompletionItem]:
     """Events."""
     _init_ctx(ctx)
     try:
@@ -107,90 +116,115 @@ def events(
     except HTTPError:
         response = {}
 
-    completions = []
+    completions = []  # type List[CompletionItem]
 
     if response:
         for entity in response:
-            completions.append((entity['event'], ''))  # type: ignore
+            completions.append(
+                CompletionItem(value=entity['event'])  # type: ignore
+            )
 
-        completions.sort()
+        # Sort by event name
+        completions.sort(key=lambda x: x.value)
 
-        return [c for c in completions if incomplete in c[0]]
+        return [c for c in completions if incomplete in c.value]
 
     return completions
 
 
 def table_formats(
     ctx: Configuration, args: List, incomplete: str
-) -> List[Tuple[str, str]]:
+) -> List[CompletionItem]:
     """Table Formats."""
     _init_ctx(ctx)
 
     completions = [
-        ("plain", "Plain tables, no pseudo-graphics to draw lines"),
-        ("simple", "Simple table with --- as header/footer (default)"),
-        ("github", "Github flavored Markdown table"),
-        ("grid", "Formatted as Emacs 'table.el' package"),
-        ("fancy_grid", "Draws a fancy grid using box-drawing characters"),
-        ("pipe", "PHP Markdown Extra"),
-        ("orgtbl", "org-mode table"),
-        ("jira", "Atlassian Jira Markup"),
-        ("presto", "Formatted as PrestoDB CLI"),
-        ("psql", "Formatted as Postgres psql CLI"),
-        ("rst", "reStructuredText"),
-        ("mediawiki", "Media Wiki as used in Wikipedia"),
-        ("moinmoin", "MoinMoin Wiki"),
-        ("youtrack", "Youtrack format"),
-        ("html", "HTML Markup"),
-        ("latex", "LaTeX markup, replacing special characters"),
-        ("latex_raw", "LaTeX markup, no replacing of special characters"),
-        (
-            "latex_booktabs",
-            "LaTex markup using spacing and style from `booktabs",
+        CompletionItem(
+            value="plain",
+            help="Plain tables, no pseudo-graphics to draw lines",
         ),
-        ("textile", "Textile"),
-        ("tsv", "Tab Separated Values"),
+        CompletionItem(
+            value="simple",
+            help="Simple table with --- as header/footer (default)",
+        ),
+        CompletionItem(value="github", help="Github flavored Markdown table"),
+        CompletionItem(
+            value="grid", help="Formatted as Emacs 'table.el' package"
+        ),
+        CompletionItem(
+            value="fancy_grid",
+            help="Draws a fancy grid using box-drawing characters",
+        ),
+        CompletionItem(value="pipe", help="PHP Markdown Extra"),
+        CompletionItem(value="orgtbl", help="org-mode table"),
+        CompletionItem(value="jira", help="Atlassian Jira Markup"),
+        CompletionItem(value="presto", help="Formatted as PrestoDB CLI"),
+        CompletionItem(value="psql", help="Formatted as Postgres psql CLI"),
+        CompletionItem(value="rst", help="reStructuredText"),
+        CompletionItem(
+            value="mediawiki", help="Media Wiki as used in Wikipedia"
+        ),
+        CompletionItem(value="moinmoin", help="MoinMoin Wiki"),
+        CompletionItem(value="youtrack", help="Youtrack format"),
+        CompletionItem(value="html", help="HTML Markup"),
+        CompletionItem(
+            value="latex", help="LaTeX markup, replacing special characters"
+        ),
+        CompletionItem(
+            value="latex_raw",
+            help="LaTeX markup, no replacing of special characters",
+        ),
+        CompletionItem(
+            value="latex_booktabs",
+            help="LaTex markup using spacing and style from `booktabs",
+        ),
+        CompletionItem(value="textile", help="Textile"),
+        CompletionItem(value="tsv", help="Tab Separated Values"),
     ]
 
-    completions.sort()
+    completions.sort(key=lambda x: x.value)
 
-    return [c for c in completions if incomplete in c[0]]
+    return [c for c in completions if incomplete in c.value]
 
 
 def api_methods(
     ctx: Configuration, args: List, incomplete: str
-) -> List[Tuple[str, str]]:
+) -> List[CompletionItem]:
     """Auto completion for methods."""
     _init_ctx(ctx)
 
     from inspect import getmembers
 
-    completions = []
+    completions = []  # type List[CompletionItem]
+
     for name, value in getmembers(hassconst):
         if name.startswith('URL_API_'):
-            completions.append((value, name[len('URL_API_') :]))
+            CompletionItem(value=value, help=name[len('URL_API_') :])
 
-    completions.sort()
+    completions.sort(key=lambda x: x.value)
 
-    return [c for c in completions if incomplete in c[0]]
+    return [c for c in completions if incomplete in c.value]
 
 
 def wsapi_methods(
     ctx: Configuration, args: List, incomplete: str
-) -> List[Tuple[str, str]]:
+) -> List[CompletionItem]:
     """Auto completion for websocket methods."""
     _init_ctx(ctx)
 
     from inspect import getmembers
 
-    completions = []
+    completions = []  # type List[CompletionItem]
+
     for name, value in getmembers(hassconst):
         if name.startswith('WS_TYPE_'):
-            completions.append((value, name[len('WS_TYPE_') :]))
+            completions.append(
+                CompletionItem(value=value, help=name[len('WS_TYPE_') :])
+            )
 
-    completions.sort()
+    completions.sort(key=lambda x: x.value)
 
-    return [c for c in completions if incomplete in c[0]]
+    return [c for c in completions if incomplete in c.value]
 
 
 def _quoteifneeded(val: str) -> str:
@@ -202,7 +236,7 @@ def _quoteifneeded(val: str) -> str:
 
 def areas(
     ctx: Configuration, args: List, incomplete: str
-) -> List[Tuple[str, str]]:
+) -> List[CompletionItem]:
     """Areas."""
     _init_ctx(ctx)
     allareas = api.get_areas(ctx)
@@ -211,10 +245,12 @@ def areas(
 
     if allareas:
         for area in allareas:
-            completions.append((_quoteifneeded(area['name']), area['area_id']))
+            completions.append(
+                CompletionItem(_quoteifneeded(area['name']), area['area_id'])
+            )
 
-        completions.sort()
+        completions.sort(key=lambda x: x.value)
 
-        return [c for c in completions if incomplete in c[0]]
+        return [c for c in completions if incomplete in c.value]
 
     return completions
