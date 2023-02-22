@@ -43,31 +43,33 @@ def _init_ctx(ctx: Configuration) -> None:
         ctx.resolved_server = resolve_server(ctx)
 
 
-def services(
+def _quoteifneeded(val: str) -> str:
+    """Add quotes if needed."""
+    if val and ' ' in val:
+        return '"{}"'.format(val)
+    return val
+
+
+def areas(
     ctx: Configuration, args: List, incomplete: str
 ) -> List[CompletionItem]:
-    """Services."""
+    """Areas."""
     _init_ctx(ctx)
     try:
-        response = api.get_services(ctx)
+        response = api.get_areas(ctx)
     except HTTPError:
         response = []
 
-    completions = []  # type List[CompletionItem]
+    completions = []  # type List[Tuple[str, str]]
+
     if response:
-        for domain in response:
-            domain_name = domain['domain']
-            servicesdict = domain['services']
-
-            for service in servicesdict:
-                description = servicesdict[service].get('description', '')
-                completions.append(
-                    CompletionItem(
-                        value=f"{domain_name}.{service}", help=description
-                    )
+        for area in response:
+            completions.append(
+                CompletionItem(
+                    value=_quoteifneeded(area['area_id']), help=area['name']
                 )
+            )
 
-        # Sort by service name
         completions.sort(key=lambda x: x.value)
 
         return [c for c in completions if incomplete in c.value]
@@ -125,6 +127,38 @@ def events(
             )
 
         # Sort by event name
+        completions.sort(key=lambda x: x.value)
+
+        return [c for c in completions if incomplete in c.value]
+
+    return completions
+
+
+def services(
+    ctx: Configuration, args: List, incomplete: str
+) -> List[CompletionItem]:
+    """Services."""
+    _init_ctx(ctx)
+    try:
+        response = api.get_services(ctx)
+    except HTTPError:
+        response = []
+
+    completions = []  # type List[CompletionItem]
+    if response:
+        for domain in response:
+            domain_name = domain['domain']
+            servicesdict = domain['services']
+
+            for service in servicesdict:
+                description = servicesdict[service].get('description', '')
+                completions.append(
+                    CompletionItem(
+                        value=f"{domain_name}.{service}", help=description
+                    )
+                )
+
+        # Sort by service name
         completions.sort(key=lambda x: x.value)
 
         return [c for c in completions if incomplete in c.value]
@@ -225,32 +259,3 @@ def wsapi_methods(
     completions.sort(key=lambda x: x.value)
 
     return [c for c in completions if incomplete in c.value]
-
-
-def _quoteifneeded(val: str) -> str:
-    """Add quotes if needed."""
-    if val and ' ' in val:
-        return '"{}"'.format(val)
-    return val
-
-
-def areas(
-    ctx: Configuration, args: List, incomplete: str
-) -> List[CompletionItem]:
-    """Areas."""
-    _init_ctx(ctx)
-    allareas = api.get_areas(ctx)
-
-    completions = []  # type List[Tuple[str, str]]
-
-    if allareas:
-        for area in allareas:
-            completions.append(
-                CompletionItem(_quoteifneeded(area['name']), area['area_id'])
-            )
-
-        completions.sort(key=lambda x: x.value)
-
-        return [c for c in completions if incomplete in c.value]
-
-    return completions
