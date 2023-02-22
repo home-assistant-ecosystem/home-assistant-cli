@@ -45,7 +45,7 @@ def _init_ctx(ctx: Configuration) -> None:
 
 def services(
     ctx: Configuration, args: List, incomplete: str
-) -> List[Tuple[str, str]]:
+) -> List[CompletionItem]:
     """Services."""
     _init_ctx(ctx)
     try:
