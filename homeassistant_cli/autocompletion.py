@@ -233,7 +233,9 @@ def api_methods(
 
     for name, value in getmembers(hassconst):
         if name.startswith('URL_API_'):
-            CompletionItem(value=value, help=name[len('URL_API_') :])
+            completions.append(
+                CompletionItem(value=value, help=name[len('URL_API_') :])
+            )
 
     completions.sort(key=lambda x: x.value)
 
