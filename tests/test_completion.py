@@ -52,26 +52,26 @@ def test_service_completion(default_services_text) -> None:
         assert val == "Remove a user group."
 
 
-# def test_event_completion(default_events_text) -> None:
-#     """Test completion for events."""
-#     with requests_mock.Mocker() as mock:
-#         mock.get(
-#             'http://localhost:8123/api/events',
-#             text=default_events_text,
-#             status_code=200,
-#         )
+def test_event_completion(default_events_text) -> None:
+    """Test completion for events."""
+    with requests_mock.Mocker() as mock:
+        mock.get(
+            'http://localhost:8123/api/events',
+            text=default_events_text,
+            status_code=200,
+        )
 
-#         cfg = cli.cli.make_context('hass-cli', ['events', 'list'])
+        cfg = cli.cli.make_context('hass-cli', ['events', 'list'])
 
-#         result = autocompletion.events(
-#             cfg, ["events", "list"], ""  # type: ignore
-#         )
-#         assert len(result) == 11
+        result = autocompletion.events(
+            cfg, ["events", "list"], ""  # type: ignore
+        )
+        assert len(result) == 11
 
-#         resultdict = dict(result)
+        resultdict = {x.value: x.help for x in result}
 
-#         assert "component_loaded" in resultdict
-#         assert resultdict["component_loaded"] == ""
+        assert "component_loaded" in resultdict
+        assert resultdict["component_loaded"] is None
 
 
 def test_area_completion(default_events_text) -> None:
