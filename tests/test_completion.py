@@ -74,23 +74,23 @@ def test_event_completion(default_events_text) -> None:
         assert resultdict["component_loaded"] is None
 
 
-def test_area_completion(default_events_text) -> None:
+def test_area_completion(default_areas_text) -> None:
     """Test completion for Area."""
     with requests_mock.Mocker() as mock:
         mock.get(
-            'http://localhost:8123/api/events',
-            text=default_events_text,
+            'http://localhost:8123/api/areas',
+            text=default_areas_text,
             status_code=200,
         )
 
-        cfg = cli.cli.make_context('hass-cli', ['events', 'list'])
+        cfg = cli.cli.make_context('hass-cli', ['area', 'list'])
 
-        result = autocompletion.events(
-            cfg, ["events", "list"], ""  # type: ignore
+        result = autocompletion.areas(
+            cfg, ["area", "list"], ""  # type: ignore
         )
-        assert len(result) == 11
+        assert len(result) == 3
 
         resultdict = {x.value: x.help for x in result}
 
-        assert "component_loaded" in resultdict
-        assert resultdict["component_loaded"] is None
+        assert "Bedroom" in resultdict
+        assert resultdict["Bedroom"] == "3"
