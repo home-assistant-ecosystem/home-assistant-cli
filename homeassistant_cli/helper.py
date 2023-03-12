@@ -3,6 +3,7 @@ import contextlib
 from http.client import HTTPConnection
 import json
 import logging
+import ast
 import shlex
 from typing import Any, Dict, Generator, List, Optional, Tuple, Union, cast
 
