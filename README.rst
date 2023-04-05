@@ -414,7 +414,7 @@ For zsh:
 
 .. code:: bash
 
-  eval "$(_HASS_CLI_COMPLETE=source_zsh hass-cli)"
+  eval "$(_HASS_CLI_COMPLETE=zsh_source hass-cli)"
 
 
 For bash:
