@@ -3,6 +3,7 @@ import contextlib
 from http.client import HTTPConnection
 import json
 import logging
+import ast
 import shlex
 from typing import Any, Dict, Generator, List, Optional, Tuple, Union, cast
 
@@ -25,9 +26,16 @@ def to_attributes(entry: str) -> Dict[str, str]:
     lexer.whitespace_split = True
     lexer.whitespace = ','
     attributes_dict = {}  # type: Dict[str, str]
-    attributes_dict = dict(
-        pair.split('=', 1) for pair in lexer  # type: ignore
-    )
+    for pair in lexer:
+        if '=' not in pair:
+            continue
+        key, value = pair.split('=', 1)
+        if value.strip().startswith('[') and value.strip().endswith(']'):
+            try:
+                value = ast.literal_eval(value)
+            except Exception:
+                pass
+        attributes_dict[key] = value
     return attributes_dict
 
 
