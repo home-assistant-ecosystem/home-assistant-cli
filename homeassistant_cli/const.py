@@ -20,3 +20,6 @@ COLUMNS_ENTITIES = [
     ('CHANGED', 'last_changed'),
 ]
 COLUMNS_SERVICES = [('DOMAIN', 'domain'), ("SERVICE", "domain.services[*]")]
+
+COLUMNS_WIDTH_DEFAULT = -1
+COLUMNS_WIDTH_STR = "\u2026"
