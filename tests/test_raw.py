@@ -58,7 +58,7 @@ def test_apimethod_completion(default_services) -> None:
     result = autocompletion.api_methods(cfg, ["raw", "get"], "/api/disc")
     assert len(result) == 1
 
-    resultdict = dict(result)
+    resultdict = {x.value: x.help for x in result}
 
     assert "/api/discovery_info" in resultdict
 
