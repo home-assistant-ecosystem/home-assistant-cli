@@ -126,7 +126,7 @@ class Configuration:
         self.no_headers = False
         self.table_format = 'plain'
         self.sort_by = None
-
+        self.max_message_size = const.WS_MAX_MESSAGE_SIZE # type: str
     def echo(self, msg: str, *args: Optional[Any]) -> None:
         """Put content message to stdout."""
         self.log(msg, *args)
@@ -151,6 +151,7 @@ class Configuration:
             "access-token": 'yes' if self.token is not None else 'no',
             "api-password": 'yes' if self.password is not None else 'no',
             "insecure": self.insecure,
+            "max_message_size" : self.max_message_size,
             "output": self.output,
             "verbose": self.verbose,
         }

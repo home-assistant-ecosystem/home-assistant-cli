@@ -23,6 +23,16 @@ pass_context = click.make_pass_decorator(  # pylint: disable=invalid-name
     Configuration, ensure=True
 )
 
+def validate_file_size(ctx, param, value):
+  if value is not None:
+    if str(value).endswith('KB'):
+      size = int(value)[:-2] * 1024
+    elif str(value).endswith('MB'):
+      size = int(value)[:-2] * 1024 * 1024
+    else:
+      # bytes
+      size = int(value)
+    return size
 
 def run() -> None:
     """Run entry point.
@@ -136,7 +146,7 @@ def _default_token() -> Optional[str]:
 @click.option(
     '--timeout',
     help='Timeout for network operations.',
-    default=const.DEFAULT_TIMEOUT,
+    default=str(const.DEFAULT_TIMEOUT),
     show_default=True,
 )
 @click.option(
@@ -205,6 +215,15 @@ def _default_token() -> Optional[str]:
     default=None,
     help='Sort table by the jsonpath expression. Example: last_changed',
 )
+
+@click.option(
+    '--max-message-size',
+    callback=validate_file_size,
+    default=const.WS_MAX_MESSAGE_SIZE,
+    help='Max size of websocket payload. Default: 4MB',
+    envvar='HASS_WS_MAX_MESSAGE_SIZE',
+)
+
 @pass_context
 def cli(
     ctx: Configuration,
@@ -222,6 +241,7 @@ def cli(
     no_headers: bool,
     table_format: str,
     sort_by: Optional[str],
+    max_message_size: str,
 ) -> None:
     """Command line interface for Home Assistant."""
     ctx.verbose = verbose
@@ -238,6 +258,7 @@ def cli(
     ctx.no_headers = no_headers
     ctx.table_format = table_format
     ctx.sort_by = sort_by  # type: ignore
+    ctx.max_message_size = max_message_size
 
     _LOGGER.debug("Using settings: %s", ctx)
 
