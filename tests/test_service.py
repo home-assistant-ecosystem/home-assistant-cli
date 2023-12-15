@@ -74,7 +74,6 @@ def test_service_completion(default_services) -> None:
 def test_service_call(default_services) -> None:
     """Test basic call of a service."""
     with requests_mock.Mocker() as mock:
-
         post = mock.post(
             "http://localhost:8123/api/services/homeassistant/restart",
             json={"result": "bogus"},

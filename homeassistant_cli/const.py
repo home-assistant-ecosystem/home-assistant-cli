@@ -20,3 +20,5 @@ COLUMNS_ENTITIES = [
     ('CHANGED', 'last_changed'),
 ]
 COLUMNS_SERVICES = [('DOMAIN', 'domain'), ("SERVICE", "domain.services[*]")]
+
+WS_MAX_MESSAGE_SIZE = '4194304'

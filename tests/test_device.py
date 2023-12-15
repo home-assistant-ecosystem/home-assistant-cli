@@ -16,7 +16,6 @@ def test_device_list(default_devices, default_areas) -> None:
         with mock.patch(
             'homeassistant_cli.remote.get_areas', return_value=default_areas
         ):
-
             runner = CliRunner()
             result = runner.invoke(
                 cli.cli,
@@ -37,7 +36,6 @@ def test_device_list_filter(default_devices, default_areas) -> None:
         with mock.patch(
             'homeassistant_cli.remote.get_areas', return_value=default_areas
         ):
-
             runner = CliRunner()
             result = runner.invoke(
                 cli.cli,
@@ -64,7 +62,6 @@ def test_device_assign(default_areas, default_devices) -> None:
                 'homeassistant_cli.remote.assign_area',
                 return_value={'success': True},
             ):
-
                 runner = CliRunner()
                 result = runner.invoke(
                     cli.cli,

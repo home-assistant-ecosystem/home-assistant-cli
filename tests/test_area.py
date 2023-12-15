@@ -13,7 +13,6 @@ def test_area_list(default_areas) -> None:
     with mock.patch(
         'homeassistant_cli.remote.get_areas', return_value=default_areas
     ):
-
         runner = CliRunner()
         result = runner.invoke(
             cli.cli, ["--output=json", "area", "list"], catch_exceptions=False
@@ -29,7 +28,6 @@ def test_area_list_filter(default_areas) -> None:
     with mock.patch(
         'homeassistant_cli.remote.get_areas', return_value=default_areas
     ):
-
         runner = CliRunner()
         result = runner.invoke(
             cli.cli,
