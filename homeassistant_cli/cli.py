@@ -27,9 +27,9 @@ pass_context = click.make_pass_decorator(  # pylint: disable=invalid-name
 def validate_file_size(ctx, param, value):
     if value is not None:
         if str(value).endswith('KB'):
-            size = int(value)[:-2] * 1024
+            size = int(value[:-2]) * 1024
         elif str(value).endswith('MB'):
-            size = int(value)[:-2] * 1024 * 1024
+            size = int(value[:-2]) * 1024 * 1024
         else:
             # bytes
             size = int(value)
