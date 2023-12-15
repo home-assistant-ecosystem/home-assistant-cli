@@ -23,16 +23,18 @@ pass_context = click.make_pass_decorator(  # pylint: disable=invalid-name
     Configuration, ensure=True
 )
 
+
 def validate_file_size(ctx, param, value):
-  if value is not None:
-    if str(value).endswith('KB'):
-      size = int(value)[:-2] * 1024
-    elif str(value).endswith('MB'):
-      size = int(value)[:-2] * 1024 * 1024
-    else:
-      # bytes
-      size = int(value)
-    return size
+    if value is not None:
+        if str(value).endswith('KB'):
+            size = int(value)[:-2] * 1024
+        elif str(value).endswith('MB'):
+            size = int(value)[:-2] * 1024 * 1024
+        else:
+            # bytes
+            size = int(value)
+        return size
+
 
 def run() -> None:
     """Run entry point.
@@ -215,7 +217,6 @@ def _default_token() -> Optional[str]:
     default=None,
     help='Sort table by the jsonpath expression. Example: last_changed',
 )
-
 @click.option(
     '--max-message-size',
     callback=validate_file_size,
@@ -223,7 +224,6 @@ def _default_token() -> Optional[str]:
     help='Max size of websocket payload. Default: 4MB',
     envvar='HASS_WS_MAX_MESSAGE_SIZE',
 )
-
 @pass_context
 def cli(
     ctx: Configuration,

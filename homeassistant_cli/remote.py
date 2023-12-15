@@ -106,9 +106,8 @@ def wsapi(
         async with aiohttp.ClientSession() as session:
             async with session.ws_connect(
                 resolve_server(ctx) + "/api/websocket",
-                max_msg_size=ctx.max_message_size
+                max_msg_size=ctx.max_message_size,
             ) as wsconn:
-
                 await wsconn.send_str(
                     json.dumps({'type': 'auth', 'access_token': ctx.token})
                 )
