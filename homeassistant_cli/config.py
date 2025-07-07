@@ -84,9 +84,7 @@ def resolve_server(ctx: Any) -> str:  # noqa: F821
         ctx.resolved_server = None
 
     if not ctx.resolved_server:
-
         if ctx.server == "auto":
-
             if "HASSIO_TOKEN" in os.environ and "HASS_TOKEN" not in os.environ:
                 ctx.resolved_server = const.DEFAULT_SERVER_MDNS
             else:
@@ -126,6 +124,7 @@ class Configuration:
         self.no_headers = False
         self.table_format = 'plain'
         self.sort_by = None
+        self.max_message_size = const.WS_MAX_MESSAGE_SIZE  # type: str
 
     def echo(self, msg: str, *args: Optional[Any]) -> None:
         """Put content message to stdout."""
@@ -151,6 +150,7 @@ class Configuration:
             "access-token": 'yes' if self.token is not None else 'no',
             "api-password": 'yes' if self.password is not None else 'no',
             "insecure": self.insecure,
+            "max_message_size": self.max_message_size,
             "output": self.output,
             "verbose": self.verbose,
         }

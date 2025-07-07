@@ -82,7 +82,6 @@ def test_raw_ws() -> None:
     with mocker.patch(
         'homeassistant_cli.remote.wsapi', return_value={"result": "worked"}
     ) as mockmethod:
-
         runner = CliRunner()
         result = runner.invoke(
             cli.cli,
@@ -103,7 +102,6 @@ def test_raw_ws_data() -> None:
     with mocker.patch(
         'homeassistant_cli.remote.wsapi', return_value={"result": "worked"}
     ) as mockmethod:
-
         runner = CliRunner()
         result = runner.invoke(
             cli.cli,
