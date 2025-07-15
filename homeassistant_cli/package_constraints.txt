@@ -1,5 +1,5 @@
 PyJWT==1.7.1
-aiohttp==3.7.4.post0
+aiohttp==3.12.14
 aiohttp_cors==0.7.0
 astral==2.2
 async_timeout==3.0.1
