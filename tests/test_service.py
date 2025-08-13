@@ -65,7 +65,7 @@ def test_service_completion(default_services) -> None:
         )
         assert len(result) == 2
 
-        resultdict = dict(result)
+        resultdict = {x.value: x.help for x in result}
 
         assert "light.turn_on" in resultdict
         assert "light.turn_off" in resultdict
