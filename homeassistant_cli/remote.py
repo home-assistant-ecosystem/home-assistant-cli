@@ -105,7 +105,8 @@ def wsapi(
     async def fetcher() -> Optional[Dict]:
         async with aiohttp.ClientSession() as session:
             async with session.ws_connect(
-                resolve_server(ctx) + "/api/websocket"
+                resolve_server(ctx) + "/api/websocket",
+                max_msg_size=16 * 1024 * 1024,  # 16MB to handle large responses
             ) as wsconn:
 
                 await wsconn.send_str(
