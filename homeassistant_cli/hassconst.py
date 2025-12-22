@@ -609,7 +609,7 @@ URL_API_COMPONENTS = "/api/components"
 URL_API_ERROR_LOG = "/api/error_log"
 URL_API_LOG_OUT = "/api/log_out"
 URL_API_TEMPLATE = "/api/template"
-URL_API_HISTORY_PERIOD = "/api/history/period"
+URL_API_HISTORY_PERIOD = "/api/history/period/{}"
 
 HTTP_OK = 200
 HTTP_CREATED = 201
