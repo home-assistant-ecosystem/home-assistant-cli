@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "hype-homeassistant"
-version = "1.0.1"
+version = "1.0.2"
 description  = "Command-line tool for Home Assistant."
 license = "Apache Software License 2.0"
 readme = "README.rst"
@@ -8,6 +8,7 @@ authors = ["The Home Assistant CLI Authors <fabian@affolter-engineering.ch>"]
 keywords = [ "home", "automation" ]
 homepage = "https://github.com/chansearrington/home-assistant-cli"
 repository = "https://github.com/chansearrington/home-assistant-cli"
+packages = [{include = "homeassistant_cli"}]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: End Users/Desktop",
