@@ -25,7 +25,7 @@ hass-cli = "homeassistant_cli.cli:run"
 
 [tool.poetry.dependencies]
 python = "^3.13"
-aiohttp = "^3.9.5"
+aiohttp = "^3.13.3"
 dateparser = "^1.2.0"
 jsonpath-ng = "^1.6.1"
 jinja2 = "^3.1.4"
