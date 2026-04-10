@@ -24,7 +24,7 @@ exclude = ["tests", "tests.*"]
 hass-cli = "homeassistant_cli.cli:run"
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.13"
 aiohttp = "^3.9.5"
 dateparser = "^1.2.0"
 jsonpath-ng = "^1.6.1"
