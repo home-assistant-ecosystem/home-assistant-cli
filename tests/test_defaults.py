@@ -77,10 +77,10 @@ def test_defaults(
         with requests_mock.mock() as mockhttp:
             expserver = f"{expected_resolved_server}/api/config"
             mockhttp.get(
-                expserver, json={"name": "mock response"}, status_code=200
+                expserver, json={"name": "mock response", "version": "1.0.0"}, status_code=200
             )
             ctx = cli.cli.make_context(
-                'hass-cli', ['--timeout', '1', 'config']
+                'hass-cli', ['--timeout', '1', 'config', 'release']
             )
             with ctx:  # type: ignore
                 cli.cli.invoke(ctx)

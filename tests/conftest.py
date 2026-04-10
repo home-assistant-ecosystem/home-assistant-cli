@@ -11,12 +11,12 @@ mydata      - Dict with the content parsed from json
 
 import json
 import os
+from pathlib import Path
 
 import click_log.core as logcore
-import pkg_resources
 import pytest
 
-FIXTURES_PATH = pkg_resources.resource_filename(__name__, 'fixtures/')
+FIXTURES_PATH = Path(__file__).parent / 'fixtures'
 
 
 logcore.basic_config()
@@ -41,7 +41,7 @@ def _all_fixtures():
     for fname in os.listdir(FIXTURES_PATH):
         name, ext = os.path.splitext(fname)
 
-        with open(FIXTURES_PATH + fname) as file:
+        with open(FIXTURES_PATH / fname) as file:
             content = file.read()
 
         _inject_fixture(name + "_text", content)
