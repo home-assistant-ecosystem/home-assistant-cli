@@ -1,13 +1,14 @@
 [tool.poetry]
-name = "homeassistant-cli"
-version = "1.0.0"
+name = "hype-homeassistant"
+version = "1.0.2"
 description  = "Command-line tool for Home Assistant."
 license = "Apache Software License 2.0"
 readme = "README.rst"
 authors = ["The Home Assistant CLI Authors <fabian@affolter-engineering.ch>"]
 keywords = [ "home", "automation" ]
-homepage = "https://github.com/home-assistant-ecosystem/home-assistant-cli"
-repository = "https://github.com/home-assistant-ecosystem/home-assistant-cli"
+homepage = "https://github.com/chansearrington/home-assistant-cli"
+repository = "https://github.com/chansearrington/home-assistant-cli"
+packages = [{include = "homeassistant_cli"}]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: End Users/Desktop",
@@ -16,6 +17,9 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Home Automation",
 ]
 exclude = ["tests", "tests.*"]
@@ -36,6 +40,7 @@ ruamel-yaml = "^0.18.6"
 click = "^8.1.7"
 click-log = "^0.4.0"
 netdisco = "^3.0.0"
+packaging = ">=21.0"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^8.2.0"
