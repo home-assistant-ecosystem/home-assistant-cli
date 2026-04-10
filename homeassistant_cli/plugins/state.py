@@ -1,22 +1,24 @@
 """Entity plugin for Home Assistant CLI (hass-cli)."""
+
 import json as json_
 import logging
 import re
-from typing import Any, Dict, List, Pattern  # noqa
+from re import Pattern
+from typing import Any, Dict, List  # noqa
 
 import click
 
 import homeassistant_cli.autocompletion as autocompletion
-from homeassistant_cli.cli import pass_context
-from homeassistant_cli.config import Configuration
 import homeassistant_cli.const as const
 import homeassistant_cli.helper as helper
 import homeassistant_cli.remote as api
+from homeassistant_cli.cli import pass_context
+from homeassistant_cli.config import Configuration
 
 _LOGGING = logging.getLogger(__name__)
 
 
-@click.group('state')
+@click.group("state")
 @pass_context
 def cli(ctx):
     """Get info on entity state from Home Assistant."""
@@ -24,7 +26,7 @@ def cli(ctx):
 
 @cli.command()
 @click.argument(
-    'entity',
+    "entity",
     required=True,
     shell_complete=autocompletion.entities,  # type: ignore
 )
@@ -48,7 +50,7 @@ def get(ctx: Configuration, entity):
 
 @cli.command()
 @click.argument(
-    'entity',
+    "entity",
     required=True,
     shell_complete=autocompletion.entities,  # type: ignore
 )
@@ -64,8 +66,8 @@ def delete(ctx: Configuration, entity):
         ctx.echo("Entity %s not found.", entity)
 
 
-@cli.command('list')
-@click.argument('entityfilter', default=".*", required=False)
+@cli.command("list")
+@click.argument("entityfilter", default=".*", required=False)
 @pass_context
 def list_command(ctx, entityfilter):
     """List all state from Home Assistant."""
@@ -80,7 +82,7 @@ def list_command(ctx, entityfilter):
         entity_filter_re = re.compile(entity_filter)  # type: Pattern
 
         for entity in states:
-            if entity_filter_re.search(entity['entity_id']):
+            if entity_filter_re.search(entity["entity_id"]):
                 result.append(entity)
     ctx.echo(
         helper.format_output(
@@ -93,22 +95,21 @@ def list_command(ctx, entityfilter):
 
 @cli.command()
 @click.argument(
-    'entity',
+    "entity",
     required=True,
     shell_complete=autocompletion.entities,  # type: ignore
 )
-@click.argument('newstate', required=False)
+@click.argument("newstate", required=False)
 @click.option(
-    '--attributes',
+    "--attributes",
     help="Comma separated key/value pairs to use as attributes.",
 )
 @click.option(
-    '--json',
-    help="Raw JSON state to use for setting. Overrides any other"
-    "state values provided.",
+    "--json",
+    help="Raw JSON state to use for setting. Overrides any otherstate values provided.",
 )
 @click.option(
-    '--merge',
+    "--merge",
     is_flag=True,
     default=False,
     help="If set and the entity state exists the state and attributes will"
@@ -118,12 +119,10 @@ def list_command(ctx, entityfilter):
 @pass_context
 def edit(ctx: Configuration, entity, newstate, attributes, merge, json):
     """Edit entity state from Home Assistant."""
-    ctx.auto_output('data')
+    ctx.auto_output("data")
     new_state = newstate
     if json:
-        _LOGGING.debug(
-            "JSON found overriding/creating new state for entity %s", entity
-        )
+        _LOGGING.debug("JSON found overriding/creating new state for entity %s", entity)
         wanted_state = json_.loads(json)
     elif new_state or attributes:
         wanted_state = {}
@@ -139,34 +138,32 @@ def edit(ctx: Configuration, entity, newstate, attributes, merge, json):
         if attributes:
             attributes_dict = helper.to_attributes(attributes)
 
-            new_attr = wanted_state.get('attributes', {})
+            new_attr = wanted_state.get("attributes", {})
             new_attr.update(attributes_dict)
             # This is not honoring merge!
-            wanted_state['attributes'] = new_attr
+            wanted_state["attributes"] = new_attr
 
         if newstate:
-            wanted_state['state'] = newstate
+            wanted_state["state"] = newstate
         else:
             if not existing_state:
                 raise ValueError("No new or existing state provided.")
-            wanted_state['state'] = existing_state['state']
+            wanted_state["state"] = existing_state["state"]
 
     else:
         existing = api.get_state(ctx, entity)
         if existing:
-            existing_raw = helper.raw_format_output(
-                ctx.output, existing, ctx.yaml()
-            )
+            existing_raw = helper.raw_format_output(ctx.output, existing, ctx.yaml())
         else:
             existing_raw = helper.raw_format_output(ctx.output, {}, ctx.yaml())
 
-        new = click.edit(existing_raw, extension='.{}'.format(ctx.output))
+        new = click.edit(existing_raw, extension=f".{ctx.output}")
 
         if new is not None:
             ctx.echo("Updating '%s'", entity)
-            if ctx.output == 'yaml':
+            if ctx.output == "yaml":
                 wanted_state = ctx.yamlload(new)
-            if ctx.output == 'json':
+            if ctx.output == "json":
                 wanted_state = json_.loads(new)
 
             api.set_state(ctx, entity, wanted_state)
@@ -180,7 +177,7 @@ def edit(ctx: Configuration, entity, newstate, attributes, merge, json):
     _LOGGING.debug("Updated to: %s", result)
 
 
-def _report(ctx: Configuration, result: List[Dict[str, Any]], action: str):
+def _report(ctx: Configuration, result: list[dict[str, Any]], action: str):
     """Create a report."""
     ctx.echo(
         helper.format_output(
@@ -195,16 +192,16 @@ def _report(ctx: Configuration, result: List[Dict[str, Any]], action: str):
 
 def _homeassistant_cmd(ctx: Configuration, entities, cmd, action):
     """Run command on Home Assistant."""
-    data = {'entity_id': entities}
+    data = {"entity_id": entities}
     _LOGGING.debug("%s on %s", cmd, entities)
-    result = api.call_service(ctx, 'homeassistant', cmd, data)
+    result = api.call_service(ctx, "homeassistant", cmd, data)
 
     _report(ctx, result, action)
 
 
 @cli.command()
 @click.argument(
-    'entities',
+    "entities",
     nargs=-1,
     required=True,
     shell_complete=autocompletion.entities,  # type: ignore
@@ -213,12 +210,12 @@ def _homeassistant_cmd(ctx: Configuration, entities, cmd, action):
 def toggle(ctx: Configuration, entities):
     """Toggle state for one or more entities in Home Assistant."""
     ctx.auto_output("table")
-    _homeassistant_cmd(ctx, entities, 'toggle', "toggled")
+    _homeassistant_cmd(ctx, entities, "toggle", "toggled")
 
 
-@cli.command('turn_off')
+@cli.command("turn_off")
 @click.argument(
-    'entities',
+    "entities",
     nargs=-1,
     required=True,
     shell_complete=autocompletion.entities,  # type: ignore
@@ -227,12 +224,12 @@ def toggle(ctx: Configuration, entities):
 def off_cmd(ctx: Configuration, entities):
     """Turn entity off."""
     ctx.auto_output("table")
-    _homeassistant_cmd(ctx, entities, 'turn_off', "turned off")
+    _homeassistant_cmd(ctx, entities, "turn_off", "turned off")
 
 
-@cli.command('turn_on')
+@cli.command("turn_on")
 @click.argument(
-    'entities',
+    "entities",
     nargs=-1,
     required=True,
     shell_complete=autocompletion.entities,  # type: ignore
@@ -241,32 +238,32 @@ def off_cmd(ctx: Configuration, entities):
 def on_cmd(ctx: Configuration, entities):
     """Turn entity on."""
     ctx.auto_output("table")
-    _homeassistant_cmd(ctx, entities, 'turn_on', "turned on")
+    _homeassistant_cmd(ctx, entities, "turn_on", "turned on")
 
 
 @cli.command()
 @click.argument(
-    'entities',
+    "entities",
     nargs=-1,
     required=True,
     shell_complete=autocompletion.entities,  # type: ignore
 )
 @click.option(
-    '--since',
+    "--since",
     required=False,
     default="1d",
     help="Start of the period to get history from. A timestamp or relative "
     "expression relative to now. Defaults to 1 day.",
 )
 @click.option(
-    '--end',
+    "--end",
     required=False,
     default="now",
     help="End of the period to query history from. A timestamp or relative "
     "expression relative to now. Defaults to now.",
 )
 @pass_context
-def history(ctx: Configuration, entities: List, since: str, end: str):
+def history(ctx: Configuration, entities: list, since: str, end: str):
     """Get state history from Home Assistant, all or per entity.
 
     You can use `--since` and `--end` to narrow or expand the time period.
@@ -280,9 +277,9 @@ def history(ctx: Configuration, entities: List, since: str, end: str):
 
     ctx.auto_output("table")
     settings = {
-        'DATE_ORDER': 'DMY',
-        'TIMEZONE': 'UTC',
-        'RETURN_AS_TIMEZONE_AWARE': True,
+        "DATE_ORDER": "DMY",
+        "TIMEZONE": "UTC",
+        "RETURN_AS_TIMEZONE_AWARE": True,
     }
 
     start_time = dateparser.parse(since, settings=settings)
@@ -293,7 +290,7 @@ def history(ctx: Configuration, entities: List, since: str, end: str):
 
     if ctx.verbose:
         click.echo(
-            'Querying from {}:{} to {}:{} a span of {}'.format(
+            "Querying from {}:{} to {}:{} a span of {}".format(
                 since, start_time.isoformat(), end, end_time.isoformat(), delta
             )
         )
@@ -316,7 +313,7 @@ def history(ctx: Configuration, entities: List, since: str, end: str):
 
     if ctx.verbose:
         click.echo(
-            'History with {} rows from {} entities found.'.format(
+            "History with {} rows from {} entities found.".format(
                 len(result), entity_count
             )
         )
