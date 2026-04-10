@@ -1,9 +1,9 @@
 """Helpers used by Home Assistant CLI (hass-cli)."""
 
+import ast
 import contextlib
 import json
 import logging
-import ast
 import shlex
 from collections.abc import Generator
 from http.client import HTTPConnection
