@@ -1,6 +1,6 @@
 """Tests file for Home Assistant CLI (hass-cli)."""
 import os
-from typing import Dict, Optional
+from typing import Optional
 from unittest import mock
 
 import pytest
@@ -63,7 +63,7 @@ HASS_SERVER = "http://localhost:8123"
 )
 def test_defaults(
     description: str,
-    env: Dict[str, str],
+    env: dict[str, str],
     expected_resolved_server,
     expected_server: str,
     expected_token: Optional[str],
