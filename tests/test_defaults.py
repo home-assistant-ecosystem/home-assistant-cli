@@ -1,4 +1,5 @@
 """Tests file for Home Assistant CLI (hass-cli)."""
+
 import os
 from typing import Optional
 from unittest import mock
@@ -19,15 +20,15 @@ HASS_SERVER = "http://localhost:8123"
         (
             "No env set, all should be defaults",
             {},
-            'auto',
+            "auto",
             HASS_SERVER,
             None,
             None,
         ),
         (
             "If only HASSIO_TOKEN, use default hassio",
-            {'HASSIO_TOKEN': 'supersecret'},
-            'auto',
+            {"HASSIO_TOKEN": "supersecret"},
+            "auto",
             MDNS_SERVER_FALLBACK,
             "supersecret",
             None,
@@ -35,8 +36,8 @@ HASS_SERVER = "http://localhost:8123"
         (
             "Honor HASS_SERVER together with HASSIO_TOKEN",
             {
-                'HASSIO_TOKEN': 'supersecret',
-                'HASS_SERVER': 'http://localhost:63333',
+                "HASSIO_TOKEN": "supersecret",
+                "HASS_SERVER": "http://localhost:63333",
             },
             "http://localhost:63333",
             "http://localhost:63333",
@@ -45,19 +46,19 @@ HASS_SERVER = "http://localhost:8123"
         ),
         (
             "HASS_TOKEN should win over HASSIO_TOKEN",
-            {'HASSIO_TOKEN': 'supersecret', 'HASS_TOKEN': 'I Win!'},
-            'auto',
+            {"HASSIO_TOKEN": "supersecret", "HASS_TOKEN": "I Win!"},
+            "auto",
             HASS_SERVER,
-            'I Win!',
+            "I Win!",
             None,
         ),
         (
             "HASS_PASSWORD should be honored",
-            {'HASS_PASSWORD': 'supersecret'},
-            'auto',
+            {"HASS_PASSWORD": "supersecret"},
+            "auto",
             HASS_SERVER,
             None,
-            'supersecret',
+            "supersecret",
         ),
     ],
 )
@@ -77,10 +78,12 @@ def test_defaults(
         with requests_mock.mock() as mockhttp:
             expserver = f"{expected_resolved_server}/api/config"
             mockhttp.get(
-                expserver, json={"name": "mock response", "version": "1.0.0"}, status_code=200
+                expserver,
+                json={"name": "mock response", "version": "1.0.0"},
+                status_code=200,
             )
             ctx = cli.cli.make_context(
-                'hass-cli', ['--timeout', '1', 'config', 'release']
+                "hass-cli", ["--timeout", "1", "config", "release"]
             )
             with ctx:  # type: ignore
                 cli.cli.invoke(ctx)
@@ -93,9 +96,7 @@ def test_defaults(
 
             assert mockhttp.call_count == 1
 
-            assert mockhttp.request_history[0].url.startswith(
-                expected_resolved_server
-            )
+            assert mockhttp.request_history[0].url.startswith(expected_resolved_server)
 
             if expected_token:
                 auth = mockhttp.request_history[0].headers["Authorization"]
@@ -104,9 +105,7 @@ def test_defaults(
                 password = mockhttp.request_history[0].headers["x-ha-access"]
                 assert password == expected_password
             else:
-                assert (
-                    "Authorization" not in mockhttp.request_history[0].headers
-                )
+                assert "Authorization" not in mockhttp.request_history[0].headers
                 assert "x-ha-access" not in mockhttp.request_history[0].headers
 
     finally:
