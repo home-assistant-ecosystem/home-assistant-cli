@@ -5,7 +5,7 @@ Home Assistant Command-line Interface (``hass-cli``)
 
 The Home Assistant Command-line interface (``hass-cli``) allows one to
 work with a local or a remote `Home Assistant <https://home-assistant.io>`_
-Core or Home Assistant (former Hass.io) instance directly from the command-line.
+instance directly from the command-line.
 
 .. image:: https://asciinema.org/a/216235.png
       :alt: hass-cli screencast
@@ -347,10 +347,10 @@ by specifying it as an argument:
    $ hass-cli event watch deconz_event
 
 
-Home Assistant (former Hass.io)
+Home Assistant Operating System
 -------------------------------
 
-If you are using Home Assistant (former Hass.io) there are commands available
+If you are using Home Assistant Operating System there are commands available
 for you to interact with Home Assistant services/systems. This includes the
 underlying services like the supervisor.
 
@@ -516,7 +516,7 @@ Help
       discover    Discovery for the local network.
       entity      Get info on entities from Home Assistant.
       event       Interact with events.
-      ha          Home Assistant (former Hass.io) commands.
+      ha          Home Assistant Operating System commands.
       info        Get basic info from Home Assistant.
       map         Show the location of the config or an entity on a map.
       raw         Call the raw API (advanced).
