@@ -1,3 +1,0 @@
-# Home Assistant CLI requirements
-# let setup.py do the heavy lifting
-.
