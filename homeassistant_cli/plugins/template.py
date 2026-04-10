@@ -1,4 +1,5 @@
 """Template plugin for Home Assistant CLI (hass-cli)."""
+
 import logging
 import os
 from typing import Any, Dict  # noqa, flake8 issue
@@ -6,9 +7,9 @@ from typing import Any, Dict  # noqa, flake8 issue
 import click
 from jinja2 import Environment, FileSystemLoader
 
+import homeassistant_cli.remote as api
 from homeassistant_cli.cli import pass_context
 from homeassistant_cli.config import Configuration
-import homeassistant_cli.remote as api
 
 _LOGGING = logging.getLogger(__name__)
 
@@ -31,11 +32,11 @@ def render(template_path, data, strict=False) -> str:
     return output
 
 
-@click.command('template')
-@click.argument('template', required=True, type=click.File())
-@click.argument('datafile', type=click.File(), required=False)
+@click.command("template")
+@click.argument("template", required=True, type=click.File())
+@click.argument("datafile", type=click.File(), required=False)
 @click.option(
-    '--local',
+    "--local",
     default=False,
     is_flag=True,
     help="If should render template locally.",
