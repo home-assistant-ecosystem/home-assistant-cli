@@ -11,12 +11,11 @@ import homeassistant_cli.cli as cli
 def test_device_list(default_devices, default_areas) -> None:
     """Test Device List."""
     with mock.patch(
-        'homeassistant_cli.remote.get_devices', return_value=default_devices
+        "homeassistant_cli.remote.get_devices", return_value=default_devices
     ):
         with mock.patch(
-            'homeassistant_cli.remote.get_areas', return_value=default_areas
+            "homeassistant_cli.remote.get_areas", return_value=default_areas
         ):
-
             runner = CliRunner()
             result = runner.invoke(
                 cli.cli,
@@ -32,12 +31,11 @@ def test_device_list(default_devices, default_areas) -> None:
 def test_device_list_filter(default_devices, default_areas) -> None:
     """Test Device List."""
     with mock.patch(
-        'homeassistant_cli.remote.get_devices', return_value=default_devices
+        "homeassistant_cli.remote.get_devices", return_value=default_devices
     ):
         with mock.patch(
-            'homeassistant_cli.remote.get_areas', return_value=default_areas
+            "homeassistant_cli.remote.get_areas", return_value=default_areas
         ):
-
             runner = CliRunner()
             result = runner.invoke(
                 cli.cli,
@@ -48,23 +46,22 @@ def test_device_list_filter(default_devices, default_areas) -> None:
 
             data = json.loads(result.output)
             assert len(data) == 2
-            assert data[0]['name'] == "Kitchen table left"
-            assert data[1]['name'] == "Kitchen front right at table"
+            assert data[0]["name"] == "Kitchen table left"
+            assert data[1]["name"] == "Kitchen front right at table"
 
 
 def test_device_assign(default_areas, default_devices) -> None:
     """Test basic device assign."""
     with mock.patch(
-        'homeassistant_cli.remote.get_devices', return_value=default_devices
+        "homeassistant_cli.remote.get_devices", return_value=default_devices
     ):
         with mock.patch(
-            'homeassistant_cli.remote.get_areas', return_value=default_areas
+            "homeassistant_cli.remote.get_areas", return_value=default_areas
         ):
             with mock.patch(
-                'homeassistant_cli.remote.assign_area',
-                return_value={'success': True},
+                "homeassistant_cli.remote.assign_area",
+                return_value={"success": True},
             ):
-
                 runner = CliRunner()
                 result = runner.invoke(
                     cli.cli,
@@ -73,7 +70,5 @@ def test_device_assign(default_areas, default_devices) -> None:
                 )
                 # print(result.output)
                 assert result.exit_code == 0
-                expected = (
-                    "Successfully assigned 'Kitchen' to 'Kitchen table left'\n"
-                )
+                expected = "Successfully assigned 'Kitchen' to 'Kitchen table left'\n"
                 assert result.output == expected

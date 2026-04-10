@@ -1,8 +1,9 @@
 """Tests file for Home Assistant CLI (hass-cli)."""
+
 import json
 
-from click.testing import CliRunner
 import requests_mock
+from click.testing import CliRunner
 
 import homeassistant_cli.cli as cli
 
@@ -56,25 +57,21 @@ def test_state_list(basic_entities_text) -> None:
 def output_formats(cmd, data, output) -> None:
     """Test output formats."""
     with requests_mock.Mocker() as mock:
-        mock.get(
-            "http://localhost:8123/api/states", text=data, status_code=200
-        )
+        mock.get("http://localhost:8123/api/states", text=data, status_code=200)
 
         runner = CliRunner()
         result = runner.invoke(cli.cli, cmd, catch_exceptions=False)
-        print('--seen--')
+        print("--seen--")
         print(result.output)
-        print('----')
-        print('---expected---')
+        print("----")
+        print("---expected---")
         print(output)
-        print('----')
+        print("----")
         assert result.exit_code == 0
         assert result.output == output
 
 
-def test_state_list_table(
-    basic_entities_text, basic_entities_table_text
-) -> None:
+def test_state_list_table(basic_entities_text, basic_entities_table_text) -> None:
     """Test table."""
     output_formats(
         ["--output=table", "state", "list"],
@@ -87,9 +84,7 @@ def test_state_default_list_table(
     basic_entities_text, basic_entities_table_text
 ) -> None:
     """Test table."""
-    output_formats(
-        ["state", "list"], basic_entities_text, basic_entities_table_text
-    )
+    output_formats(["state", "list"], basic_entities_text, basic_entities_table_text)
 
 
 def test_state_list_tblformat(
@@ -126,10 +121,7 @@ def test_state_list_table_columns_sortby(
     output_formats(
         [
             "--output=table",
-            (
-                '--columns=entity=attributes.friendly_name,'
-                'state=state,last_changed'
-            ),
+            ("--columns=entity=attributes.friendly_name,state=state,last_changed"),
             "--sort-by=last_changed",
             "state",
             "list",
@@ -153,9 +145,7 @@ def test_state_list_no_header(
 def test_state_get(basic_entities_text, basic_entities) -> None:
     """Test entity get."""
     with requests_mock.Mocker() as mock:
-        sensorone = next(
-            x for x in basic_entities if x['entity_id'] == 'sensor.one'
-        )
+        sensorone = next(x for x in basic_entities if x["entity_id"] == "sensor.one")
         mock.get(
             "http://localhost:8123/api/states/sensor.one",
             json=sensorone,
@@ -184,9 +174,7 @@ def test_state_edit(basic_entities_text, basic_entities) -> None:
             text=basic_entities_text,
             status_code=200,
         )
-        sensorone = next(
-            x for x in basic_entities if x['entity_id'] == 'sensor.one'
-        )
+        sensorone = next(x for x in basic_entities if x["entity_id"] == "sensor.one")
         get = mock.get(
             "http://localhost:8123/api/states/sensor.one",
             json=sensorone,
@@ -209,7 +197,7 @@ def test_state_edit(basic_entities_text, basic_entities) -> None:
 
         assert get.call_count == 1
         assert post.call_count == 1
-        assert post.request_history[0].json()['state'] == 'myspecialstate'
+        assert post.request_history[0].json()["state"] == "myspecialstate"
 
 
 def test_state_toggle(basic_entities_text, basic_entities) -> None:
@@ -261,7 +249,7 @@ def test_state_filter(default_entities) -> None:
         data = json.loads(result.output)
         assert len(data) == 3
 
-        ids = [d['entity_id'] for d in data]
+        ids = [d["entity_id"] for d in data]
 
         assert len(ids) == 3
         assert "timer.timer_small_bathroom" in ids

@@ -16,7 +16,7 @@ from pathlib import Path
 import click_log.core as logcore
 import pytest
 
-FIXTURES_PATH = Path(__file__).parent / 'fixtures'
+FIXTURES_PATH = Path(__file__).parent / "fixtures"
 
 
 logcore.basic_config()
@@ -26,7 +26,7 @@ def generate_fixture(content: str):
     """Generate the individual fixtures."""
     pass  # pylint: disable=unnecessary-pass
 
-    @pytest.fixture(scope='module')
+    @pytest.fixture(scope="module")
     def my_fixture():
         return content
 
@@ -45,7 +45,7 @@ def _all_fixtures():
             content = file.read()
 
         _inject_fixture(name + "_text", content)
-        if ext == '.json':
+        if ext == ".json":
             _inject_fixture(name, json.loads(content))
 
 
