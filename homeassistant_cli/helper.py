@@ -1,84 +1,88 @@
 """Helpers used by Home Assistant CLI (hass-cli)."""
+
 import contextlib
-from http.client import HTTPConnection
 import json
 import logging
 import shlex
-from typing import Any, Dict, Generator, List, Optional, Tuple, Union, cast
+from collections.abc import Generator
+from http.client import HTTPConnection
+from typing import Any, Dict, List, Optional, Tuple, Union, cast
 
 from ruamel.yaml import YAML
 from tabulate import tabulate
 
-from homeassistant_cli.config import Configuration
 import homeassistant_cli.const as const
 import homeassistant_cli.yaml as yaml
+from homeassistant_cli.config import Configuration
 
 _LOGGING = logging.getLogger(__name__)
 
 
-def to_attributes(entry: str) -> Dict[str, str]:
+def to_attributes(entry: str) -> dict[str, str]:
     """Convert list of key=value pairs to dictionary."""
     if not entry:
         return {}
 
     lexer = shlex.shlex(entry, posix=True)
     lexer.whitespace_split = True
-    lexer.whitespace = ','
+    lexer.whitespace = ","
     attributes_dict = {}  # type: Dict[str, str]
     attributes_dict = dict(
-        pair.split('=', 1) for pair in lexer  # type: ignore
+        pair.split("=", 1)
+        for pair in lexer  # type: ignore
     )
     return attributes_dict
 
 
-def to_tuples(entry: str) -> List[Tuple[str, str]]:
+def to_tuples(entry: str) -> list[tuple[str, str]]:
     """Convert list of key=value pairs to list of tuples."""
     if not entry:
         return []
 
     lexer = shlex.shlex(entry, posix=True)
     lexer.whitespace_split = True
-    lexer.whitespace = ','
+    lexer.whitespace = ","
     attributes_list = []  # type: List[Tuple[str,str]]
     attributes_list = list(
-        tuple(pair.split('=', 1)) for pair in lexer  # type: ignore
+        tuple(pair.split("=", 1))
+        for pair in lexer  # type: ignore
     )
     return attributes_list
 
 
 def raw_format_output(
     output: str,
-    data: Union[Dict[str, Any], List[Dict[str, Any]]],
+    data: Union[dict[str, Any], list[dict[str, Any]]],
     yamlparser: YAML,
-    columns: Optional[List] = None,
+    columns: Optional[list] = None,
     no_headers: bool = False,
-    table_format: str = 'plain',
+    table_format: str = "plain",
     sort_by: Optional[str] = None,
 ) -> str:
     """Format the raw output."""
-    if output == 'auto':
+    if output == "auto":
         _LOGGING.debug("Output `auto` thus using %s", const.DEFAULT_DATAOUTPUT)
         output = const.DEFAULT_DATAOUTPUT
 
-    if sort_by and isinstance(data, List):
+    if sort_by and isinstance(data, list):
         _sort_table(data, sort_by)
 
-    if output == 'json':
+    if output == "json":
         try:
             return json.dumps(data, indent=2, sort_keys=False)
         except ValueError:
             return str(data)
-    elif output == 'ndjson':
+    elif output == "ndjson":
         try:
             return json.dumps(data)
         except ValueError:
             return str(data)
-    elif output == 'yaml':
+    elif output == "yaml":
         try:
             return cast(str, yaml.dumpyaml(yamlparser, data))
         except ValueError:
             return str(data)
-    elif output == 'table':
+    elif output == "table":
         from jsonpath_ng import parse
 
         if not columns:
@@ -95,7 +99,7 @@ def raw_format_output(
 
         # In case data passed in is a single element
         # we turn it into a single item list for better table output
-        if not isinstance(data, List):
+        if not isinstance(data, list):
             data = [data]
 
         for item in data:
@@ -105,25 +109,21 @@ def raw_format_output(
                 row.append(", ".join(map(str, val)))
             result.append(row)
 
-        res = tabulate(
-            result, headers=headers, tablefmt=table_format
-        )  # type: str
+        res = tabulate(result, headers=headers, tablefmt=table_format)  # type: str
         return res
     else:
         raise ValueError(
-            "Output Format was {}, expected either 'json' or 'yaml'".format(
-                output
-            )
+            "Output Format was {}, expected either 'json' or 'yaml'".format(output)
         )
 
 
-def _sort_table(result: List[Any], sort_by: str) -> List[Any]:
+def _sort_table(result: list[Any], sort_by: str) -> list[Any]:
     """Sort the content of a table."""
     from jsonpath_ng import parse
 
     expr = parse(sort_by)
 
-    def _internal_sort(row: Dict[Any, str]) -> Any:
+    def _internal_sort(row: dict[Any, str]) -> Any:
         val = next(iter([match.value for match in expr.find(row)]), None)
         return (val is None, val)
 
@@ -133,8 +133,8 @@ def _sort_table(result: List[Any], sort_by: str) -> List[Any]:
 
 def format_output(
     ctx: Configuration,
-    data: List[Dict[str, Any]],
-    columns: Optional[List] = None,
+    data: list[dict[str, Any]],
+    columns: Optional[list] = None,
 ) -> str:
     """Format data to output based on settings in ctx/Context."""
     return raw_format_output(
@@ -154,7 +154,7 @@ def debug_requests_on() -> None:
 
     logging.basicConfig()
     logging.getLogger().setLevel(logging.DEBUG)
-    requests_log = logging.getLogger('requests.packages.urllib3')
+    requests_log = logging.getLogger("requests.packages.urllib3")
     requests_log.setLevel(logging.DEBUG)
     requests_log.propagate = True
 
@@ -169,7 +169,7 @@ def debug_requests_off() -> None:
     root_logger = logging.getLogger()
     root_logger.setLevel(logging.WARNING)
     root_logger.handlers = []
-    requests_log = logging.getLogger('requests.packages.urllib3')
+    requests_log = logging.getLogger("requests.packages.urllib3")
     requests_log.setLevel(logging.WARNING)
     requests_log.propagate = False
 
