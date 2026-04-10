@@ -1,7 +1,6 @@
 """Details for the auto-completion."""
 
 import os
-from typing import List, Tuple  # NOQA
 
 from requests.exceptions import HTTPError
 

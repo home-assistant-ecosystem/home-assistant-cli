@@ -1,7 +1,7 @@
 """Tests for helper."""
 
 from collections.abc import Sized
-from typing import List, cast  # noqa: F401
+from typing import cast
 
 import homeassistant_cli.helper as helper
 

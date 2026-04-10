@@ -3,11 +3,9 @@
 import json as json_
 import logging
 import re
-from re import Pattern
-from typing import Any, Dict, List  # noqa
+from typing import Any, Dict, List
 
 import click
-
 import homeassistant_cli.autocompletion as autocompletion
 import homeassistant_cli.const as const
 import homeassistant_cli.helper as helper
@@ -290,9 +288,8 @@ def history(ctx: Configuration, entities: list, since: str, end: str):
 
     if ctx.verbose:
         click.echo(
-            "Querying from {}:{} to {}:{} a span of {}".format(
-                since, start_time.isoformat(), end, end_time.isoformat(), delta
-            )
+            f"Querying from {since}:{start_time.isoformat()} to "
+            f"{end}:{end_time.isoformat()} a span of {delta}"
         )
 
     data = api.get_history(ctx, list(entities), start_time, end_time)
@@ -313,7 +310,5 @@ def history(ctx: Configuration, entities: list, since: str, end: str):
 
     if ctx.verbose:
         click.echo(
-            "History with {} rows from {} entities found.".format(
-                len(result), entity_count
-            )
+            f"History with {len(result)} rows from {entity_count} entities found."
         )

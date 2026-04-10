@@ -3,11 +3,9 @@
 import logging
 import re
 import sys
-from re import Pattern
-from typing import Any, Dict, List, Optional  # noqa
+from typing import Any, Dict, List, Optional
 
 import click
-
 import homeassistant_cli.autocompletion as autocompletion
 import homeassistant_cli.helper as helper
 import homeassistant_cli.remote as api
@@ -75,7 +73,7 @@ def assign(
     ctx: Configuration,
     area_id_or_name,
     names: list[str],
-    match: Optional[str] = None,
+    match: str | None = None,
 ):
     """Update area on one or more devices.
 

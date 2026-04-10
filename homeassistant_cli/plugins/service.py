@@ -3,11 +3,9 @@
 import logging
 import re as reg
 import sys
-from re import Pattern
-from typing import Any, Dict, List  # noqa: F401
+from typing import Any, Dict, List
 
 import click
-
 import homeassistant_cli.autocompletion as autocompletion
 import homeassistant_cli.remote as api
 from homeassistant_cli.cli import pass_context

@@ -6,7 +6,7 @@ import logging
 import shlex
 from collections.abc import Generator
 from http.client import HTTPConnection
-from typing import Any, Dict, List, Optional, Tuple, Union, cast
+from typing import Any, cast
 
 from ruamel.yaml import YAML
 from tabulate import tabulate
@@ -52,12 +52,12 @@ def to_tuples(entry: str) -> list[tuple[str, str]]:
 
 def raw_format_output(
     output: str,
-    data: Union[dict[str, Any], list[dict[str, Any]]],
+    data: dict[str, Any] | list[dict[str, Any]],
     yamlparser: YAML,
-    columns: Optional[list] = None,
+    columns: list | None = None,
     no_headers: bool = False,
     table_format: str = "plain",
-    sort_by: Optional[str] = None,
+    sort_by: str | None = None,
 ) -> str:
     """Format the raw output."""
     if output == "auto":
@@ -113,7 +113,7 @@ def raw_format_output(
         return res
     else:
         raise ValueError(
-            "Output Format was {}, expected either 'json' or 'yaml'".format(output)
+            f"Output Format was {output}, expected either 'json' or 'yaml'"
         )
 
 
@@ -134,7 +134,7 @@ def _sort_table(result: list[Any], sort_by: str) -> list[Any]:
 def format_output(
     ctx: Configuration,
     data: list[dict[str, Any]],
-    columns: Optional[list] = None,
+    columns: list | None = None,
 ) -> str:
     """Format data to output based on settings in ctx/Context."""
     return raw_format_output(

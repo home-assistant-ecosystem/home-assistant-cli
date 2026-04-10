@@ -40,7 +40,7 @@ def clean_hass_env(monkeypatch):
 
 def generate_fixture(content: str):
     """Generate the individual fixtures."""
-    pass  # pylint: disable=unnecessary-pass
+    # pylint: disable=unnecessary-pass
 
     @pytest.fixture(scope="module")
     def my_fixture():

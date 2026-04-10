@@ -3,7 +3,6 @@
 import logging
 
 import click
-
 import homeassistant_cli.const as const
 import homeassistant_cli.remote as api
 from homeassistant_cli.cli import pass_context

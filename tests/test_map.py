@@ -3,11 +3,10 @@
 from typing import no_type_check
 from unittest.mock import patch
 
+import homeassistant_cli.cli as cli
 import pytest
 import requests_mock
 from click.testing import CliRunner
-
-import homeassistant_cli.cli as cli
 
 
 @no_type_check

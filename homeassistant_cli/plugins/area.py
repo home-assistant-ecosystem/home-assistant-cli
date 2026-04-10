@@ -3,11 +3,9 @@
 import logging
 import re
 import sys
-from re import Pattern
-from typing import Any, Dict, List  # noqa
+from typing import Any, Dict, List
 
 import click
-
 import homeassistant_cli.autocompletion as autocompletion
 import homeassistant_cli.const as const
 import homeassistant_cli.helper as helper
@@ -33,7 +31,7 @@ def listcmd(ctx: Configuration, areafilter: str):
 
     areas = api.get_areas(ctx)
 
-    result = []  # type: List[Dict]
+    result = []  # type: list[dict]
     if areafilter == ".*":
         result = areas
     else:

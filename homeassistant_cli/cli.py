@@ -3,7 +3,7 @@
 import logging
 import os
 import sys
-from typing import List, Optional, Union, cast
+from typing import cast
 
 import click
 import click_log
@@ -78,9 +78,7 @@ class HomeAssistantCli(click.MultiCommand):
 
         return commands
 
-    def get_command(
-        self, ctx: Context, cmd_name: str
-    ) -> Optional[Union[Group, Command]]:
+    def get_command(self, ctx: Context, cmd_name: str) -> Group | Command | None:
         """Import the commands of the plugins."""
         try:
             mod = __import__(
@@ -92,10 +90,10 @@ class HomeAssistantCli(click.MultiCommand):
         except ImportError:
             # todo: print out issue of loading plugins?
             return None
-        return cast(Union[Group, Command], mod.cli)  # type: ignore
+        return cast(Group | Command, mod.cli)  # type: ignore
 
 
-def _default_token() -> Optional[str]:
+def _default_token() -> str | None:
     """Handle the token provided as env variable."""
     return os.environ.get("HASS_TOKEN", os.environ.get("HASSIO_TOKEN", None))
 
@@ -207,8 +205,8 @@ def cli(
     ctx: Configuration,
     verbose: bool,
     server: str,
-    token: Optional[str],
-    password: Optional[str],
+    token: str | None,
+    password: str | None,
     output: str,
     timeout: int,
     debug: bool,
@@ -218,7 +216,7 @@ def cli(
     columns: str,
     no_headers: bool,
     table_format: str,
-    sort_by: Optional[str],
+    sort_by: str | None,
 ) -> None:
     """Command line interface for Home Assistant."""
     ctx.verbose = verbose

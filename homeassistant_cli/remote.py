@@ -11,8 +11,9 @@ import enum
 import json
 import logging
 import urllib.parse
+from collections.abc import Callable
 from datetime import datetime
-from typing import Any, Callable, Optional, cast
+from typing import Any, cast
 from urllib.parse import urlencode
 
 import aiohttp
@@ -45,7 +46,7 @@ class APIStatus(enum.Enum):
 
 
 def restapi(
-    ctx: Configuration, method: str, path: str, data: Optional[dict] = None
+    ctx: Configuration, method: str, path: str, data: dict | None = None
 ) -> requests.Response:
     """Make a call to the Home Assistant REST API."""
     if data is None:
@@ -81,19 +82,19 @@ def restapi(
         return requests.request(method, url, data=data_str, headers=headers)
 
     except requests.exceptions.ConnectionError:
-        raise HomeAssistantCliError(f"Error connecting to {url}")
+        raise HomeAssistantCliError(f"Error connecting to {url}") from None
 
     except requests.exceptions.Timeout:
         error = f"Timeout when talking to {url}"
         _LOGGER.exception(error)
-        raise HomeAssistantCliError(error)
+        raise HomeAssistantCliError(error) from None
 
 
 def wsapi(
     ctx: Configuration,
     frame: dict,
-    callback: Optional[Callable[[dict], Any]] = None,
-) -> Optional[dict]:
+    callback: Callable[[dict], Any] | None = None,
+) -> dict | None:
     """Make a call to Home Assistant using WS API.
 
     if callback provided will keep listening and call
@@ -103,7 +104,8 @@ def wsapi(
     """
     loop = asyncio.get_event_loop()
 
-    async def fetcher() -> Optional[dict]:
+    async def fetcher() -> dict | None:
+        """Fetch data from WS API."""
         async with aiohttp.ClientSession() as session:
             async with session.ws_connect(
                 resolve_server(ctx) + "/api/websocket"
@@ -165,7 +167,7 @@ def get_areas(ctx: Configuration) -> list[dict[str, Any]]:
     return areas
 
 
-def find_area(ctx: Configuration, id_or_name: str) -> Optional[dict[str, str]]:
+def find_area(ctx: Configuration, id_or_name: str) -> dict[str, str] | None:
     """Find area first by id and if no match by name."""
     areas = get_areas(ctx)
 
@@ -204,8 +206,8 @@ def rename_area(ctx: Configuration, area_id: str, new_name: str) -> dict[str, An
 def rename_entity(
     ctx: Configuration,
     entity_id: str,
-    new_id: Optional[str],
-    new_name: Optional[str],
+    new_id: str | None,
+    new_name: str | None,
 ) -> dict[str, Any]:
     """Rename entity."""
     frame = {
@@ -318,8 +320,10 @@ def get_info(ctx: Configuration) -> dict[str, Any]:
 
         return cast(dict[str, Any], req.json()) if req.status_code == 200 else {}
 
-    except (HomeAssistantCliError, ValueError):
-        raise HomeAssistantCliError("Unexpected error retrieving information")
+    except (HomeAssistantCliError, ValueError) as exception:
+        raise HomeAssistantCliError(
+            "Unexpected error retrieving information"
+        ) from exception
         # ValueError if req.json() can't parse the json
 
 
@@ -327,8 +331,10 @@ def get_events(ctx: Configuration) -> dict[str, Any]:
     """Return all events."""
     try:
         req = restapi(ctx, METH_GET, hass.URL_API_EVENTS)
-    except HomeAssistantCliError as ex:
-        raise HomeAssistantCliError(f"Unexpected error getting events: {ex}")
+    except HomeAssistantCliError as exception:
+        raise HomeAssistantCliError(
+            f"Unexpected error getting events: {exception}"
+        ) from exception
 
     if req.status_code == 200:
         return cast(dict[str, Any], req.json())
@@ -338,9 +344,9 @@ def get_events(ctx: Configuration) -> dict[str, Any]:
 
 def get_history(
     ctx: Configuration,
-    entities: Optional[list] = None,
-    start_time: Optional[datetime] = None,
-    end_time: Optional[datetime] = None,
+    entities: list | None = None,
+    start_time: datetime | None = None,
+    end_time: datetime | None = None,
 ) -> list[dict[str, Any]]:
     """Return History."""
     try:
@@ -360,8 +366,10 @@ def get_history(
             method = f"{method}?{urlencode(params)}"
 
         req = restapi(ctx, METH_GET, method)
-    except HomeAssistantCliError as ex:
-        raise HomeAssistantCliError(f"Unexpected error getting history: {ex}")
+    except HomeAssistantCliError as exception:
+        raise HomeAssistantCliError(
+            f"Unexpected error getting history: {exception}"
+        ) from exception
 
     if req.status_code == 200:
         return cast(list[dict[str, Any]], req.json())
@@ -373,8 +381,10 @@ def get_states(ctx: Configuration) -> list[dict[str, Any]]:
     """Return all states."""
     try:
         req = restapi(ctx, METH_GET, hass.URL_API_STATES)
-    except HomeAssistantCliError as ex:
-        raise HomeAssistantCliError(f"Unexpected error getting state: {ex}")
+    except HomeAssistantCliError as exception:
+        raise HomeAssistantCliError(
+            f"Unexpected error getting state: {exception}"
+        ) from exception
 
     if req.status_code == 200:
         data = req.json()  # type: List[Dict[str, Any]]
@@ -388,8 +398,10 @@ def get_raw_error_log(ctx: Configuration) -> str:
     try:
         req = restapi(ctx, METH_GET, hass.URL_API_ERROR_LOG)
         req.raise_for_status()
-    except HomeAssistantCliError as ex:
-        raise HomeAssistantCliError(f"Unexpected error getting error log: {ex}")
+    except HomeAssistantCliError as exception:
+        raise HomeAssistantCliError(
+            f"Unexpected error getting error log: {exception}"
+        ) from exception
 
     return req.text
 
@@ -398,8 +410,10 @@ def get_config(ctx: Configuration) -> dict[str, Any]:
     """Return the running configuration."""
     try:
         req = restapi(ctx, METH_GET, hass.URL_API_CONFIG)
-    except HomeAssistantCliError as ex:
-        raise HomeAssistantCliError(f"Unexpected error getting configuration: {ex}")
+    except HomeAssistantCliError as exception:
+        raise HomeAssistantCliError(
+            f"Unexpected error getting configuration: {exception}"
+        ) from exception
 
     if req.status_code == 200:
         return cast(dict[str, str], req.json())
@@ -407,16 +421,18 @@ def get_config(ctx: Configuration) -> dict[str, Any]:
     raise HomeAssistantCliError(f"Error while getting all configuration: {req.text}")
 
 
-def get_state(ctx: Configuration, entity_id: str) -> Optional[dict[str, Any]]:
+def get_state(ctx: Configuration, entity_id: str) -> dict[str, Any] | None:
     """Get entity state. If ok, return dictionary with state.
 
-    If no entity found return None - otherwise excepton raised
+    If no entity found return None - otherwise exception raised
     with details.
     """
     try:
         req = restapi(ctx, METH_GET, hass.URL_API_STATES_ENTITY.format(entity_id))
-    except HomeAssistantCliError as ex:
-        raise HomeAssistantCliError(f"Unexpected error getting state: {ex}")
+    except HomeAssistantCliError as exception:
+        raise HomeAssistantCliError(
+            f"Unexpected error getting state: {exception}"
+        ) from exception
 
     if req.status_code == 200:
         return cast(dict[str, Any], req.json())
@@ -439,8 +455,8 @@ def remove_state(ctx: Configuration, entity_id: str) -> bool:
             return True
         if req.status_code == 404:
             return False
-    except HomeAssistantCliError:
-        raise HomeAssistantCliError("Unexpected error removing state")
+    except HomeAssistantCliError as exception:
+        raise HomeAssistantCliError("Unexpected error removing state") from exception
 
     raise HomeAssistantCliError(f"Error removing state: {req.status_code} - {req.text}")
 
@@ -453,14 +469,13 @@ def set_state(ctx: Configuration, entity_id: str, data: dict) -> dict[str, Any]:
         )
     except HomeAssistantCliError as exception:
         raise HomeAssistantCliError(
-            "Error updating state for entity {}: {}".format(entity_id, exception)
-        )
+            f"Error updating state for entity {entity_id}: {exception}"
+        ) from exception
 
     if req.status_code not in (200, 201):
         raise HomeAssistantCliError(
-            "Error changing state for entity {}: {} - {}".format(
-                entity_id, req.status_code, req.text
-            )
+            f"Error changing state for entity {entity_id}: {req.status_code} - "
+            f"{req.text}"
         )
     return cast(dict[str, Any], req.json())
 
@@ -472,11 +487,13 @@ def render_template(ctx: Configuration, template: str, variables: dict) -> str:
     try:
         req = restapi(ctx, METH_POST, hass.URL_API_TEMPLATE, data)
     except HomeAssistantCliError as exception:
-        raise HomeAssistantCliError(f"Error applying template: {exception}")
+        raise HomeAssistantCliError(
+            f"Error applying template: {exception}"
+        ) from exception
 
     if req.status_code not in (200, 201):
         raise HomeAssistantCliError(
-            "Error applying template: {} - {}".format(req.status_code, req.text)
+            f"Error applying template: {req.status_code} - {req.text}"
         )
     return req.text
 
@@ -496,8 +513,8 @@ def get_event_listeners(ctx: Configuration) -> dict:
 
 
 def fire_event(
-    ctx: Configuration, event_type: str, data: Optional[dict[str, Any]] = None
-) -> Optional[dict[str, Any]]:
+    ctx: Configuration, event_type: str, data: dict[str, Any] | None = None
+) -> dict[str, Any] | None:
     """Fire an event at remote API."""
     try:
         req = restapi(
@@ -510,14 +527,14 @@ def fire_event(
         return cast(dict[str, Any], req.json())
 
     except HomeAssistantCliError as exception:
-        raise HomeAssistantCliError(f"Error firing event: {exception}")
+        raise HomeAssistantCliError(f"Error firing event: {exception}") from exception
 
 
 def call_service(
     ctx: Configuration,
     domain: str,
     service: str,
-    service_data: Optional[dict] = None,
+    service_data: dict | None = None,
 ) -> list[dict[str, Any]]:
     """Call a service."""
     try:
@@ -527,8 +544,10 @@ def call_service(
             hass.URL_API_SERVICES_SERVICE.format(domain, service),
             service_data,
         )
-    except HomeAssistantCliError as ex:
-        raise HomeAssistantCliError(f"Error calling service: {ex}")
+    except HomeAssistantCliError as exception:
+        raise HomeAssistantCliError(
+            f"Error calling service: {exception}"
+        ) from exception
 
     if req.status_code != 200:
         raise HomeAssistantCliError(
@@ -544,8 +563,10 @@ def get_services(
     """Get list of services."""
     try:
         req = restapi(ctx, METH_GET, hass.URL_API_SERVICES)
-    except HomeAssistantCliError as ex:
-        raise HomeAssistantCliError(f"Unexpected error getting services: {ex}")
+    except HomeAssistantCliError as exception:
+        raise HomeAssistantCliError(
+            f"Unexpected error getting services: {exception}"
+        ) from exception
 
     if req.status_code == 200:
         return cast(list[dict[str, Any]], req.json())

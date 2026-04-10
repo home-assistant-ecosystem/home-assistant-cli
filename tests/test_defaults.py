@@ -1,13 +1,11 @@
 """Tests file for Home Assistant CLI (hass-cli)."""
 
 import os
-from typing import Optional
 from unittest import mock
 
+import homeassistant_cli.cli as cli
 import pytest
 import requests_mock
-
-import homeassistant_cli.cli as cli
 
 MDNS_SERVER_FALLBACK = "http://homeassistant.local:8123"
 HASS_SERVER = "http://localhost:8123"
@@ -67,8 +65,8 @@ def test_defaults(
     env: dict[str, str],
     expected_resolved_server,
     expected_server: str,
-    expected_token: Optional[str],
-    expected_password: Optional[str],
+    expected_token: str | None,
+    expected_password: str | None,
 ) -> None:
     """Test defaults applied correctly for server, token and password."""
     mockenv = mock.patch.dict(os.environ, env)

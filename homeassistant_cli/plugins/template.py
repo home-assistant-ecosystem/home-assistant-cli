@@ -2,14 +2,12 @@
 
 import logging
 import os
-from typing import Any, Dict  # noqa, flake8 issue
 
 import click
-from jinja2 import Environment, FileSystemLoader
-
 import homeassistant_cli.remote as api
 from homeassistant_cli.cli import pass_context
 from homeassistant_cli.config import Configuration
+from jinja2 import Environment, FileSystemLoader
 
 _LOGGING = logging.getLogger(__name__)
 

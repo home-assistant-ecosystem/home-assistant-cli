@@ -3,11 +3,10 @@
 import logging
 import os
 import sys
-from typing import Any, Dict, List, Optional, Tuple, cast  # noqa: F401
+from typing import Any, Dict, List, Optional, Tuple, cast
 
 import click
 import zeroconf
-from requests import Session  # noqa: ignore
 from ruamel.yaml import YAML
 
 import homeassistant_cli.const as const
@@ -34,7 +33,7 @@ class _ZeroconfListener:
         self.services[name] = _zeroconf.get_service_info(_type, name)
 
 
-def _locate_ha() -> Optional[str]:
+def _locate_ha() -> str | None:
     """Locate the Home Assistant instance."""
     _zeroconf = zeroconf.Zeroconf()
     listener = _ZeroconfListener()
@@ -68,7 +67,7 @@ def _locate_ha() -> Optional[str]:
     return None
 
 
-def resolve_server(ctx: Any) -> str:  # noqa: F821
+def resolve_server(ctx: Any) -> str:
     """Resolve server if not already done.
 
     if server is `auto` try and resolve it
@@ -120,19 +119,19 @@ class Configuration:
         self.table_format = "plain"
         self.sort_by = None
 
-    def echo(self, msg: str, *args: Optional[Any]) -> None:
+    def echo(self, msg: str, *args: Any | None) -> None:
         """Put content message to stdout."""
         self.log(msg, *args)
 
     def log(  # pylint: disable=no-self-use
-        self, msg: str, *args: Optional[str]
+        self, msg: str, *args: str | None
     ) -> None:  # pylint: disable=no-self-use
         """Log a message to stdout."""
         if args:
             msg %= args
         click.echo(msg, file=sys.stdout)
 
-    def vlog(self, msg: str, *args: Optional[str]) -> None:
+    def vlog(self, msg: str, *args: str | None) -> None:
         """Log a message only if verbose is enabled."""
         if self.verbose:
             self.log(msg, *args)

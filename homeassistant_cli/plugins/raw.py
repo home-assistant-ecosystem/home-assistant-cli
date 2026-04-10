@@ -2,10 +2,9 @@
 
 import json as json_
 import logging
-from typing import Any, Dict, List, cast  # noqa: F401
+from typing import Any, Dict, List, cast
 
 import click
-
 import homeassistant_cli.autocompletion as autocompletion
 import homeassistant_cli.remote as api
 from homeassistant_cli.cli import pass_context
@@ -82,8 +81,8 @@ def post(ctx: Configuration, method, json):
 )
 @click.option("--json")
 @pass_context
-def websocket(ctx: Configuration, wstype, json):  # noqa: D301
-    """Send a websocket request against /api/websocket.
+def websocket(ctx: Configuration, wstype, json):
+    r"""Send a websocket request against /api/websocket.
 
     WSTYPE is name of websocket methods.
 

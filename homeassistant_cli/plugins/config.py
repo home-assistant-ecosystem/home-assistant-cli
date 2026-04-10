@@ -1,7 +1,6 @@
 """Configuration plugin for Home Assistant CLI (hass-cli)."""
 
 import click
-
 import homeassistant_cli.remote as api
 from homeassistant_cli.cli import pass_context
 from homeassistant_cli.config import Configuration

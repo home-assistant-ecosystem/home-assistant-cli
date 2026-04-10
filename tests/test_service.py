@@ -2,11 +2,10 @@
 
 import json
 
-import requests_mock
-from click.testing import CliRunner
-
 import homeassistant_cli.autocompletion as autocompletion
 import homeassistant_cli.cli as cli
+import requests_mock
+from click.testing import CliRunner
 from homeassistant_cli.config import Configuration
 
 
