@@ -5,19 +5,18 @@ import logging
 from typing import Any, Dict, List, cast
 
 import click
-from packaging.version import Version
-from requests.exceptions import HTTPError
-
 import homeassistant_cli.remote as api
 from homeassistant_cli.cli import pass_context
 from homeassistant_cli.config import Configuration
 from homeassistant_cli.exceptions import HomeAssistantCliError
 from homeassistant_cli.helper import format_output
+from packaging.version import Version
+from requests.exceptions import HTTPError
 
 _LOGGING = logging.getLogger(__name__)
 
-# These commands loosely based on what is found in
-# https://github.com/home-assistant/supervisor/blob/master/API.md
+# These commands loosely based on what can be found in
+# https://developers.home-assistant.io/docs/api/supervisor/endpoints
 
 
 @click.group("ha")
@@ -126,7 +125,17 @@ def supervisor_logs(ctx: Configuration):
 @pass_context
 def supervisor_repair(ctx: Configuration):
     """Home Assistant supervisor repair."""
-    _handle(ctx, "supervisor/repair")
+    _handle(ctx, "supervisor/repair", "post")
+
+
+@supervisor.command("restart")
+@pass_context
+def supervisor_restart(ctx: Configuration):
+    """Home Assistant supervisor restart."""
+    try:
+        _handle(ctx, "supervisor/restart", "post")
+    except HomeAssistantCliError:
+        pass
 
 
 @supervisor.command("stats")
@@ -136,25 +145,25 @@ def supervisor_stats(ctx: Configuration):
     _handle(ctx, "supervisor/stats")
 
 
-@cli.group("snapshot")
+@cli.group("backup")
 @pass_context
-def snapshot(ctx: Configuration):
-    """Home Assistant snapshot commands."""
+def backup(ctx: Configuration):
+    """Home Assistant backup commands."""
     ctx.auto_output("data")
 
 
-@snapshot.command("reload")
+@backup.command("info")
 @pass_context
-def snapshot_reload(ctx: Configuration):
-    """Home Assistant snapshots reload."""
-    _handle(ctx, "snapshots/reload", "post")
+def backup_info(ctx: Configuration):
+    """Home Assistant backup info."""
+    _handle(ctx, "backups/info")
 
 
-@snapshot.command("shutdown")
+@backup.command("reload")
 @pass_context
-def snapshot_shutdown(ctx: Configuration):
-    """Home Assistant host shutdown."""
-    _handle(ctx, "host/shutdown", "post")
+def backup_reload(ctx: Configuration):
+    """Home Assistant backups reload."""
+    _handle(ctx, "backups/reload", "post")
 
 
 @cli.group("host")
@@ -256,16 +265,6 @@ def hardware_info(ctx: Configuration):
 def hardware_audio(ctx: Configuration):
     """Home Assistant hardware audio."""
     _handle(ctx, "hardware/audio")
-
-
-@hardware.command("trigger")
-@pass_context
-def hardware_trigger(ctx: Configuration):
-    """Home Assistant hardware trigger."""
-    try:
-        _handle(ctx, "hardware/trigger", "post")
-    except (HomeAssistantCliError, HTTPError):
-        pass
 
 
 @cli.group("addons")
@@ -446,6 +445,26 @@ def dns_stats(ctx: Configuration):
     _handle(ctx, "dns/stats")
 
 
+@dns.command("update")
+@pass_context
+def dns_update(ctx: Configuration):
+    """Home Assistant DNS update."""
+    try:
+        _handle(ctx, "dns/update", "post")
+    except (HomeAssistantCliError, HTTPError):
+        pass
+
+
+@dns.command("reset")
+@pass_context
+def dns_reset(ctx: Configuration):
+    """Home Assistant DNS reset."""
+    try:
+        _handle(ctx, "dns/reset", "post")
+    except (HomeAssistantCliError, HTTPError):
+        pass
+
+
 @cli.group("multicast")
 @pass_context
 def multicast(ctx: Configuration):
@@ -530,23 +549,6 @@ def ha_update(ctx: Configuration):
             _handle(ctx, "cli/update", "post")
         except (HomeAssistantCliError, HTTPError):
             pass
-
-
-@ha_cli.command("restart")
-@pass_context
-def ha_restart(ctx: Configuration):
-    """Home Assistant ha-cli restart."""
-    try:
-        _handle(ctx, "cli/restart", "post")
-    except HomeAssistantCliError:
-        pass
-
-
-@ha_cli.command("logs")
-@pass_context
-def ha_logs(ctx: Configuration):
-    """Home Assistant ha-cli logs."""
-    _handle(ctx, "cli/logs")
 
 
 @ha_cli.command("stats")
