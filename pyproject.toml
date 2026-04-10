@@ -38,7 +38,7 @@ click-log = "^0.4.0"
 netdisco = "^3.0.0"
 
 [tool.poetry.group.test.dependencies]
-pytest = "^8.2.0"
+pytest = "^9.0.0"
 mypy = "^1.10.0"
 pytest-timeout = "^2.3.1"
 requests-mock = "^1.12.1"
