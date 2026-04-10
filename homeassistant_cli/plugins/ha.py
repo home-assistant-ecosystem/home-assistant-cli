@@ -1,4 +1,4 @@
-"""Home Assistant (former Hass.io) plugin for Home Assistant CLI (hass-cli)."""
+"""Home Assistant Operating System plugin for Home Assistant CLI (hass-cli)."""
 
 import json as json_
 import logging
@@ -22,7 +22,7 @@ _LOGGING = logging.getLogger(__name__)
 @click.group("ha")
 @pass_context
 def cli(ctx: Configuration):
-    """Home Assistant (former Hass.io) commands."""
+    """Home Assistant Operating System commands."""
     ctx.auto_output("data")
 
 
