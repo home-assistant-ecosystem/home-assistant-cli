@@ -7,28 +7,28 @@ import pytest
 from homeassistant_cli.cli import HomeAssistantCli, cli
 
 DFEAULT_PLUGINS = [
-    'completion',
-    'config',
-    'discover',
-    'state',
-    'entity',
-    'event',
-    'ha',
-    'info',
-    'map',
-    'raw',
-    'service',
-    'system',
-    'template',
-    'area',
-    'device',
+    "completion",
+    "config",
+    "discover",
+    "state",
+    "entity",
+    "event",
+    "ha",
+    "info",
+    "map",
+    "raw",
+    "service",
+    "system",
+    "template",
+    "area",
+    "device",
 ]
 
 DFEAULT_PLUGINS.sort()
 
 
 @pytest.fixture(name="defaultplugins_sorted")
-def defaultplugins_fixture() -> List[str]:
+def defaultplugins_fixture() -> list[str]:
     """Return the expected default list of plugins."""
     return DFEAULT_PLUGINS
 
@@ -37,7 +37,7 @@ def test_commands_match_expected(defaultplugins_sorted) -> None:
     """Test plugin discovery."""
     hac = HomeAssistantCli()
 
-    ctx = cli.make_context('hass-cli', ['info'])
+    ctx = cli.make_context("hass-cli", ["info"])
 
     cmds = hac.list_commands(ctx)
 
@@ -51,17 +51,17 @@ def test_commands_match_expected(defaultplugins_sorted) -> None:
 @pytest.mark.parametrize(
     "plugin",
     [
-        'service',
-        'state',
-        'system',
-        'template',
+        "service",
+        "state",
+        "system",
+        "template",
     ],
 )
 def test_commands_loads(plugin) -> None:
     """Test loading of command."""
     hac = HomeAssistantCli()
 
-    ctx = cli.make_context('hass-cli', ['info'])
+    ctx = cli.make_context("hass-cli", ["info"])
 
     cmd = hac.get_command(ctx, plugin)
 
