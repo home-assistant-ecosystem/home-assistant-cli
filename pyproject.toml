@@ -1,3 +1,267 @@
-[tool.black]
-line-length = 79
-skip-string-normalization = true
+[tool.poetry]
+name = "homeassistant-cli"
+version = "1.0.0"
+description  = "Command-line tool for Home Assistant."
+license = "Apache Software License 2.0"
+readme = "README.rst"
+authors = ["The Home Assistant CLI Authors <fabian@affolter-engineering.ch>"]
+keywords = [ "home", "automation" ]
+homepage = "https://github.com/home-assistant-ecosystem/home-assistant-cli"
+repository = "https://github.com/home-assistant-ecosystem/home-assistant-cli"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: End Users/Desktop",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Home Automation",
+]
+exclude = ["tests", "tests.*"]
+
+[tool.poetry.scripts]
+hass-cli = "homeassistant_cli.cli:run"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+aiohttp = "^3.9.5"
+dateparser = "^1.2.0"
+jsonpath-ng = "^1.6.1"
+jinja2 = "^3.1.4"
+requests = "^2.31.0"
+tabulate = "^0.9.0"
+regex = "^2024.5.10"
+ruamel-yaml = "^0.18.6"
+click = "^8.1.7"
+click-log = "^0.4.0"
+netdisco = "^3.0.0"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^8.2.0"
+mypy = "^1.10.0"
+pytest-timeout = "^2.3.1"
+requests-mock = "^1.12.1"
+pytest-sugar = "^1.0.0"
+pytest-cov = "^5.0.0"
+types-requests = "^2.31.0.20240406"
+types-dateparser = "^1.2.0.20240420"
+types-tabulate = "^0.9.0.20240106"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+src = ["src"]
+line-length = 88
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.ruff.lint]
+select = [
+    "B",  # bugbear
+    "D",  # pydocstyle
+    "E",  # pycodestyle
+    "F",  # pyflakes
+    "I",  # isort
+    "PYI", # flake8-pyi
+    "UP", # pyupgrade
+    "RUF", # ruff
+    "W",  # pycodestyle
+    "PIE", # flake8-pie
+    "PGH004", # pygrep-hooks - Use specific rule codes when using noqa
+    "PLE", # pylint error
+    "PLW", # pylint warning
+    "PLR1714", # Consider merging multiple comparisons
+    "T100", # flake8-debugger
+]
+ignore = [
+    # bugbear ignore
+    "B004", # Using `hasattr(x, "__call__")` to test if x is callable is unreliable.
+    "B007", # Loop control variable `i` not used within loop body
+    "B009", # Do not call `getattr` with a constant attribute value
+    "B010", # [*] Do not call `setattr` with a constant attribute value.
+    "B011", # Do not `assert False` (`python -O` removes these calls)
+    "B028", # No explicit `stacklevel` keyword argument found
+    # pycodestyle ignore
+    # pytest can do weird low-level things, and we usually know
+    # what we're doing when we use type(..) is ...
+    "E721", # Do not compare types, use `isinstance()`
+    # pydocstyle ignore
+    "D100", # Missing docstring in public module
+    "D101", # Missing docstring in public class
+    "D102", # Missing docstring in public method
+    "D103", # Missing docstring in public function
+    "D104", # Missing docstring in public package
+    "D105", # Missing docstring in magic method
+    "D106", # Missing docstring in public nested class
+    "D107", # Missing docstring in `__init__`
+    "D209", # [*] Multi-line docstring closing quotes should be on a separate line
+    "D205", # 1 blank line required between summary line and description
+    "D400", # First line should end with a period
+    "D401", # First line of docstring should be in imperative mood
+    "D402", # First line should not be the function's signature
+    "D404", # First word of the docstring should not be "This"
+    "D415", # First line should end with a period, question mark, or exclamation point
+    # ruff ignore
+    "RUF012", # Mutable class attributes should be annotated with `typing.ClassVar`
+    # pylint ignore
+    "PLW0603",  # Using the global statement
+    "PLW0120",  # remove the else and dedent its contents
+    "PLW2901",  # for loop variable overwritten by assignment target
+    "PLR5501",  # Use `elif` instead of `else` then `if`
+]
+
+[tool.ruff.lint.pycodestyle]
+# In order to be able to format for 88 char in ruff format
+max-line-length = 120
+
+[tool.ruff.lint.pydocstyle]
+convention = "pep257"
+
+[tool.ruff.lint.isort]
+force-single-line = true
+combine-as-imports = true
+force-sort-within-sections = true
+order-by-type = false
+known-local-folder = ["homeassistant_cli"]
+lines-after-imports = 2
+
+[tool.pylint.main]
+# Maximum number of characters on a single line.
+max-line-length = 120
+disable= [
+    "abstract-method",
+    "arguments-differ",
+    "arguments-renamed",
+    "assigning-non-slot",
+    "attribute-defined-outside-init",
+    "bad-classmethod-argument",
+    "bad-mcs-method-argument",
+    "broad-exception-caught",
+    "broad-exception-raised",
+    "cell-var-from-loop",
+    "comparison-of-constants",
+    "comparison-with-callable",
+    "comparison-with-itself",
+    "condition-evals-to-constant",
+    "consider-using-dict-items",
+    "consider-using-enumerate",
+    "consider-using-from-import",
+    "consider-using-f-string",
+    "consider-using-in",
+    "consider-using-sys-exit",
+    "consider-using-ternary",
+    "consider-using-with",
+    "cyclic-import",
+    "disallowed-name",
+    "duplicate-code",
+    "eval-used",
+    "exec-used",
+    "expression-not-assigned",
+    "fixme",
+    "global-statement",
+    "implicit-str-concat",
+    "import-error",
+    "import-outside-toplevel",
+    "inconsistent-return-statements",
+    "invalid-bool-returned",
+    "invalid-name",
+    "invalid-repr-returned",
+    "invalid-str-returned",
+    "keyword-arg-before-vararg",
+    "line-too-long",
+    "method-hidden",
+    "misplaced-bare-raise",
+    "missing-docstring",
+    "missing-timeout",
+    "multiple-statements",
+    "no-else-break",
+    "no-else-continue",
+    "no-else-raise",
+    "no-else-return",
+    "no-member",
+    "no-name-in-module",
+    "no-self-argument",
+    "not-an-iterable",
+    "not-callable",
+    "pointless-exception-statement",
+    "pointless-statement",
+    "pointless-string-statement",
+    "protected-access",
+    "raise-missing-from",
+    "redefined-argument-from-local",
+    "redefined-builtin",
+    "redefined-outer-name",
+    "reimported",
+    "simplifiable-condition",
+    "simplifiable-if-expression",
+    "singleton-comparison",
+    "superfluous-parens",
+    "super-init-not-called",
+    "too-few-public-methods",
+    "too-many-ancestors",
+    "too-many-arguments",
+    "too-many-branches",
+    "too-many-function-args",
+    "too-many-instance-attributes",
+    "too-many-lines",
+    "too-many-locals",
+    "too-many-nested-blocks",
+    "too-many-public-methods",
+    "too-many-return-statements",
+    "too-many-statements",
+    "try-except-raise",
+    "typevar-name-incorrect-variance",
+    "unbalanced-tuple-unpacking",
+    "undefined-loop-variable",
+    "undefined-variable",
+    "unexpected-keyword-arg",
+    "unidiomatic-typecheck",
+    "unnecessary-comprehension",
+    "unnecessary-dunder-call",
+    "unnecessary-lambda",
+    "unnecessary-lambda-assignment",
+    "unpacking-non-sequence",
+    "unspecified-encoding",
+    "unsubscriptable-object",
+    "unused-argument",
+    "unused-import",
+    "unused-variable",
+    "used-before-assignment",
+    "use-dict-literal",
+    "use-implicit-booleaness-not-comparison",
+    "use-implicit-booleaness-not-len",
+    "useless-else-on-loop",
+    "useless-import-alias",
+    "useless-return",
+    "use-maxsplit-arg",
+    "using-constant-test",
+    "wrong-import-order",
+]
+
+[tool.mypy]
+files = "homeassistant_cli, tests"
+mypy_path = "homeassistant_cli"
+check_untyped_defs = true
+disallow_untyped_calls = true
+explicit_package_bases = true
+ignore_missing_imports = true
+namespace_packages = true
+no_implicit_optional = true
+show_error_codes = true
+strict = true
+warn_incomplete_stub = true
+warn_redundant_casts = true
+warn_return_any = true
+warn_unused_configs = true
+warn_unused_ignores = true
+enable_error_code = [
+  "ignore-without-code",
+  "redundant-expr",
+  "truthy-bool",
+  "no-any-return",
+  "no-untyped-def",
+]

@@ -1,5 +1,5 @@
-FROM python:3.10-alpine
-LABEL maintainer="Max Rydahl Andersen <max@xam.dk>"
+FROM python:3.11-alpine
+LABEL maintainer="Fabian Affolter <fabian@affolter-engineering.ch>"
 
 WORKDIR /usr/src/app
 

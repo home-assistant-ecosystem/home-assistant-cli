@@ -16,7 +16,7 @@ _LOGGING = logging.getLogger(__name__)
 
 
 class _ZeroconfListener:
-    """Reporesentation of the ZeroCOnf listener."""
+    """Representation of the Zeroconf listener."""
 
     def __init__(self) -> None:
         """Initialize the listener."""
@@ -36,7 +36,7 @@ class _ZeroconfListener:
 
 
 def _locate_ha() -> Optional[str]:
-    """Locate the HOme Assistant instance."""
+    """Locate the Home Assistant instance."""
     _zeroconf = zeroconf.Zeroconf()
     listener = _ZeroconfListener()
     zeroconf.ServiceBrowser(_zeroconf, "_home-assistant._tcp.local.", listener)

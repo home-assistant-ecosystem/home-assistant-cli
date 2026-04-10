@@ -64,7 +64,7 @@ def cli(ctx: Configuration, service: str, entity: str) -> None:
             webbrowser.open_new_tab(url)
         else:
             ctx.echo(
-                "Could not find url pattern for service {}".format(service)
+                "Could not find URL pattern for service {}".format(service)
             )
     else:
         ctx.echo("No exact location info found in {}".format(thing))

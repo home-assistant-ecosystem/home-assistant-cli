@@ -48,7 +48,7 @@ __VERSION__ = find_version("homeassistant_cli", "const.py")  # type: ignore
 if 'dev' in __VERSION__:
     __VERSION__ = f'{__VERSION__}{get_git_commit_datetime()}'
 
-REQUIRED_PYTHON_VER = (3, 9, 0)
+REQUIRED_PYTHON_VER = (3, 11, 0)
 
 
 PROJECT_NAME = 'Home Assistant CLI'
@@ -79,22 +79,22 @@ PROJECT_URLS = {
 PACKAGES = find_packages(exclude=['tests', 'tests.*'])
 
 REQUIRES = [
-    'aiohttp>=3.8,<4',
+    'aiohttp>=3.9,<4',
     'click-log>=0.4,<0.5',
     'click>=8,<9',
-    'dateparser>=0.7.1,<1.2',
+    'dateparser>=0.7.1,<1.3',
     'jinja2>=2.10',
     'jsonpath-ng>=1.5.1,<2',
     'netdisco>=3.0.0,<4',
-    'regex>=2022.9',
+    'regex>=2024.5',
     'ruamel.yaml>=0.17,<0.19',
     'requests>=2.28.0,<3',
-    'tabulate>=0.8.3,<0.10',
+    'tabulate>=0.9,<0.10',
 ]
 
 # Should be as close to Home Assistant dev/master as possible
 TESTS_REQUIRE = [
-    'black>=22.8,<30',
+    'black>=24.3,<30',
     'codecov>=2.0.15,<3',
     'coveralls>=1.2.0,<2',
     'flake8>=3.9,<4',
@@ -103,7 +103,7 @@ TESTS_REQUIRE = [
     'mypy>=0.800,<0.900',
     'pydocstyle>=6,<7',
     'pylint>=2.7,<3',
-    'pytest>=7,<8',
+    'pytest>=8,<9',
     'pytest-cov>=2.11,<3',
     'pytest-sugar>=0.9.4,<0.10',
     'pytest-timeout>=2,<3',
