@@ -1,32 +1,32 @@
 """Service plugin for Home Assistant CLI (hass-cli)."""
+
 import logging
 import re as reg
 import sys
-from typing import Any, Dict, List, Pattern  # noqa: F401
+from typing import Any, Dict, List
 
 import click
-
 import homeassistant_cli.autocompletion as autocompletion
+import homeassistant_cli.remote as api
 from homeassistant_cli.cli import pass_context
 from homeassistant_cli.config import Configuration
 from homeassistant_cli.helper import format_output, to_attributes
-import homeassistant_cli.remote as api
 
 _LOGGING = logging.getLogger(__name__)
 
 
-@click.group('service')
+@click.group("service")
 @pass_context
 def cli(ctx):
     """Call and work with services."""
 
 
-@cli.command('list')
-@click.argument('servicefilter', default=".*", required=False)
+@cli.command("list")
+@click.argument("servicefilter", default=".*", required=False)
 @pass_context
 def list_cmd(ctx: Configuration, servicefilter):
     """Get list of services."""
-    ctx.auto_output('table')
+    ctx.auto_output("table")
     services = api.get_services(ctx)
     service_filter = servicefilter
 
@@ -39,14 +39,12 @@ def list_cmd(ctx: Configuration, servicefilter):
 
         domains = []
         for domain in services:
-            domain_name = domain['domain']
+            domain_name = domain["domain"]
             domain_data = {}
-            services_dict = domain['services']
+            services_dict = domain["services"]
             service_data = {}
             for service in services_dict:
-                if service_filter_re.search(
-                    "{}.{}".format(domain_name, service)
-                ):
+                if service_filter_re.search(f"{domain_name}.{service}"):
                     service_data[service] = services_dict[service]
 
             if service_data:
@@ -57,38 +55,36 @@ def list_cmd(ctx: Configuration, servicefilter):
 
     flatten_result = []  # type: List[Dict[str,Any]]
     for domain in result:
-        for service in domain['services']:
+        for service in domain["services"]:
             item = {}
-            item['domain'] = domain['domain']
-            item['service'] = service
-            item = {**item, **domain['services'][service]}
+            item["domain"] = domain["domain"]
+            item["service"] = service
+            item = {**item, **domain["services"][service]}
             flatten_result.append(item)
 
     cols = [
-        ('DOMAIN', 'domain'),
-        ('SERVICE', 'service'),
-        ('DESCRIPTION', 'description'),
+        ("DOMAIN", "domain"),
+        ("SERVICE", "service"),
+        ("DESCRIPTION", "description"),
     ]
     ctx.echo(
-        format_output(
-            ctx, flatten_result, columns=ctx.columns if ctx.columns else cols
-        )
+        format_output(ctx, flatten_result, columns=ctx.columns if ctx.columns else cols)
     )
 
 
-@cli.command('call')
+@cli.command("call")
 @click.argument(
-    'service',
+    "service",
     required=True,
     shell_complete=autocompletion.services,  # type: ignore
 )
 @click.option(
-    '--arguments', help="Comma separated key/value pairs to use as arguments."
+    "--arguments", help="Comma separated key/value pairs to use as arguments."
 )
 @pass_context
 def call(ctx: Configuration, service, arguments):
     """Call a service."""
-    ctx.auto_output('data')
+    ctx.auto_output("data")
     _LOGGING.debug("service call <start>")
     parts = service.split(".")
     if len(parts) != 2:

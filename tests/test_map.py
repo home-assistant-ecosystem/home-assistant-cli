@@ -1,12 +1,12 @@
 """Tests file for hass-cli map."""
+
 from typing import no_type_check
 from unittest.mock import patch
 
-from click.testing import CliRunner
+import homeassistant_cli.cli as cli
 import pytest
 import requests_mock
-
-import homeassistant_cli.cli as cli
+from click.testing import CliRunner
 
 
 @no_type_check
@@ -20,17 +20,18 @@ import homeassistant_cli.cli as cli
 )
 def test_map_services(service, url, default_entities) -> None:
     """Test map feature."""
-    entity_id = 'zone.school'
+    entity_id = "zone.school"
     school = next(
-        (x for x in default_entities if x['entity_id'] == entity_id), "ERROR!"
+        (x for x in default_entities if x["entity_id"] == entity_id), "ERROR!"
     )
 
     print(school)
-    with requests_mock.Mocker() as mock, patch(
-        'webbrowser.open_new_tab'
-    ) as mocked_browser:
+    with (
+        requests_mock.Mocker() as mock,
+        patch("webbrowser.open_new_tab") as mocked_browser,
+    ):
         mock.get(
-            "http://localhost:8123/api/states/{}".format(entity_id),
+            f"http://localhost:8123/api/states/{entity_id}",
             json=school,
             status_code=200,
         )
@@ -46,7 +47,7 @@ def test_map_services(service, url, default_entities) -> None:
         callurl = mocked_browser.call_args[0][0]
 
         assert callurl.startswith(url)
-        assert str(school.get('attributes').get('latitude')) in callurl
+        assert str(school.get("attributes").get("latitude")) in callurl
         assert (
-            str(school.get('attributes').get('longitude')) in callurl
+            str(school.get("attributes").get("longitude")) in callurl
         )  # typing: ignore

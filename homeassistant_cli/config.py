@@ -1,13 +1,13 @@
 """Configuration for Home Assistant CLI (hass-cli)."""
+
 import logging
 import os
 import sys
-from typing import Any, Dict, List, Optional, Tuple, cast  # noqa: F401
+from typing import Any, Dict, List, Optional, Tuple, cast
 
 import click
-from requests import Session  # noqa: ignore
-from ruamel.yaml import YAML
 import zeroconf
+from ruamel.yaml import YAML
 
 import homeassistant_cli.const as const
 import homeassistant_cli.yaml as yaml
@@ -16,7 +16,7 @@ _LOGGING = logging.getLogger(__name__)
 
 
 class _ZeroconfListener:
-    """Reporesentation of the ZeroCOnf listener."""
+    """Representation of the Zeroconf listener."""
 
     def __init__(self) -> None:
         """Initialize the listener."""
@@ -28,15 +28,13 @@ class _ZeroconfListener:
         """Remove service."""
         self.services[name] = None
 
-    def add_service(
-        self, _zeroconf: zeroconf.Zeroconf, _type: str, name: str
-    ) -> None:
+    def add_service(self, _zeroconf: zeroconf.Zeroconf, _type: str, name: str) -> None:
         """Add service."""
         self.services[name] = _zeroconf.get_service_info(_type, name)
 
 
-def _locate_ha() -> Optional[str]:
-    """Locate the HOme Assistant instance."""
+def _locate_ha() -> str | None:
+    """Locate the Home Assistant instance."""
     _zeroconf = zeroconf.Zeroconf()
     listener = _ZeroconfListener()
     zeroconf.ServiceBrowser(_zeroconf, "_home-assistant._tcp.local.", listener)
@@ -45,9 +43,7 @@ def _locate_ha() -> Optional[str]:
 
         retries = 0
         while not listener.services and retries < 5:
-            _LOGGING.info(
-                "Trying to locate Home Assistant on local network..."
-            )
+            _LOGGING.info("Trying to locate Home Assistant on local network...")
             time.sleep(0.5)
             retries = retries + 1
     finally:
@@ -63,17 +59,15 @@ def _locate_ha() -> Optional[str]:
             return None
 
         _, service = listener.services.popitem()
-        base_url = service.properties[b'base_url'].decode('utf-8')
+        base_url = service.properties[b"base_url"].decode("utf-8")
         _LOGGING.info("Found and using %s as server", base_url)
         return cast(str, base_url)
 
-    _LOGGING.warning(
-        "Found no Home Assistant on local network. Using defaults"
-    )
+    _LOGGING.warning("Found no Home Assistant on local network. Using defaults")
     return None
 
 
-def resolve_server(ctx: Any) -> str:  # noqa: F821
+def resolve_server(ctx: Any) -> str:
     """Resolve server if not already done.
 
     if server is `auto` try and resolve it
@@ -84,9 +78,7 @@ def resolve_server(ctx: Any) -> str:  # noqa: F821
         ctx.resolved_server = None
 
     if not ctx.resolved_server:
-
         if ctx.server == "auto":
-
             if "HASSIO_TOKEN" in os.environ and "HASS_TOKEN" not in os.environ:
                 ctx.resolved_server = const.DEFAULT_SERVER_MDNS
             else:
@@ -124,22 +116,22 @@ class Configuration:
         self.cert = None  # type: Optional[str]
         self.columns = None  # type: Optional[List[Tuple[str, str]]]
         self.no_headers = False
-        self.table_format = 'plain'
+        self.table_format = "plain"
         self.sort_by = None
 
-    def echo(self, msg: str, *args: Optional[Any]) -> None:
+    def echo(self, msg: str, *args: Any | None) -> None:
         """Put content message to stdout."""
         self.log(msg, *args)
 
     def log(  # pylint: disable=no-self-use
-        self, msg: str, *args: Optional[str]
+        self, msg: str, *args: str | None
     ) -> None:  # pylint: disable=no-self-use
         """Log a message to stdout."""
         if args:
             msg %= args
         click.echo(msg, file=sys.stdout)
 
-    def vlog(self, msg: str, *args: Optional[str]) -> None:
+    def vlog(self, msg: str, *args: str | None) -> None:
         """Log a message only if verbose is enabled."""
         if self.verbose:
             self.log(msg, *args)
@@ -148,8 +140,8 @@ class Configuration:
         """Return the representation of the Configuration."""
         view = {
             "server": self.server,
-            "access-token": 'yes' if self.token is not None else 'no',
-            "api-password": 'yes' if self.password is not None else 'no',
+            "access-token": "yes" if self.token is not None else "no",
+            "api-password": "yes" if self.password is not None else "no",
             "insecure": self.insecure,
             "output": self.output,
             "verbose": self.verbose,
@@ -164,7 +156,7 @@ class Configuration:
     def auto_output(self, auto_output: str) -> str:
         """Configure output format."""
         if self.output == "auto":
-            if auto_output == 'data':
+            if auto_output == "data":
                 auto_output = const.DEFAULT_DATAOUTPUT
             _LOGGING.debug("Setting auto-output to: %s", auto_output)
             self.output = auto_output

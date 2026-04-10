@@ -1,11 +1,11 @@
 """Tests file for Home Assistant CLI (hass-cli)."""
-import json
 
-from click.testing import CliRunner
-import requests_mock
+import json
 
 import homeassistant_cli.autocompletion as autocompletion
 import homeassistant_cli.cli as cli
+import requests_mock
+from click.testing import CliRunner
 from homeassistant_cli.config import Configuration
 
 
@@ -53,16 +53,14 @@ def test_service_completion(default_services) -> None:
     """Test completion for services with filter."""
     with requests_mock.Mocker() as mock:
         mock.get(
-            'http://localhost:8123/api/services',
+            "http://localhost:8123/api/services",
             json=default_services,
             status_code=200,
         )
 
         cfg = Configuration()
 
-        result = autocompletion.services(
-            cfg, ["service", "call"], "light.turn"
-        )
+        result = autocompletion.services(cfg, ["service", "call"], "light.turn")
         assert len(result) == 2
 
         resultdict = dict(result)
@@ -74,7 +72,6 @@ def test_service_completion(default_services) -> None:
 def test_service_call(default_services) -> None:
     """Test basic call of a service."""
     with requests_mock.Mocker() as mock:
-
         post = mock.post(
             "http://localhost:8123/api/services/homeassistant/restart",
             json={"result": "bogus"},

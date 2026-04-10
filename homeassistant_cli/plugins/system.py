@@ -1,18 +1,18 @@
 """System plugin for Home Assistant CLI (hass-cli)."""
+
 import logging
 
 import click
-
+import homeassistant_cli.const as const
+import homeassistant_cli.remote as api
 from homeassistant_cli.cli import pass_context
 from homeassistant_cli.config import Configuration
-import homeassistant_cli.const as const
 from homeassistant_cli.helper import format_output
-import homeassistant_cli.remote as api
 
 _LOGGING = logging.getLogger(__name__)
 
 
-@click.group('system')
+@click.group("system")
 @pass_context
 def cli(ctx):
     """System details and operations for Home Assistant."""

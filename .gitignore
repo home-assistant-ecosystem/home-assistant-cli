@@ -19,7 +19,7 @@ Icon
 
 # pytest
 .cache
-htmlcov 
+htmlcov
 
 # GitHub Proposed Python stuff:
 *.py[cod]
@@ -73,7 +73,7 @@ pip-selfcheck.json
 venv
 .venv
 .Python
-include 
+include
 
 # vimmy stuff
 *.swp

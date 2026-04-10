@@ -1,6 +1,6 @@
-# Python 3.7 with Alpine
-FROM balenalib/armv7hf-alpine-python:3.7-3.15
-LABEL maintainer="Max Rydahl Andersen <max@xam.dk>"
+# Python 3.11 with Alpine
+FROM balenalib/armv7hf-alpine-python:3.11-3.15
+LABEL maintainer="Fabian Affolter <fabian@affolter-engineering.ch>"
 
 RUN [ "cross-build-start" ]
 

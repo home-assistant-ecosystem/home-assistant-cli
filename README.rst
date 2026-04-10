@@ -101,27 +101,41 @@ autocompletion for ``hass-cli`` commands.
 Usage
 =======
 
+
+Basic info
+----------
+
 Note: Below is listed **some** of the features, make sure to use ``--help`` and
 autocompletion to learn more of the features as they become available.
 
 Most commands returns a table version of what the Home Assistant API returns.
-For example to get basic info about your Home Assistant server you use ``info``:
+For example to get basic info about your Home Assistant server you use ``system``:
 
 .. code:: bash
 
-   $ hass-cli info
-     BASE_URL                           LOCATION         REQUIRES_API_PASWORD  VERSION
-     https://home-assistant.local:8123  Fort of Solitude False                 0.86.2
+   $ hass-cli config release
+   VERSION
+   2026.4.1
 
 If you prefer yaml you can use ``--output=yaml``:
 
 .. code:: bash
 
-    $ hass-cli --output yaml info
-      base_url: https://home-assistant.local:8123
-      location_name: Wayne Manor
-      requires_api_password: false
-      version: 0.86.2
+    $ hass-cli --output=yaml config release
+      -  2026.4.1
+
+Backup
+------
+
+Backup can be created with command:
+
+.. code:: bash
+
+    $ hass-cli service list | grep backup
+    $ hass-cli service call backup.create
+
+States
+------
 
 To get list of states you use `state list`:
 
@@ -196,6 +210,9 @@ You can also explicitly create/edit via the ``--json`` flag:
 List possible services with or without a regular expression filter:
 
 .. code:: bash
+
+Services
+--------
 
     $ hass-cli service list 'home.*toggle'
       DOMAIN         SERVICE    DESCRIPTION

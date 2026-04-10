@@ -1,29 +1,29 @@
 """Area (registry) plugin for Home Assistant CLI (hass-cli)."""
+
 import logging
 import re
 import sys
-from typing import Any, Dict, List, Pattern  # noqa
+from typing import Any, Dict, List
 
 import click
-
 import homeassistant_cli.autocompletion as autocompletion
-from homeassistant_cli.cli import pass_context
-from homeassistant_cli.config import Configuration
 import homeassistant_cli.const as const
 import homeassistant_cli.helper as helper
 import homeassistant_cli.remote as api
+from homeassistant_cli.cli import pass_context
+from homeassistant_cli.config import Configuration
 
 _LOGGING = logging.getLogger(__name__)
 
 
-@click.group('area')
+@click.group("area")
 @pass_context
 def cli(ctx):
     """Get info and operate on areas from Home Assistant (EXPERIMENTAL)."""
 
 
-@cli.command('list')
-@click.argument('areafilter', default=".*", required=False)
+@cli.command("list")
+@click.argument("areafilter", default=".*", required=False)
 @pass_context
 def listcmd(ctx: Configuration, areafilter: str):
     """List all areas from Home Assistant."""
@@ -31,27 +31,25 @@ def listcmd(ctx: Configuration, areafilter: str):
 
     areas = api.get_areas(ctx)
 
-    result = []  # type: List[Dict]
+    result = []  # type: list[dict]
     if areafilter == ".*":
         result = areas
     else:
         areafilterre = re.compile(areafilter)  # type: Pattern
 
         for area in areas:
-            if areafilterre.search(area['name']):
+            if areafilterre.search(area["name"]):
                 result.append(area)
 
-    cols = [('ID', 'area_id'), ('NAME', 'name')]
+    cols = [("ID", "area_id"), ("NAME", "name")]
 
     ctx.echo(
-        helper.format_output(
-            ctx, result, columns=ctx.columns if ctx.columns else cols
-        )
+        helper.format_output(ctx, result, columns=ctx.columns if ctx.columns else cols)
     )
 
 
-@cli.command('create')
-@click.argument('names', nargs=-1, required=True)
+@cli.command("create")
+@click.argument("names", nargs=-1, required=True)
 @pass_context
 def create(ctx, names):
     """Create an area.
@@ -72,9 +70,9 @@ def create(ctx, names):
         )
 
 
-@cli.command('delete')
+@cli.command("delete")
 @click.argument(
-    'names',
+    "names",
     nargs=-1,
     required=True,
     shell_complete=autocompletion.areas,  # type: ignore
@@ -94,15 +92,13 @@ def delete(ctx, names):
             _LOGGING.error("Could not find area with id or name: %s", name)
             excode = 1
         else:
-            result = api.delete_area(ctx, area['area_id'])
+            result = api.delete_area(ctx, area["area_id"])
 
             ctx.echo(
                 helper.format_output(
                     ctx,
                     [result],
-                    columns=ctx.columns
-                    if ctx.columns
-                    else const.COLUMNS_DEFAULT,
+                    columns=ctx.columns if ctx.columns else const.COLUMNS_DEFAULT,
                 )
             )
 
@@ -110,13 +106,13 @@ def delete(ctx, names):
         sys.exit(excode)
 
 
-@cli.command('rename')
+@cli.command("rename")
 @click.argument(
-    'oldname',
+    "oldname",
     required=True,
     shell_complete=autocompletion.areas,  # type: ignore
 )
-@click.argument('newname', required=True)
+@click.argument("newname", required=True)
 @pass_context
 def rename(ctx, oldname, newname):
     """Rename an area."""
@@ -127,7 +123,7 @@ def rename(ctx, oldname, newname):
         _LOGGING.error("Could not find area with id or name: %s", oldname)
         sys.exit(1)
 
-    result = api.rename_area(ctx, area['area_id'], newname)
+    result = api.rename_area(ctx, area["area_id"], newname)
 
     ctx.echo(
         helper.format_output(
