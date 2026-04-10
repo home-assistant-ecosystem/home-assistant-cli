@@ -15,28 +15,41 @@ jobs:
         python-version: [ "3.13", "3.14" ]
 
     steps:
-    - uses: actions/checkout@v6
+    - name: Checkout
+      uses: actions/checkout@v6
+
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v6
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-    - name: Black Check
-      uses: jpetrucciani/black-check@22.8.0
+
+    - name: Install Poetry
+      uses: snok/install-poetry@v1
       with:
-        path: homeassistant_cli
-    - name: Lint with flake8
+        virtualenvs-create: true
+        virtualenvs-in-project: true
+        installer-parallel: true
+
+    - name: Load cached venv
+      id: cached-poetry-dependencies
+      uses: actions/cache@v5
+      with:
+        path: .venv
+        key: venv-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+
+    - name: Install dependencies
+      if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+      run: poetry install --no-interaction --no-root
+
+    - name: Install library
+      run: poetry install --no-interaction
+
+    - name: Run tests
       run: |
-        pip install flake8
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Test with pytest
+        source .venv/bin/activate
+        pytest tests/
+
+    - name: Lint with ruff
       run: |
-        pip install pytest
-        pip install -r requirements_test_all.txt
-        pytest
+        pip install ruff
+        ruff check .
