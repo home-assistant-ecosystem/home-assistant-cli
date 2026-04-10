@@ -5,12 +5,12 @@ import sys
 from typing import List, Optional, Union, cast
 
 import click
-from click.core import Command, Context, Group
 import click_log
+from click.core import Command, Context, Group
 
 import homeassistant_cli.autocompletion as autocompletion
-from homeassistant_cli.config import Configuration
 import homeassistant_cli.const as const
+from homeassistant_cli.config import Configuration
 from homeassistant_cli.helper import debug_requests_on, to_tuples
 
 click_log.basic_config()
@@ -42,7 +42,7 @@ def run() -> None:
             sys.exit(result)
 
     # Exception handling below is done to use logger
-    # and mimick as close as possible what click would
+    # and mimic as close as possible what click would
     # do normally in its main()
     except click.ClickException as ex:
         ex.show()  # let Click handle its own errors
@@ -65,7 +65,7 @@ def run() -> None:
 class HomeAssistantCli(click.MultiCommand):
     """The Home Assistant Command-line."""
 
-    def list_commands(self, ctx: Context) -> List[str]:
+    def list_commands(self, ctx: Context) -> list[str]:
         """List all command available as plugin."""
         cmd_folder = os.path.abspath(
             os.path.join(os.path.dirname(__file__), 'plugins')
@@ -85,7 +85,7 @@ class HomeAssistantCli(click.MultiCommand):
         """Import the commands of the plugins."""
         try:
             mod = __import__(
-                '{}.plugins.{}'.format(const.PACKAGE_NAME, cmd_name),
+                f'{const.PACKAGE_NAME}.plugins.{cmd_name}',
                 {},
                 {},
                 ['cli'],
