@@ -1,4 +1,5 @@
 """Home Assistant CLI (hass-cli)."""
+
 import logging
 import os
 import sys
@@ -17,7 +18,7 @@ click_log.basic_config()
 
 _LOGGER = logging.getLogger(__name__)
 
-CONTEXT_SETTINGS = dict(auto_envvar_prefix='HOMEASSISTANT')
+CONTEXT_SETTINGS = dict(auto_envvar_prefix="HOMEASSISTANT")
 
 pass_context = click.make_pass_decorator(  # pylint: disable=invalid-name
     Configuration, ensure=True
@@ -30,7 +31,7 @@ def run() -> None:
     Wraps click for full control over exception handling in Click.
     """
     # A hack to see if exception details should be printed.
-    exceptionflags = ['-x']
+    exceptionflags = ["-x"]
     verbose = [c for c in exceptionflags if c in sys.argv]
 
     try:
@@ -67,13 +68,11 @@ class HomeAssistantCli(click.MultiCommand):
 
     def list_commands(self, ctx: Context) -> list[str]:
         """List all command available as plugin."""
-        cmd_folder = os.path.abspath(
-            os.path.join(os.path.dirname(__file__), 'plugins')
-        )
+        cmd_folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "plugins"))
 
         commands = []
         for filename in os.listdir(cmd_folder):
-            if filename.endswith('.py') and not filename.startswith('__'):
+            if filename.endswith(".py") and not filename.startswith("__"):
                 commands.append(filename[:-3])
         commands.sort()
 
@@ -85,10 +84,10 @@ class HomeAssistantCli(click.MultiCommand):
         """Import the commands of the plugins."""
         try:
             mod = __import__(
-                f'{const.PACKAGE_NAME}.plugins.{cmd_name}',
+                f"{const.PACKAGE_NAME}.plugins.{cmd_name}",
                 {},
                 {},
-                ['cli'],
+                ["cli"],
             )
         except ImportError:
             # todo: print out issue of loading plugins?
@@ -98,112 +97,110 @@ class HomeAssistantCli(click.MultiCommand):
 
 def _default_token() -> Optional[str]:
     """Handle the token provided as env variable."""
-    return os.environ.get('HASS_TOKEN', os.environ.get('HASSIO_TOKEN', None))
+    return os.environ.get("HASS_TOKEN", os.environ.get("HASSIO_TOKEN", None))
 
 
 @click.command(cls=HomeAssistantCli, context_settings=CONTEXT_SETTINGS)
 @click_log.simple_verbosity_option(logging.getLogger(), "--loglevel", "-l")
 @click.version_option(const.__version__)
 @click.option(
-    '--server',
-    '-s',
+    "--server",
+    "-s",
     help=(
-        'The server URL or `auto` for automatic detection. Can also be set '
-        'with the environment variable HASS_SERVER.'
+        "The server URL or `auto` for automatic detection. Can also be set "
+        "with the environment variable HASS_SERVER."
     ),
     default="auto",
     show_default=True,
-    envvar='HASS_SERVER',
+    envvar="HASS_SERVER",
 )
 @click.option(
-    '--token',
+    "--token",
     default=_default_token,
     help=(
-        'The Bearer token for Home Assistant instance. Can also be set with '
-        'the environment variable HASS_TOKEN.'
+        "The Bearer token for Home Assistant instance. Can also be set with "
+        "the environment variable HASS_TOKEN."
     ),
-    envvar='HASS_TOKEN',
+    envvar="HASS_TOKEN",
 )
 @click.option(
-    '--password',
+    "--password",
     default=None,
     help=(
-        'The API password for Home Assistant instance. Can also be set with '
-        'the environment variable HASS_PASSWORD.'
+        "The API password for Home Assistant instance. Can also be set with "
+        "the environment variable HASS_PASSWORD."
     ),
-    envvar='HASS_PASSWORD',
+    envvar="HASS_PASSWORD",
 )
 @click.option(
-    '--timeout',
-    help='Timeout for network operations.',
+    "--timeout",
+    help="Timeout for network operations.",
     default=const.DEFAULT_TIMEOUT,
     show_default=True,
 )
 @click.option(
-    '--output',
-    '-o',
+    "--output",
+    "-o",
     help="Output format.",
-    type=click.Choice(['json', 'yaml', 'table', 'auto', 'ndjson']),
-    default='auto',
+    type=click.Choice(["json", "yaml", "table", "auto", "ndjson"]),
+    default="auto",
     show_default=True,
 )
 @click.option(
-    '-v',
-    '--verbose',
+    "-v",
+    "--verbose",
     is_flag=True,
     default=False,
-    help='Enables verbose mode.',
+    help="Enables verbose mode.",
 )
 @click.option(
-    '-x',
-    'showexceptions',
+    "-x",
+    "showexceptions",
     default=False,
     is_flag=True,
     help="Print backtraces when exception occurs.",
 )
 @click.option(
-    '--cert',
+    "--cert",
     default=None,
     envvar="HASS_CERT",
     help="Path to client certificate file (.pem) to use when connecting.",
 )
 @click.option(
-    '--insecure',
+    "--insecure",
     is_flag=True,
     default=False,
     help=(
-        'Ignore SSL Certificates.'
-        ' Allow to connect to servers with self-signed certificates.'
-        ' Be careful!'
+        "Ignore SSL Certificates."
+        " Allow to connect to servers with self-signed certificates."
+        " Be careful!"
     ),
 )
+@click.option("--debug", is_flag=True, default=False, help="Enables debug mode.")
 @click.option(
-    '--debug', is_flag=True, default=False, help='Enables debug mode.'
-)
-@click.option(
-    '--columns',
+    "--columns",
     default=None,
     help=(
-        'Custom columns key=value list.'
-        ' Example: ENTITY=entity_id, NAME=attributes.friendly_name'
+        "Custom columns key=value list."
+        " Example: ENTITY=entity_id, NAME=attributes.friendly_name"
     ),
 )
 @click.option(
-    '--no-headers',
+    "--no-headers",
     default=False,
     is_flag=True,
-    help="When printing tables don\'t use headers (default: print headers)",
+    help="When printing tables don't use headers (default: print headers)",
 )
 @click.option(
-    '--table-format',
-    default='plain',
+    "--table-format",
+    default="plain",
     help="Which table format to use.",
     shell_complete=autocompletion.table_formats,
 )
 @click.option(
-    '--sort-by',
+    "--sort-by",
     default=None,
-    help='Sort table by the jsonpath expression. Example: last_changed',
+    help="Sort table by the jsonpath expression. Example: last_changed",
 )
 @pass_context
 def cli(
