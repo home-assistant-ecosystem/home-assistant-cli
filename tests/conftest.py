@@ -22,6 +22,22 @@ FIXTURES_PATH = Path(__file__).parent / "fixtures"
 logcore.basic_config()
 
 
+# Environment variables that should be cleared during tests
+HASS_ENV_VARS = [
+    "HASS_SERVER",
+    "HASS_TOKEN",
+    "HASS_PASSWORD",
+    "HASSIO_TOKEN",
+]
+
+
+@pytest.fixture(autouse=True)
+def clean_hass_env(monkeypatch):
+    """Clear Home Assistant environment variables for test isolation."""
+    for var in HASS_ENV_VARS:
+        monkeypatch.delenv(var, raising=False)
+
+
 def generate_fixture(content: str):
     """Generate the individual fixtures."""
     pass  # pylint: disable=unnecessary-pass
