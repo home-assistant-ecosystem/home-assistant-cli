@@ -1,50 +1,45 @@
 """Details for the auto-completion."""
+
 import os
-from typing import Any, Dict, List, Tuple  # NOQA
+from typing import List, Tuple  # NOQA
 
 from requests.exceptions import HTTPError
 
+import homeassistant_cli.remote as api
 from homeassistant_cli import const, hassconst
 from homeassistant_cli.config import Configuration, resolve_server
-import homeassistant_cli.remote as api
 
 
 def _init_ctx(ctx: Configuration) -> None:
     """Initialize ctx."""
     # ctx is incomplete thus need to 'hack' around it
     # see bug https://github.com/pallets/click/issues/942
-    if not hasattr(ctx, 'server'):
-        ctx.server = os.environ.get('HASS_SERVER', const.AUTO_SERVER)
+    if not hasattr(ctx, "server"):
+        ctx.server = os.environ.get("HASS_SERVER", const.AUTO_SERVER)
 
-    if not hasattr(ctx, 'token'):
-        ctx.token = os.environ.get(
-            'HASS_TOKEN', os.environ.get('HASSIO_TOKEN', None)
-        )
+    if not hasattr(ctx, "token"):
+        ctx.token = os.environ.get("HASS_TOKEN", os.environ.get("HASSIO_TOKEN", None))
 
-    if not hasattr(ctx, 'password'):
-        ctx.password = os.environ.get('HASS_PASSWORD', None)
+    if not hasattr(ctx, "password"):
+        ctx.password = os.environ.get("HASS_PASSWORD", None)
 
-    if not hasattr(ctx, 'timeout'):
-        ctx.timeout = int(
-            os.environ.get('HASS_TIMEOUT', str(const.DEFAULT_TIMEOUT))
-        )
+    if not hasattr(ctx, "timeout"):
+        ctx.timeout = int(os.environ.get("HASS_TIMEOUT", str(const.DEFAULT_TIMEOUT)))
 
-    if not hasattr(ctx, 'insecure'):
+    if not hasattr(ctx, "insecure"):
         ctx.insecure = False
 
-    if not hasattr(ctx, 'session'):
+    if not hasattr(ctx, "session"):
         ctx.session = None
 
-    if not hasattr(ctx, 'cert'):
+    if not hasattr(ctx, "cert"):
         ctx.cert = None
 
-    if not hasattr(ctx, 'resolved_server'):
+    if not hasattr(ctx, "resolved_server"):
         ctx.resolved_server = resolve_server(ctx)
 
 
-def services(
-    ctx: Configuration, args: List, incomplete: str
-) -> List[Tuple[str, str]]:
+def services(ctx: Configuration, args: list, incomplete: str) -> list[tuple[str, str]]:
     """Services."""
     _init_ctx(ctx)
     try:
@@ -55,14 +50,14 @@ def services(
     completions = []  # type: List[Tuple[str, str]]
     if response:
         for domain in response:
-            domain_name = domain['domain']
-            servicesdict = domain['services']
+            domain_name = domain["domain"]
+            servicesdict = domain["services"]
 
             for service in servicesdict:
                 completions.append(
                     (
-                        "{}.{}".format(domain_name, service),
-                        servicesdict[service]['description'],
+                        f"{domain_name}.{service}",
+                        servicesdict[service]["description"],
                     )
                 )
 
@@ -73,9 +68,7 @@ def services(
     return completions
 
 
-def entities(
-    ctx: Configuration, args: List, incomplete: str
-) -> List[Tuple[str, str]]:
+def entities(ctx: Configuration, args: list, incomplete: str) -> list[tuple[str, str]]:
     """Entities."""
     _init_ctx(ctx)
     try:
@@ -87,8 +80,8 @@ def entities(
 
     if response:
         for entity in response:
-            friendly_name = entity['attributes'].get('friendly_name', '')
-            completions.append((entity['entity_id'], friendly_name))
+            friendly_name = entity["attributes"].get("friendly_name", "")
+            completions.append((entity["entity_id"], friendly_name))
 
         completions.sort()
 
@@ -97,9 +90,7 @@ def entities(
     return completions
 
 
-def events(
-    ctx: Configuration, args: List, incomplete: str
-) -> List[Tuple[str, str]]:
+def events(ctx: Configuration, args: list, incomplete: str) -> list[tuple[str, str]]:
     """Events."""
     _init_ctx(ctx)
     try:
@@ -111,7 +102,7 @@ def events(
 
     if response:
         for entity in response:
-            completions.append((entity['event'], ''))  # type: ignore
+            completions.append((entity["event"], ""))  # type: ignore
 
         completions.sort()
 
@@ -121,8 +112,8 @@ def events(
 
 
 def table_formats(
-    ctx: Configuration, args: List, incomplete: str
-) -> List[Tuple[str, str]]:
+    ctx: Configuration, args: list, incomplete: str
+) -> list[tuple[str, str]]:
     """Table Formats."""
     _init_ctx(ctx)
 
@@ -158,8 +149,8 @@ def table_formats(
 
 
 def api_methods(
-    ctx: Configuration, args: List, incomplete: str
-) -> List[Tuple[str, str]]:
+    ctx: Configuration, args: list, incomplete: str
+) -> list[tuple[str, str]]:
     """Auto completion for methods."""
     _init_ctx(ctx)
 
@@ -167,8 +158,8 @@ def api_methods(
 
     completions = []
     for name, value in getmembers(hassconst):
-        if name.startswith('URL_API_'):
-            completions.append((value, name[len('URL_API_') :]))
+        if name.startswith("URL_API_"):
+            completions.append((value, name[len("URL_API_") :]))
 
     completions.sort()
 
@@ -176,8 +167,8 @@ def api_methods(
 
 
 def wsapi_methods(
-    ctx: Configuration, args: List, incomplete: str
-) -> List[Tuple[str, str]]:
+    ctx: Configuration, args: list, incomplete: str
+) -> list[tuple[str, str]]:
     """Auto completion for websocket methods."""
     _init_ctx(ctx)
 
@@ -185,8 +176,8 @@ def wsapi_methods(
 
     completions = []
     for name, value in getmembers(hassconst):
-        if name.startswith('WS_TYPE_'):
-            completions.append((value, name[len('WS_TYPE_') :]))
+        if name.startswith("WS_TYPE_"):
+            completions.append((value, name[len("WS_TYPE_") :]))
 
     completions.sort()
 
@@ -195,14 +186,12 @@ def wsapi_methods(
 
 def _quoteifneeded(val: str) -> str:
     """Add quotes if needed."""
-    if val and ' ' in val:
-        return '"{}"'.format(val)
+    if val and " " in val:
+        return f'"{val}"'
     return val
 
 
-def areas(
-    ctx: Configuration, args: List, incomplete: str
-) -> List[Tuple[str, str]]:
+def areas(ctx: Configuration, args: list, incomplete: str) -> list[tuple[str, str]]:
     """Areas."""
     _init_ctx(ctx)
     allareas = api.get_areas(ctx)
@@ -211,7 +200,7 @@ def areas(
 
     if allareas:
         for area in allareas:
-            completions.append((_quoteifneeded(area['name']), area['area_id']))
+            completions.append((_quoteifneeded(area["name"]), area["area_id"]))
 
         completions.sort()
 
