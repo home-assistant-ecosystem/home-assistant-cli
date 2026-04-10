@@ -184,23 +184,23 @@ def wsapi_methods(
     return [c for c in completions if incomplete in c[0]]
 
 
-def _quoteifneeded(val: str) -> str:
+def _quote_if_needed(value: str) -> str:
     """Add quotes if needed."""
-    if val and " " in val:
-        return f'"{val}"'
-    return val
+    if value and " " in value:
+        return f'"{value}"'
+    return value
 
 
 def areas(ctx: Configuration, args: list, incomplete: str) -> list[tuple[str, str]]:
     """Areas."""
     _init_ctx(ctx)
-    allareas = api.get_areas(ctx)
+    all_areas = api.get_areas(ctx)
 
-    completions = []  # type List[Tuple[str, str]]
+    completions = []  # type: List[Tuple[str, str]]
 
-    if allareas:
-        for area in allareas:
-            completions.append((_quoteifneeded(area["name"]), area["area_id"]))
+    if all_areas:
+        for area in all_areas:
+            completions.append((_quote_if_needed(area["name"]), area["area_id"]))
 
         completions.sort()
 
