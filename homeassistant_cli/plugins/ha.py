@@ -2,16 +2,17 @@
 
 import json as json_
 import logging
-from distutils.version import StrictVersion
 from typing import Any, Dict, List, cast
 
 import click
+from packaging.version import Version
+from requests.exceptions import HTTPError
+
 import homeassistant_cli.remote as api
 from homeassistant_cli.cli import pass_context
 from homeassistant_cli.config import Configuration
 from homeassistant_cli.exceptions import HomeAssistantCliError
 from homeassistant_cli.helper import format_output
-from requests.exceptions import HTTPError
 
 _LOGGING = logging.getLogger(__name__)
 
@@ -208,7 +209,7 @@ def host_services(ctx: Configuration):
 @cli.group("os")
 @pass_context
 def os(ctx: Configuration):
-    """Home Assistant os commands."""
+    """Home Assistant Operating System commands."""
     ctx.auto_output("data")
 
 
@@ -222,12 +223,12 @@ def os_info(ctx: Configuration):
 @os.command("update")
 @pass_context
 def os_update(ctx: Configuration):
-    """Home Assistant os update."""
+    """Home Assistant Operating System update."""
     response = _handle_raw(ctx, "os/info")
     data = response["data"]
     current_version = data["version"]
     latest_version = data["version_latest"]
-    if StrictVersion(current_version) == StrictVersion(latest_version):
+    if Version(current_version) == Version(latest_version):
         ctx.echo("Already running the latest release")
     else:
         try:
@@ -310,7 +311,7 @@ def core_update(ctx: Configuration):
     data = response["data"]
     current_version = data["version"]
     latest_version = data["version_latest"]
-    if StrictVersion(current_version) == StrictVersion(latest_version):
+    if Version(current_version) == Version(latest_version):
         ctx.echo("Already running the latest release")
     else:
         try:

@@ -36,6 +36,7 @@ ruamel-yaml = "^0.19.0"
 click = "^8.1.7"
 click-log = "^0.4.0"
 netdisco = "^3.0.0"
+packaging = "^25.0"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^9.0.0"
