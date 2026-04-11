@@ -1,4 +1,4 @@
-FROM python:3.11-alpine
+FROM python:3.13-alpine
 LABEL maintainer="Fabian Affolter <fabian@affolter-engineering.ch>"
 
 WORKDIR /usr/src/app
