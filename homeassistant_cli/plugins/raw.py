@@ -5,6 +5,7 @@ import logging
 from typing import Any, Dict, List, cast
 
 import click
+
 import homeassistant_cli.autocompletion as autocompletion
 import homeassistant_cli.remote as api
 from homeassistant_cli.cli import pass_context

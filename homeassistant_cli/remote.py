@@ -20,7 +20,11 @@ import aiohttp
 import requests
 
 import homeassistant_cli.hassconst as hass
-from homeassistant_cli.config import Configuration, resolve_server
+from homeassistant_cli.config import (
+    Configuration,
+    resolve_server,
+    set_supervisor_server,
+)
 from homeassistant_cli.exceptions import HomeAssistantCliError
 
 _LOGGER = logging.getLogger(__name__)
@@ -74,6 +78,49 @@ def restapi(
         headers["x-ha-access"] = ctx.password
 
     url = urllib.parse.urljoin(resolve_server(ctx) + path, "")
+
+    try:
+        if method == METH_GET:
+            return requests.get(url, params=data_str, headers=headers)
+
+        return requests.request(method, url, data=data_str, headers=headers)
+
+    except requests.exceptions.ConnectionError:
+        raise HomeAssistantCliError(f"Error connecting to {url}") from None
+
+    except requests.exceptions.Timeout:
+        error = f"Timeout when talking to {url}"
+        _LOGGER.exception(error)
+        raise HomeAssistantCliError(error) from None
+
+
+def restapi_supervisor(
+    ctx: Configuration, method: str, path: str, data: dict | None = None
+) -> requests.Response:
+    """Make a call to the Supervisor REST API."""
+    if data is None:
+        data_str = None
+    else:
+        data_str = json.dumps(data, cls=JSONEncoder)
+
+    if not ctx.session:
+        ctx.session = requests.Session()
+        ctx.session.verify = not ctx.insecure
+        if ctx.cert:
+            ctx.session.cert = ctx.cert
+
+        _LOGGER.debug(
+            "Session: verify(%s), cert(%s)",
+            ctx.session.verify,
+            ctx.session.cert,
+        )
+
+    headers = {CONTENT_TYPE: hass.CONTENT_TYPE_JSON}  # type: Dict[str, Any]
+
+    if ctx.token:
+        headers["Authorization"] = f"Bearer {ctx.supervisor_token}"
+
+    url = urllib.parse.urljoin(set_supervisor_server(ctx) + path, "")
 
     try:
         if method == METH_GET:
@@ -573,3 +620,14 @@ def get_services(
         return cast(list[dict[str, Any]], req.json())
 
     raise HomeAssistantCliError(f"Error while getting all services: {req.text}")
+
+
+def get_network(ctx: Configuration) -> dict[str, Any]:
+    """Get network information."""
+    frame = {"type": "config/network"}
+
+    print(wsapi(ctx, frame))
+
+    network = cast(dict[str, dict[str, Any]], wsapi(ctx, frame))["result"]
+
+    return network

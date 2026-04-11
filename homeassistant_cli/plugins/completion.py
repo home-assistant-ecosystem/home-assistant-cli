@@ -2,6 +2,7 @@
 
 import click
 from click._bashcomplete import get_completion_script
+
 from homeassistant_cli.cli import pass_context
 
 

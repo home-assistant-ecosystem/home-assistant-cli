@@ -4,10 +4,11 @@ import json
 import unittest.mock as mocker
 from unittest.mock import ANY
 
-import homeassistant_cli.autocompletion as autocompletion
-import homeassistant_cli.cli as cli
 import requests_mock
 from click.testing import CliRunner
+
+import homeassistant_cli.autocompletion as autocompletion
+import homeassistant_cli.cli as cli
 from homeassistant_cli.config import Configuration
 
 

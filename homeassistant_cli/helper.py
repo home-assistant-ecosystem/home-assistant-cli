@@ -29,10 +29,10 @@ def to_attributes(entry: str) -> dict[str, str]:
     lexer.whitespace = ","
     attributes_dict = {}  # type: Dict[str, str]
     for pair in lexer:
-        if '=' not in pair:
+        if "=" not in pair:
             continue
-        key, value = pair.split('=', 1)
-        if value.strip().startswith('[') and value.strip().endswith(']'):
+        key, value = pair.split("=", 1)
+        if value.strip().startswith("[") and value.strip().endswith("]"):
             try:
                 value = ast.literal_eval(value)
             except Exception:

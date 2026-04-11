@@ -6,6 +6,7 @@ import re
 from typing import Any, Dict, List
 
 import click
+
 import homeassistant_cli.autocompletion as autocompletion
 import homeassistant_cli.const as const
 import homeassistant_cli.helper as helper

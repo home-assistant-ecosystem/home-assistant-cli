@@ -36,6 +36,7 @@ ruamel-yaml = "^0.19.0"
 click = "^8.1.7"
 click-log = "^0.4.0"
 netdisco = "^3.0.0"
+packaging = "^25.0"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^9.0.0"
@@ -48,17 +49,19 @@ types-requests = "^2.31.0.20240406"
 types-dateparser = "^1.2.0.20240420"
 types-tabulate = "^0.9.0.20240106"
 pre-commit = "^3.0.0"
+ruff = "^0.15.10"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.ruff]
-src = ["src"]
+src = ["homeassistant_cli", "tests"]
 line-length = 88
 
 [tool.ruff.format]
 docstring-code-format = true
+skip-magic-trailing-comma = true
 
 [tool.ruff.lint]
 select = [
@@ -100,6 +103,10 @@ ignore = [
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
+
+[tool.ruff.lint.isort]
+known-first-party = ["homeassistant_cli"]
+split-on-trailing-comma = false
 
 [tool.mypy]
 files = "homeassistant_cli, tests"

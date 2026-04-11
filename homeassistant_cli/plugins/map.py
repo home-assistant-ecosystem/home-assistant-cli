@@ -4,6 +4,7 @@ import sys
 import webbrowser
 
 import click
+
 import homeassistant_cli.autocompletion as autocompletion
 import homeassistant_cli.remote as api
 from homeassistant_cli.cli import pass_context

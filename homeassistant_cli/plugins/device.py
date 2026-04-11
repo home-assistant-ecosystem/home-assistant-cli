@@ -6,6 +6,7 @@ import sys
 from typing import Any, Dict, List, Optional
 
 import click
+
 import homeassistant_cli.autocompletion as autocompletion
 import homeassistant_cli.helper as helper
 import homeassistant_cli.remote as api

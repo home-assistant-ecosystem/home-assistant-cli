@@ -3,9 +3,10 @@
 import os
 from unittest import mock
 
-import homeassistant_cli.cli as cli
 import pytest
 import requests_mock
+
+import homeassistant_cli.cli as cli
 
 MDNS_SERVER_FALLBACK = "http://homeassistant.local:8123"
 HASS_SERVER = "http://localhost:8123"

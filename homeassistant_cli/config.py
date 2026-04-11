@@ -97,6 +97,20 @@ def resolve_server(ctx: Any) -> str:
     return cast(str, ctx.resolved_server)
 
 
+def set_supervisor_server(ctx: Any) -> str:
+    """Derive the supervisor server URL from the main server URL."""
+    if not hasattr(ctx, "supervisor_server"):
+        ctx.supervisor_server = None
+
+    if not ctx.supervisor_server:
+        if ctx.server:
+            ctx.supervisor_server = ctx.server.rsplit(":", 1)[0]
+        else:
+            ctx.supervisor_server = ctx.resolved_server.rsplit(":", 1)[0]
+
+    return cast(str, ctx.supervisor_server)
+
+
 class Configuration:
     """The configuration context for the Home Assistant CLI."""
 
@@ -105,8 +119,10 @@ class Configuration:
         self.verbose = False  # type: bool
         self.server = const.AUTO_SERVER  # type: str
         self.resolved_server = None  # type: Optional[str]
+        self.supervisor_server = None  # type: Optional[str]
         self.output = const.DEFAULT_OUTPUT  # type: str
         self.token = None  # type: Optional[str]
+        self.supervisor_token = None  # type: Optional[str]
         self.password = None  # type: Optional[str]
         self.insecure = False  # type: bool
         self.timeout = const.DEFAULT_TIMEOUT  # type: int
@@ -152,6 +168,10 @@ class Configuration:
     def resolve_server(self) -> str:
         """Return resolved server (after resolving if needed)."""
         return resolve_server(self)
+
+    def set_supervisor_server(self) -> str:
+        """Return supervisor server."""
+        return set_supervisor_server(self)
 
     def auto_output(self, auto_output: str) -> str:
         """Configure output format."""

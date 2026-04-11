@@ -5,7 +5,7 @@ Home Assistant Command-line Interface (``hass-cli``)
 
 The Home Assistant Command-line interface (``hass-cli``) allows one to
 work with a local or a remote `Home Assistant <https://home-assistant.io>`_
-Core or Home Assistant (former Hass.io) instance directly from the command-line.
+instance directly from the command-line.
 
 .. image:: https://asciinema.org/a/216235.png
       :alt: hass-cli screencast
@@ -78,7 +78,7 @@ Setup
 ======
 
 To get started you'll need to have or generate a long lasting token format
-on your Home Assistant profile page (i.e. https://localhost:8123/profile
+on your Home Assistant profile page (e. g., http://homeassistant.local:8123/profile
 then scroll down to "Long-Lived Access Tokens").
 
 Then you can use ``--server`` and ``--token`` parameter on each call or as is
@@ -86,8 +86,36 @@ recommended setup ``HASS_SERVER`` and ``HASS_TOKEN`` environment variables.
 
 .. code:: bash
 
-    $ export HASS_SERVER=https://homeassistant.local:8123
+    $ export HASS_SERVER=http://homeassistant.local:8123
     $ export HASS_TOKEN=<secret>
+
+
+Remote API access
+-----------------
+
+For Home Assistant Operating System users, the `Remote API proxy <https://developers.home-assistant.io/docs/supervisor/development/#supervisor-api-access>`
+add-on is needed. Keep in mind that this is not a feature for regular users as it allows access to
+the Supervisor API. This is relevant for the ``ha`` commands in ``hass-cli``.
+
+Install the add-on and start it. Once started you can get the Supervisor API key for the add-on via
+the logs:
+
+.. code:: text
+
+    s6-rc: info: service legacy-services: starting
+    s6-rc: info: service legacy-services successfully started
+    Your API key is: 89400091.....d0897
+
+
+Use ``--supervisor-token`` or the ``HASS_SUPERVISOR_TOKEN`` environment variable.
+
+.. code:: bash
+
+    $ export HASS_SUPERVISOR_TOKEN=<supervisor_secret>
+
+
+Automatic completion
+--------------------
 
 Once that is enabled, run one of the following commands to enable
 autocompletion for ``hass-cli`` commands.
@@ -98,9 +126,9 @@ autocompletion for ``hass-cli`` commands.
   $ source <(_HASS_CLI_COMPLETE=zsh_source hass-cli)  # for zsh
   $ eval (_HASS_CLI_COMPLETE=fish_source hass-cli)    # for fish
 
-Usage
-=======
 
+Usage
+=====
 
 Basic info
 ----------
@@ -117,12 +145,14 @@ For example to get basic info about your Home Assistant server you use ``system`
    VERSION
    2026.4.1
 
+
 If you prefer yaml you can use ``--output=yaml``:
 
 .. code:: bash
 
     $ hass-cli --output=yaml config release
       -  2026.4.1
+
 
 Backup
 ------
@@ -347,10 +377,10 @@ by specifying it as an argument:
    $ hass-cli event watch deconz_event
 
 
-Home Assistant (former Hass.io)
+Home Assistant Operating System
 -------------------------------
 
-If you are using Home Assistant (former Hass.io) there are commands available
+If you are using Home Assistant Operating System there are commands available
 for you to interact with Home Assistant services/systems. This includes the
 underlying services like the supervisor.
 
@@ -516,7 +546,7 @@ Help
       discover    Discovery for the local network.
       entity      Get info on entities from Home Assistant.
       event       Interact with events.
-      ha          Home Assistant (former Hass.io) commands.
+      ha          Home Assistant Operating System commands.
       info        Get basic info from Home Assistant.
       map         Show the location of the config or an entity on a map.
       raw         Call the raw API (advanced).

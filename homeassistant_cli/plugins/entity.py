@@ -5,6 +5,7 @@ import re
 import sys
 
 import click
+
 import homeassistant_cli.autocompletion as autocompletion
 import homeassistant_cli.const as const
 import homeassistant_cli.helper as helper

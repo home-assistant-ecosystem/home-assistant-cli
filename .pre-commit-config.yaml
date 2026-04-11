@@ -8,6 +8,9 @@ repos:
     hooks:
       - id: ruff-format
         files: ^((homeassistant_cli|script|tests)/.+)?[^/]+\.py$
+      - id: ruff
+        args: [--fix]
+        files: ^((homeassistant_cli|script|tests)/.+)?[^/]+\.py$
   - repo: https://github.com/codespell-project/codespell
     rev: v2.4.2
     hooks:
@@ -26,10 +29,6 @@ repos:
           - --format=custom
           - --configfile=tests/bandit.yaml
         files: ^(homeassistant_cli|tests)/.+\.py$
-  - repo: https://github.com/PyCQA/isort
-    rev: 8.0.1
-    hooks:
-      - id: isort
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v6.0.0
     hooks:
