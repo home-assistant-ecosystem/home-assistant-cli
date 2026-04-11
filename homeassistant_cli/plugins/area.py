@@ -3,7 +3,7 @@
 import logging
 import re
 import sys
-from typing import Any, Dict, List
+from re import Pattern
 
 import click
 
@@ -19,27 +19,30 @@ _LOGGING = logging.getLogger(__name__)
 
 @click.group("area")
 @pass_context
-def cli(ctx):
+def cli(ctx: Configuration) -> None:
     """Get info and operate on areas from Home Assistant (EXPERIMENTAL)."""
 
 
 @cli.command("list")
-@click.argument("areafilter", default=".*", required=False)
+@click.argument("area_filter", default=".*", required=False)
 @pass_context
-def listcmd(ctx: Configuration, areafilter: str):
-    """List all areas from Home Assistant."""
+def listcmd(ctx: Configuration, area_filter: str) -> None:
+    """List all areas from Home Assistant.
+
+    AREA_FILTER - optional regex to filter by area name
+    """
     ctx.auto_output("table")
 
     areas = api.get_areas(ctx)
 
-    result = []  # type: list[dict]
-    if areafilter == ".*":
+    result: list[dict] = []
+    if area_filter == ".*":
         result = areas
     else:
-        areafilterre = re.compile(areafilter)  # type: Pattern
+        area_filter_regex: Pattern[str] = re.compile(area_filter)
 
         for area in areas:
-            if areafilterre.search(area["name"]):
+            if area_filter_regex.search(area["name"]):
                 result.append(area)
 
     cols = [("ID", "area_id"), ("NAME", "name")]
@@ -52,7 +55,7 @@ def listcmd(ctx: Configuration, areafilter: str):
 @cli.command("create")
 @click.argument("names", nargs=-1, required=True)
 @pass_context
-def create(ctx, names):
+def create(ctx: Configuration, names: tuple[str, ...]) -> None:
     """Create an area.
 
     NAMES - one or more area names to create
@@ -85,7 +88,7 @@ def create(ctx, names):
     help="Confirm deletion without prompting",
 )
 @pass_context
-def delete(ctx: Configuration, names: str, confirm: bool):
+def delete(ctx: Configuration, names: tuple[str, ...], confirm: bool) -> None:
     """Delete an area.
 
     NAMES - one or more area names or id to delete
@@ -120,22 +123,22 @@ def delete(ctx: Configuration, names: str, confirm: bool):
 
 @cli.command("rename")
 @click.argument(
-    "oldname",
+    "old_name",
     required=True,
     shell_complete=autocompletion.areas,  # type: ignore
 )
-@click.argument("newname", required=True)
+@click.argument("new_name", required=True)
 @pass_context
-def rename(ctx, oldname, newname):
+def rename(ctx: Configuration, old_name: str, new_name: str) -> None:
     """Rename an area."""
     ctx.auto_output("data")
 
-    area = api.find_area(ctx, oldname)
+    area = api.find_area(ctx, old_name)
     if not area:
-        _LOGGING.error("Could not find area with id or name: %s", oldname)
+        _LOGGING.error("Could not find area with id or name: %s", old_name)
         sys.exit(1)
 
-    result = api.rename_area(ctx, area["area_id"], newname)
+    result = api.rename_area(ctx, area["area_id"], new_name)
 
     ctx.echo(
         helper.format_output(
