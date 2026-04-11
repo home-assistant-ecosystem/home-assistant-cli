@@ -98,10 +98,10 @@ def assign(
         if match == ".*":
             result = devices
         else:
-            devicefilterre = re.compile(match)  # type: Pattern
+            device_filter_regex = re.compile(match)  # type: Pattern
 
             for device in devices:
-                if devicefilterre.search(device["name"]):
+                if device_filter_regex.search(device["name"]):
                     result.append(device)
 
     for id_or_name in names:
