@@ -389,11 +389,12 @@ Check the Supervisor release you are running:
 .. code:: bash
 
    $ hass-cli ha supervisor info
-   result: ok
-   data:
-    version: '217'
-    version_latest: '217'
-    channel: stable
+     result: ok
+     data:
+       version: 2026.03.3
+        version_latest: 2026.03.3
+       update_available: false
+       channel: stable
     [...]
 
 Check the Core release you are using at the moment:
@@ -403,8 +404,10 @@ Check the Core release you are using at the moment:
    $ hass-cli ha core info
    result: ok
    data:
-       version: 0.108.2
-       version_latest: 0.108.3
+       version: 2026.4.1
+       version_latest: 2026.4.1
+       update_available: false
+       machine: generic-x86-64
        [...]
 
 Update Core to the latest available release:
