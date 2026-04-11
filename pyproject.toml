@@ -49,17 +49,19 @@ types-requests = "^2.31.0.20240406"
 types-dateparser = "^1.2.0.20240420"
 types-tabulate = "^0.9.0.20240106"
 pre-commit = "^3.0.0"
+ruff = "^0.15.10"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.ruff]
-src = ["src"]
+src = ["homeassistant_cli", "tests"]
 line-length = 88
 
 [tool.ruff.format]
 docstring-code-format = true
+skip-magic-trailing-comma = true
 
 [tool.ruff.lint]
 select = [
@@ -89,7 +91,6 @@ ignore = [
     "D203", # 1 blank line required before class docstring
     "D212", # Multi-line docstring summary should start at the first line
     "E721", # Do not compare types, use `isinstance()`
-    "I001", # isort found an import in the wrong position
     "F401", # Module imported but unused
     "D415", # First line should end with a period, question mark, or exclamation point
     "RUF012", # Mutable class attributes should be annotated with `typing.ClassVar`
@@ -102,6 +103,10 @@ ignore = [
 
 [tool.ruff.lint.pydocstyle]
 convention = "google"
+
+[tool.ruff.lint.isort]
+known-first-party = ["homeassistant_cli"]
+split-on-trailing-comma = false
 
 [tool.mypy]
 files = "homeassistant_cli, tests"
