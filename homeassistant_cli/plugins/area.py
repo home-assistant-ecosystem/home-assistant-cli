@@ -78,8 +78,14 @@ def create(ctx, names):
     required=True,
     shell_complete=autocompletion.areas,  # type: ignore
 )
+@click.option(
+    "--confirm",
+    is_flag=True,
+    default=False,
+    help="Confirm deletion without prompting",
+)
 @pass_context
-def delete(ctx, names):
+def delete(ctx: Configuration, names: str, confirm: bool):
     """Delete an area.
 
     NAMES - one or more area names or id to delete
@@ -92,16 +98,21 @@ def delete(ctx, names):
         if not area:
             _LOGGING.error("Could not find area with id or name: %s", name)
             excode = 1
-        else:
-            result = api.delete_area(ctx, area["area_id"])
+            continue
 
-            ctx.echo(
-                helper.format_output(
-                    ctx,
-                    [result],
-                    columns=ctx.columns if ctx.columns else const.COLUMNS_DEFAULT,
-                )
+        if not confirm:
+            click.confirm(
+                f"Are you sure you want to delete '{area['name']}'"
+                f" ({area['area_id']})?",
+                abort=True,
             )
+
+        result = api.delete_area(ctx, area["area_id"])
+
+        if result.get("success"):
+            ctx.echo(f"Successfully deleted area: {area['name']} ({area['area_id']})")
+        else:
+            ctx.echo(helper.format_output(ctx, result))
 
     if excode != 0:
         sys.exit(excode)
