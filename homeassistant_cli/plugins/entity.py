@@ -171,3 +171,43 @@ def rename(ctx, old_id, new_id, name):
             columns=ctx.columns if ctx.columns else const.COLUMNS_DEFAULT,
         )
     )
+
+
+@cli.command("delete")
+@click.argument(
+    "entity_id",
+    required=True,
+    shell_complete=autocompletion.entities,  # type: ignore
+)
+@click.option(
+    "--confirm",
+    is_flag=True,
+    default=False,
+    help="Confirm deletion without prompting",
+)
+@pass_context
+def delete(ctx: Configuration, entity_id: str, confirm: bool) -> None:
+    """Delete an entity.
+
+    ENTITY_ID - the entity_id of the entity to delete
+    """
+    ctx.auto_output("data")
+
+    entity = api.get_entity(ctx, entity_id)
+    if not entity:
+        _LOGGING.error("Could not find entity with ID: %s", entity_id)
+        sys.exit(1)
+
+    if not confirm:
+        click.confirm(
+            f"Are you sure you want to delete '{entity_id}'?",
+            abort=True,
+        )
+
+    result = api.delete_entity(ctx, entity_id)
+
+    if result.get("success"):
+        ctx.echo(f"Successfully deleted entity '{entity_id}'")
+    else:
+        _LOGGING.error("Failed to delete entity: %s", entity_id)
+        ctx.echo(str(result))
