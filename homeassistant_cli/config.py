@@ -32,6 +32,12 @@ class _ZeroconfListener:
         """Add service."""
         self.services[name] = _zeroconf.get_service_info(_type, name)
 
+    def update_service(
+        self, _zeroconf: zeroconf.Zeroconf, _type: str, name: str
+    ) -> None:
+        """Update service."""
+        self.services[name] = _zeroconf.get_service_info(_type, name)
+
 
 def _locate_ha() -> str | None:
     """Locate the Home Assistant instance."""
@@ -162,6 +168,9 @@ class Configuration:
             "output": self.output,
             "verbose": self.verbose,
         }
+
+        print("-------------------------------")
+        print(view)
 
         return f"<Configuration({view})"
 
