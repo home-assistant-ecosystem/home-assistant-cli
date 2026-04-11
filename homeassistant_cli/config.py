@@ -96,6 +96,7 @@ def resolve_server(ctx: Any) -> str:
 
     return cast(str, ctx.resolved_server)
 
+
 def set_supervisor_server(ctx: Any) -> str:
     """Derive the supervisor server URL from the main server URL."""
     if not hasattr(ctx, "supervisor_server"):

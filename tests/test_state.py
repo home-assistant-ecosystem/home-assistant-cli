@@ -2,9 +2,10 @@
 
 import json
 
-import homeassistant_cli.cli as cli
 import requests_mock
 from click.testing import CliRunner
+
+import homeassistant_cli.cli as cli
 
 # import re
 

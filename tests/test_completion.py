@@ -2,9 +2,10 @@
 
 from typing import cast
 
+import requests_mock
+
 import homeassistant_cli.autocompletion as autocompletion
 import homeassistant_cli.cli as cli
-import requests_mock
 from homeassistant_cli.config import Configuration
 
 

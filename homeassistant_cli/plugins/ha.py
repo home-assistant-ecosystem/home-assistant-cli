@@ -5,13 +5,14 @@ import logging
 from typing import Any, Dict, List, cast
 
 import click
+from packaging.version import Version
+from requests.exceptions import HTTPError
+
 import homeassistant_cli.remote as api
 from homeassistant_cli.cli import pass_context
 from homeassistant_cli.config import Configuration
 from homeassistant_cli.exceptions import HomeAssistantCliError
 from homeassistant_cli.helper import format_output
-from packaging.version import Version
-from requests.exceptions import HTTPError
 
 _LOGGING = logging.getLogger(__name__)
 

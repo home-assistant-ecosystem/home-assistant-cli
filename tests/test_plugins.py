@@ -1,6 +1,7 @@
 """Tests file for Home Assistant CLI (hass-cli)."""
 
 import pytest
+
 from homeassistant_cli.cli import HomeAssistantCli, cli
 
 DFEAULT_PLUGINS = [

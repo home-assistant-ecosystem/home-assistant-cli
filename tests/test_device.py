@@ -3,8 +3,9 @@
 import json
 import unittest.mock as mock
 
-import homeassistant_cli.cli as cli
 from click.testing import CliRunner
+
+import homeassistant_cli.cli as cli
 
 
 def test_device_list(default_devices, default_areas) -> None:
