@@ -207,3 +207,45 @@ def list_by_area(ctx: Configuration, area_id_or_name: str):
     ctx.echo(
         helper.format_output(ctx, result, columns=ctx.columns if ctx.columns else cols)
     )
+
+
+@cli.command("delete")
+@click.argument("device_id_or_name", required=True)
+@click.option(
+    "--confirm",
+    is_flag=True,
+    default=False,
+    help="Confirm deletion without prompting",
+)
+@pass_context
+def delete(ctx: Configuration, device_id_or_name: str, confirm: bool):
+    """Delete a specified device."""
+    ctx.auto_output("data")
+
+    devices = api.get_devices(ctx)
+
+    device = next(
+        (x for x in devices if x["id"] == device_id_or_name),
+        None,  # type: ignore
+    )
+    if not device:
+        device = next(
+            (x for x in devices if x["name"] == device_id_or_name),
+            None,  # type: ignore
+        )
+    if not device:
+        _LOGGING.error("Could not find device with id or name: %s", device_id_or_name)
+        sys.exit(1)
+
+    if not confirm:
+        click.confirm(
+            f"Are you sure you want to delete '{device['name']}' [{device['id']}]?",
+            abort=True,
+        )
+
+    output = api.delete_device(ctx, device["id"])
+    if output["success"]:
+        ctx.echo("Successfully deleted device '{}'".format(device["name"]))
+    else:
+        _LOGGING.error("Failed to delete device '%s'", device_id_or_name)
+        ctx.echo(str(output))
