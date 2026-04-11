@@ -51,13 +51,13 @@ def cli(ctx: Configuration, template, datafile, local: bool) -> None:
     if datafile:
         variables = ctx.yamlload(datafile)
 
-    templatestr = template.read()
+    template_string = template.read()
 
-    _LOGGING.debug("Rendering: %s Variables: %s", templatestr, variables)
+    _LOGGING.debug("Rendering: %s Variables: %s", template_string, variables)
 
     if local:
         output = render(template.name, variables, True)
     else:
-        output = api.render_template(ctx, templatestr, variables)
+        output = api.render_template(ctx, template_string, variables)
 
     ctx.echo(output)
