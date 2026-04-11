@@ -342,6 +342,61 @@ def get_entity(ctx: Configuration, entity_id: str) -> list[dict[str, Any]]:
     return result["id"]
 
 
+def get_config_entries(ctx: Configuration) -> list[dict[str, Any]]:
+    """Return all config entries (integrations)."""
+    req = restapi(ctx, METH_GET, "/api/config/config_entries/entry")
+    req.raise_for_status()
+    return cast(list[dict[str, Any]], req.json())
+
+
+def get_config_entry(ctx: Configuration, entry_id: str) -> dict[str, Any]:
+    """Return a specific config entry."""
+    frame = {"type": hass.WS_TYPE_CONFIG_ENTRIES_GET_SINGLE, "entry_id": entry_id}
+    result = cast(dict[str, Any], wsapi(ctx, frame))
+    return result.get("result", {}).get("config_entry", {})
+
+
+def reload_config_entry(ctx: Configuration, entry_id: str) -> dict[str, Any]:
+    """Reload a config entry via REST API."""
+    req = restapi(ctx, METH_POST, f"/api/config/config_entries/entry/{entry_id}/reload")
+    if req.status_code == 200:
+        return {"success": True, **req.json()}
+    elif req.status_code == 404:
+        return {"success": False, "error": "Config entry not found"}
+    elif req.status_code == 403:
+        return {"success": False, "error": "Entry cannot be reloaded"}
+    else:
+        req.raise_for_status()
+        return {"success": False}
+
+
+def delete_config_entry(ctx: Configuration, entry_id: str) -> dict[str, Any]:
+    """Delete a config entry via REST API."""
+    req = restapi(ctx, METH_DELETE, f"/api/config/config_entries/entry/{entry_id}")
+    if req.status_code == 200:
+        return {"success": True, **req.json()}
+    elif req.status_code == 404:
+        return {"success": False, "error": "Config entry not found"}
+    else:
+        req.raise_for_status()
+        return {"success": False}
+
+
+def disable_config_entry(
+    ctx: Configuration, entry_id: str, disabled_by: str | None
+) -> dict[str, Any]:
+    """Enable or disable a config entry.
+
+    Set disabled_by to "user" to disable, or None to enable.
+    """
+    frame = {
+        "type": hass.WS_TYPE_CONFIG_ENTRIES_DISABLE,
+        "entry_id": entry_id,
+        "disabled_by": disabled_by,
+    }
+    return cast(dict[str, Any], wsapi(ctx, frame))
+
+
 def validate_api(ctx: Configuration) -> APIStatus:
     """Make a call to validate API."""
     try:
