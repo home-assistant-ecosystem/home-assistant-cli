@@ -239,3 +239,31 @@ def enable(ctx: Configuration, entity_id: str) -> None:
     else:
         _LOGGING.error("Failed to enable entity: %s", entity_id)
         ctx.echo(str(result))
+
+
+@cli.command("disable")
+@click.argument(
+    "entity_id",
+    required=True,
+    shell_complete=autocompletion.entities,  # type: ignore
+)
+@pass_context
+def disable(ctx: Configuration, entity_id: str) -> None:
+    """Disable an entity.
+
+    ENTITY_ID - the entity_id of the entity to disable
+    """
+    ctx.auto_output("data")
+
+    entity = api.get_entity(ctx, entity_id)
+    if not entity:
+        _LOGGING.error("Could not find entity with ID: %s", entity_id)
+        sys.exit(1)
+
+    result = api.enable_entity(ctx, entity_id, "user")
+
+    if result.get("success"):
+        ctx.echo(f"Successfully disabled entity '{entity_id}'")
+    else:
+        _LOGGING.error("Failed to disable entity: %s", entity_id)
+        ctx.echo(str(result))
