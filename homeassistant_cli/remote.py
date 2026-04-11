@@ -417,7 +417,7 @@ def validate_api(ctx: Configuration) -> APIStatus:
 def get_info(ctx: Configuration) -> dict[str, Any]:
     """Get basic info about the Home Assistant instance."""
     try:
-        req = restapi(ctx, METH_GET, hass.URL_API_DISCOVERY_INFO)
+        req = restapi(ctx, METH_GET, hass.URL_API_CONFIG)
 
         req.raise_for_status()
 
