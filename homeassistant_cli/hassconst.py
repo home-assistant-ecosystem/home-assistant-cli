@@ -15,7 +15,7 @@ WS_TYPE_DEVICE_REGISTRY_UPDATE = "config/device_registry/update"
 WS_TYPE_ENTITY_REGISTRY_LIST = "config/entity_registry/list"
 WS_TYPE_ENTITY_REGISTRY_GET = "config/entity_registry/get"
 WS_TYPE_ENTITY_REGISTRY_UPDATE = "config/entity_registry/update"
-WS_TYPE_ENTITY_REGISTRY_REGISTRY = "config/entity_registry/remove"
+WS_TYPE_ENTITY_REGISTRY_REMOVE = "config/entity_registry/remove"
 
 # Config entries (integrations)
 WS_TYPE_CONFIG_ENTRIES_GET = "config_entries/get"

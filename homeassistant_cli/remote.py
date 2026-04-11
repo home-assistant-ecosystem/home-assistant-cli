@@ -306,6 +306,29 @@ def assign_entity_area(
     return cast(dict[str, Any], wsapi(ctx, frame))
 
 
+def delete_entity(ctx: Configuration, entity_id: str) -> dict[str, Any]:
+    """Delete entity from registry."""
+    frame = {
+        "type": hass.WS_TYPE_ENTITY_REGISTRY_REMOVE,
+        "entity_id": entity_id,
+    }
+
+    return cast(dict[str, Any], wsapi(ctx, frame))
+
+
+def enable_entity(
+    ctx: Configuration, entity_id: str, disabled_by: str | None
+) -> dict[str, Any]:
+    """Enable or disable an entity."""
+    frame = {
+        "type": hass.WS_TYPE_ENTITY_REGISTRY_UPDATE,
+        "entity_id": entity_id,
+        "disabled_by": disabled_by,
+    }
+
+    return cast(dict[str, Any], wsapi(ctx, frame))
+
+
 def get_health(ctx: Configuration) -> dict[str, Any]:
     """Get system Health."""
     frame = {"type": "system_health/info"}

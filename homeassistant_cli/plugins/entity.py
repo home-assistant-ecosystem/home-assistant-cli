@@ -171,3 +171,99 @@ def rename(ctx, old_id, new_id, name):
             columns=ctx.columns if ctx.columns else const.COLUMNS_DEFAULT,
         )
     )
+
+
+@cli.command("delete")
+@click.argument(
+    "entity_id",
+    required=True,
+    shell_complete=autocompletion.entities,  # type: ignore
+)
+@click.option(
+    "--confirm",
+    is_flag=True,
+    default=False,
+    help="Confirm deletion without prompting",
+)
+@pass_context
+def delete(ctx: Configuration, entity_id: str, confirm: bool) -> None:
+    """Delete an entity.
+
+    ENTITY_ID - the entity_id of the entity to delete
+    """
+    ctx.auto_output("data")
+
+    entity = api.get_entity(ctx, entity_id)
+    if not entity:
+        _LOGGING.error("Could not find entity with ID: %s", entity_id)
+        sys.exit(1)
+
+    if not confirm:
+        click.confirm(
+            f"Are you sure you want to delete '{entity_id}'?",
+            abort=True,
+        )
+
+    result = api.delete_entity(ctx, entity_id)
+
+    if result.get("success"):
+        ctx.echo(f"Successfully deleted entity '{entity_id}'")
+    else:
+        _LOGGING.error("Failed to delete entity: %s", entity_id)
+        ctx.echo(str(result))
+
+
+@cli.command("enable")
+@click.argument(
+    "entity_id",
+    required=True,
+    shell_complete=autocompletion.entities,  # type: ignore
+)
+@pass_context
+def enable(ctx: Configuration, entity_id: str) -> None:
+    """Enable an entity.
+
+    ENTITY_ID - the entity_id of the entity to enable
+    """
+    ctx.auto_output("data")
+
+    entity = api.get_entity(ctx, entity_id)
+    if not entity:
+        _LOGGING.error("Could not find entity with ID: %s", entity_id)
+        sys.exit(1)
+
+    result = api.enable_entity(ctx, entity_id, None)
+
+    if result.get("success"):
+        ctx.echo(f"Successfully enabled entity '{entity_id}'")
+    else:
+        _LOGGING.error("Failed to enable entity: %s", entity_id)
+        ctx.echo(str(result))
+
+
+@cli.command("disable")
+@click.argument(
+    "entity_id",
+    required=True,
+    shell_complete=autocompletion.entities,  # type: ignore
+)
+@pass_context
+def disable(ctx: Configuration, entity_id: str) -> None:
+    """Disable an entity.
+
+    ENTITY_ID - the entity_id of the entity to disable
+    """
+    ctx.auto_output("data")
+
+    entity = api.get_entity(ctx, entity_id)
+    if not entity:
+        _LOGGING.error("Could not find entity with ID: %s", entity_id)
+        sys.exit(1)
+
+    result = api.enable_entity(ctx, entity_id, "user")
+
+    if result.get("success"):
+        ctx.echo(f"Successfully disabled entity '{entity_id}'")
+    else:
+        _LOGGING.error("Failed to disable entity: %s", entity_id)
+        ctx.echo(str(result))
