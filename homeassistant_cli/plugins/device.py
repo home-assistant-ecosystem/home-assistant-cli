@@ -19,14 +19,17 @@ _LOGGING = logging.getLogger(__name__)
 @click.group("device")
 @pass_context
 def cli(ctx):
-    """Get info and operate on devices from Home Assistant (EXPERIMENTAL)."""
+    """Get info and operate on devices from Home Assistant."""
 
 
 @cli.command("list")
-@click.argument("devicefilter", default=".*", required=False)
+@click.argument("device_filter", default=".*", required=False)
 @pass_context
-def listcmd(ctx: Configuration, devicefilter: str):
-    """List all devices from Home Assistant."""
+def list_cmd(ctx: Configuration, device_filter: str):
+    """List all devices from Home Assistant.
+
+    DEVICE_FILTER - regular expression to filter devices by name
+    """
     ctx.auto_output("table")
 
     areas = api.get_areas(ctx)
@@ -34,13 +37,13 @@ def listcmd(ctx: Configuration, devicefilter: str):
     devices = api.get_devices(ctx)
 
     result = []  # type: List[Dict]
-    if devicefilter == ".*":
+    if device_filter == ".*":
         result = devices
     else:
-        devicefilterre = re.compile(devicefilter)  # type: Pattern
+        device_filter_regex = re.compile(device_filter)  # type: Pattern
 
         for device in devices:
-            if devicefilterre.search(device["name"]):
+            if device_filter_regex.search(device["name"]):
                 result.append(device)
 
     for device in devices:
@@ -95,10 +98,10 @@ def assign(
         if match == ".*":
             result = devices
         else:
-            devicefilterre = re.compile(match)  # type: Pattern
+            device_filter_regex = re.compile(match)  # type: Pattern
 
             for device in devices:
-                if devicefilterre.search(device["name"]):
+                if device_filter_regex.search(device["name"]):
                     result.append(device)
 
     for id_or_name in names:
@@ -169,4 +172,80 @@ def rename(
     else:
         _LOGGING.error("Failed to rename '%s' to '%s'", device_id_or_name, new_name)
 
+        ctx.echo(str(output))
+
+
+@cli.command("list-by-area")
+@click.argument(
+    "area_id_or_name",
+    required=True,
+    shell_complete=autocompletion.areas,  # type: ignore
+)
+@pass_context
+def list_by_area(ctx: Configuration, area_id_or_name: str):
+    """List all devices in a specified area.
+
+    AREA_ID_OR_NAME - area id or name
+    """
+    ctx.auto_output("table")
+
+    area = api.find_area(ctx, area_id_or_name)
+    if not area:
+        _LOGGING.error("Could not find area with id or name: %s", area_id_or_name)
+        sys.exit(1)
+
+    devices = api.get_devices(ctx)
+    result = [d for d in devices if d["area_id"] == area["area_id"]]
+
+    cols = [
+        ("ID", "id"),
+        ("NAME", "name"),
+        ("MODEL", "model"),
+        ("MANUFACTURER", "manufacturer"),
+    ]
+
+    ctx.echo(
+        helper.format_output(ctx, result, columns=ctx.columns if ctx.columns else cols)
+    )
+
+
+@cli.command("delete")
+@click.argument("device_id_or_name", required=True)
+@click.option(
+    "--confirm",
+    is_flag=True,
+    default=False,
+    help="Confirm deletion without prompting",
+)
+@pass_context
+def delete(ctx: Configuration, device_id_or_name: str, confirm: bool):
+    """Delete a specified device."""
+    ctx.auto_output("data")
+
+    devices = api.get_devices(ctx)
+
+    device = next(
+        (x for x in devices if x["id"] == device_id_or_name),
+        None,  # type: ignore
+    )
+    if not device:
+        device = next(
+            (x for x in devices if x["name"] == device_id_or_name),
+            None,  # type: ignore
+        )
+    if not device:
+        _LOGGING.error("Could not find device with id or name: %s", device_id_or_name)
+        sys.exit(1)
+
+    if not confirm:
+        click.confirm(
+            f"Are you sure you want to delete '{device['name']}' [{device['id']}]?",
+            abort=True,
+        )
+
+    output = api.delete_device(ctx, device["id"])
+    if output["success"]:
+        ctx.echo("Successfully deleted device '{}'".format(device["name"]))
+    else:
+        _LOGGING.error("Failed to delete device '%s'", device_id_or_name)
         ctx.echo(str(output))
