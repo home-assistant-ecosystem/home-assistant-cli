@@ -19,7 +19,7 @@ _LOGGING = logging.getLogger(__name__)
 @click.group("device")
 @pass_context
 def cli(ctx):
-    """Get info and operate on devices from Home Assistant (EXPERIMENTAL)."""
+    """Get info and operate on devices from Home Assistant."""
 
 
 @cli.command("list")
