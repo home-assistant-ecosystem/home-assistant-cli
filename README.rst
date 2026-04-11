@@ -500,63 +500,66 @@ Help
 
 .. code:: bash
 
-    $ hass-cli
-    Usage: hass-cli [OPTIONS] COMMAND [ARGS]...
+   $ hass-cli --help
+   Usage: hass-cli [OPTIONS] COMMAND [ARGS]...
 
-      Command line interface for Home Assistant.
+   Command line interface for Home Assistant.
 
-    Options:
-      -l, --loglevel LVL              Either CRITICAL, ERROR, WARNING, INFO or
-                                      DEBUG
-      --version                       Show the version and exit.
-      -s, --server TEXT               The server URL or `auto` for automatic
-                                      detection. Can also be set with the
-                                      environment variable HASS_SERVER.  [default:
-                                      auto]
-      --token TEXT                    The Bearer token for Home Assistant
-                                      instance. Can also be set with the
-                                      environment variable HASS_TOKEN.
-      --password TEXT                 The API password for Home Assistant
-                                      instance. Can also be set with the
-                                      environment variable HASS_PASSWORD.
-      --timeout INTEGER               Timeout for network operations.  [default:
-                                      5]
-      -o, --output [json|yaml|table|ndjson|auto]
-                                      Output format.  [default: auto]
-      -v, --verbose                   Enables verbose mode.
-      -x                              Print backtraces when exception occurs.
-      --cert TEXT                     Path to client certificate file (.pem) to
-                                      use when connecting.
-      --insecure                      Ignore SSL Certificates. Allow to connect to
-                                      servers with self-signed certificates. Be
-                                      careful!
-      --debug                         Enables debug mode.
-      --columns TEXT                  Custom columns key=value list. Example:
-                                      ENTITY=entity_id,
-                                      NAME=attributes.friendly_name
-      --no-headers                    When printing tables don't use headers
-                                      (default: print headers)
-      --table-format TEXT             Which table format to use.
-      --sort-by TEXT                  Sort table by the jsonpath expression.
-                                      Example: last_changed
-      --help                          Show this message and exit.
+   Options:
+   -l, --loglevel LVL              Either CRITICAL, ERROR, WARNING, INFO or
+                                    DEBUG
+   --version                       Show the version and exit.
+   -s, --server TEXT               The server URL or `auto` for automatic
+                                    detection. Can also be set with the
+                                    environment variable HASS_SERVER.  [default:
+                                    auto]
+   --token TEXT                    The Bearer token for Home Assistant
+                                    instance. Can also be set with the
+                                    environment variable HASS_TOKEN.
+   --supervisor-token TEXT         The Bearer token for Home Assistant
+                                    supervisor. Can also be set with the
+                                    environment variable HASS_SUPERVISOR_TOKEN.
+   --password TEXT                 The API password for Home Assistant
+                                    instance. Can also be set with the
+                                    environment variable HASS_PASSWORD.
+   --timeout INTEGER               Timeout for network operations.  [default:
+                                    5]
+   -o, --output [json|yaml|table|auto|ndjson]
+                                    Output format.  [default: auto]
+   -v, --verbose                   Enables verbose mode.
+   -x                              Print backtraces when exception occurs.
+   --cert TEXT                     Path to client certificate file (.pem) to
+                                    use when connecting.
+   --insecure                      Ignore SSL Certificates. Allow to connect to
+                                    servers with self-signed certificates. Be
+                                    careful!
+   --debug                         Enables debug mode.
+   --columns TEXT                  Custom columns key=value list. Example:
+                                    ENTITY=entity_id,
+                                    NAME=attributes.friendly_name
+   --no-headers                    When printing tables don't use headers
+                                    (default: print headers)
+   --table-format TEXT             Which table format to use.
+   --sort-by TEXT                  Sort table by the jsonpath expression.
+                                    Example: last_changed
+   --help                          Show this message and exit.
 
-    Commands:
-      area        Get info and operate on areas from Home Assistant...
-      completion  Output shell completion code for the specified shell (bash or...
-      config      Get configuration from a Home Assistant instance.
-      device      Get info and operate on devices from Home Assistant...
-      discover    Discovery for the local network.
-      entity      Get info on entities from Home Assistant.
-      event       Interact with events.
-      ha          Home Assistant Operating System commands.
-      info        Get basic info from Home Assistant.
-      map         Show the location of the config or an entity on a map.
-      raw         Call the raw API (advanced).
-      service     Call and work with services.
-      state       Get info on entity state from Home Assistant.
-      system      System details and operations for Home Assistant.
-      template    Render templates on server or locally.
+   Commands:
+   area         Get info and operate on areas from Home Assistant...
+   config       Get configuration from a Home Assistant instance.
+   device       Get info and operate on devices from Home Assistant.
+   discover     Discovery for the local network.
+   entity       Get info on entities from Home Assistant.
+   event        Interact with events.
+   ha           Home Assistant Operating System commands.
+   info         Show information about Home Assistant CLI.
+   integration  Get info and operate on integrations (config entries) from...
+   map          Show the location of the config or an entity on a map.
+   raw          Call the raw API (advanced).
+   service      Call and work with services.
+   state        Get info on entity state from Home Assistant.
+   system       System details and operations for Home Assistant.
+   template     Render templates on server or locally.
 
 
 Clone the git repository and
