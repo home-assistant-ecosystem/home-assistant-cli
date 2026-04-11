@@ -41,7 +41,7 @@ class _ZeroconfListener:
 
 def _locate_ha() -> str | None:
     """Locate the Home Assistant instance."""
-    _zeroconf = zeroconf.Zeroconf()
+    _zeroconf = zeroconf.Zeroconf(interfaces=zeroconf.InterfaceChoice.Default)
     listener = _ZeroconfListener()
     zeroconf.ServiceBrowser(_zeroconf, "_home-assistant._tcp.local.", listener)
     try:
