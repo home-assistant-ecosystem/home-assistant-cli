@@ -58,15 +58,15 @@ def _locate_ha() -> str | None:
     if listener.services:
         if len(listener.services) > 1:
             _LOGGING.warning(
-                "Found multiple Home Assistant instances at %s",
-                ", ".join(listener.services),
+                f"Found multiple Home Assistant instances at "
+                f"{', '.join(listener.services)}"
             )
             _LOGGING.warning("Use --server to explicitly specify one.")
             return None
 
         _, service = listener.services.popitem()
         base_url = service.properties[b"base_url"].decode("utf-8")
-        _LOGGING.info("Found and using %s as server", base_url)
+        _LOGGING.info(f"Found and using {base_url} as server")
         return cast(str, base_url)
 
     _LOGGING.warning("Found no Home Assistant on local network. Using defaults")
@@ -78,8 +78,7 @@ def resolve_server(ctx: Any) -> str:
 
     if server is `auto` try and resolve it
     """
-    # to work around bug in click that hands out
-    # non-Configuration context objects.
+    # Work-around for bug in click that hands out non-Configuration context objects
     if not hasattr(ctx, "resolved_server"):
         ctx.resolved_server = None
 
@@ -109,10 +108,12 @@ def set_supervisor_server(ctx: Any) -> str:
         ctx.supervisor_server = None
 
     if not ctx.supervisor_server:
-        if ctx.server:
+        if ctx.server and ctx.server != "auto":
             ctx.supervisor_server = ctx.server.rsplit(":", 1)[0]
         else:
-            ctx.supervisor_server = ctx.resolved_server.rsplit(":", 1)[0]
+            # Ensure resolved_server is set first
+            resolved = resolve_server(ctx)
+            ctx.supervisor_server = resolved.rsplit(":", 1)[0]
 
     return cast(str, ctx.supervisor_server)
 
