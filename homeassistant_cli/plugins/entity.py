@@ -23,9 +23,9 @@ def cli(ctx):
 
 
 @cli.command("list")
-@click.argument("entityfilter", default=".*", required=False)
+@click.argument("entity_filter", default=".*", required=False)
 @pass_context
-def listcmd(ctx: Configuration, entityfilter: str):
+def listcmd(ctx: Configuration, entity_filter: str):
     """List all entities from Home Assistant."""
     ctx.auto_output("table")
 
@@ -34,13 +34,13 @@ def listcmd(ctx: Configuration, entityfilter: str):
     entities = api.get_entities(ctx)
 
     result = []  # type: List[Dict]
-    if entityfilter == ".*":
+    if entity_filter == ".*":
         result = entities
     else:
-        entityfilterre = re.compile(entityfilter)  # type: Pattern
+        entity_filter_regex = re.compile(entity_filter)  # type: Pattern
 
         for entity in entities:
-            if entityfilterre.search(entity["entity_id"]):
+            if entity_filter_regex.search(entity["entity_id"]):
                 result.append(entity)
 
     for entity in entities:
@@ -97,10 +97,10 @@ def assign(
         if match == ".*":
             result = entities
         else:
-            entityfilterre = re.compile(match)  # type: Pattern
+            entity_filter_regex = re.compile(match)  # type: Pattern
 
             for entity in entities:
-                if entityfilterre.search(entity["name"]):
+                if entity_filter_regex.search(entity["name"]):
                     result.append(entity)
 
     for id_or_name in names:
@@ -138,31 +138,31 @@ def assign(
 
 @cli.command("rename")
 @click.argument(
-    "oldid",
+    "old_id",
     required=True,
     shell_complete=autocompletion.entities,  # type: ignore
 )
 @click.option("--name", required=False)
 @click.argument(
-    "newid",
+    "new_id",
     required=False,
     shell_complete=autocompletion.entities,  # type: ignore
 )
 @pass_context
-def rename(ctx, oldid, newid, name):
+def rename(ctx, old_id, new_id, name):
     """Rename a entity."""
     ctx.auto_output("data")
 
-    if not newid and not name:
+    if not new_id and not name:
         _LOGGING.error("Need to at least specify either a new id or new name")
         sys.exit(1)
 
-    entity = api.get_entity(ctx, oldid)
+    entity = api.get_entity(ctx, old_id)
     if not entity:
-        _LOGGING.error("Could not find entity with ID: %s", oldid)
+        _LOGGING.error("Could not find entity with ID: %s", old_id)
         sys.exit(1)
 
-    result = api.rename_entity(ctx, oldid, newid, name)
+    result = api.rename_entity(ctx, old_id, new_id, name)
 
     ctx.echo(
         helper.format_output(
