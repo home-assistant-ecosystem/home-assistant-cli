@@ -27,7 +27,7 @@ def cli(ctx):
 @pass_context
 def list_cmd(ctx: Configuration, device_filter: str):
     """List all devices from Home Assistant.
-    
+
     DEVICE_FILTER - regular expression to filter devices by name
     """
     ctx.auto_output("table")
@@ -184,7 +184,7 @@ def rename(
 @pass_context
 def list_by_area(ctx: Configuration, area_id_or_name: str):
     """List all devices in a specified area.
-    
+
     AREA_ID_OR_NAME - area id or name
     """
     ctx.auto_output("table")
