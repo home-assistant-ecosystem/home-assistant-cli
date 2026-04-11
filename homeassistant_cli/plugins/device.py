@@ -173,3 +173,37 @@ def rename(
         _LOGGING.error("Failed to rename '%s' to '%s'", device_id_or_name, new_name)
 
         ctx.echo(str(output))
+
+
+@cli.command("list-by-area")
+@click.argument(
+    "area_id_or_name",
+    required=True,
+    shell_complete=autocompletion.areas,  # type: ignore
+)
+@pass_context
+def list_by_area(ctx: Configuration, area_id_or_name: str):
+    """List all devices in a specified area.
+    
+    AREA_ID_OR_NAME - area id or name
+    """
+    ctx.auto_output("table")
+
+    area = api.find_area(ctx, area_id_or_name)
+    if not area:
+        _LOGGING.error("Could not find area with id or name: %s", area_id_or_name)
+        sys.exit(1)
+
+    devices = api.get_devices(ctx)
+    result = [d for d in devices if d["area_id"] == area["area_id"]]
+
+    cols = [
+        ("ID", "id"),
+        ("NAME", "name"),
+        ("MODEL", "model"),
+        ("MANUFACTURER", "manufacturer"),
+    ]
+
+    ctx.echo(
+        helper.format_output(ctx, result, columns=ctx.columns if ctx.columns else cols)
+    )
