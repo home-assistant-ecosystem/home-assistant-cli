@@ -43,13 +43,13 @@ def full(ctx: Configuration):
 
 @cli.command()
 @pass_context
-def components(ctx: Configuration):
-    """Get loaded components from Home Assistant."""
+def integrations(ctx: Configuration):
+    """Get loaded integrations from Home Assistant."""
     click.echo(
         format_output(
             ctx,
             api.get_config(ctx)["components"],
-            columns=ctx.columns if ctx.columns else [("COMPONENT", "$")],
+            columns=ctx.columns if ctx.columns else [("INTEGRATIONS", "$")],
         )
     )
 
