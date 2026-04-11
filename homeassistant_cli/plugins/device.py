@@ -23,10 +23,13 @@ def cli(ctx):
 
 
 @cli.command("list")
-@click.argument("devicefilter", default=".*", required=False)
+@click.argument("device_filter", default=".*", required=False)
 @pass_context
-def listcmd(ctx: Configuration, devicefilter: str):
-    """List all devices from Home Assistant."""
+def list_cmd(ctx: Configuration, device_filter: str):
+    """List all devices from Home Assistant.
+    
+    DEVICE_FILTER - regular expression to filter devices by name
+    """
     ctx.auto_output("table")
 
     areas = api.get_areas(ctx)
@@ -34,13 +37,13 @@ def listcmd(ctx: Configuration, devicefilter: str):
     devices = api.get_devices(ctx)
 
     result = []  # type: List[Dict]
-    if devicefilter == ".*":
+    if device_filter == ".*":
         result = devices
     else:
-        devicefilterre = re.compile(devicefilter)  # type: Pattern
+        device_filter_regex = re.compile(device_filter)  # type: Pattern
 
         for device in devices:
-            if devicefilterre.search(device["name"]):
+            if device_filter_regex.search(device["name"]):
                 result.append(device)
 
     for device in devices:
