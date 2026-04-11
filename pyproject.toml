@@ -89,6 +89,7 @@ ignore = [
     "D203", # 1 blank line required before class docstring
     "D212", # Multi-line docstring summary should start at the first line
     "E721", # Do not compare types, use `isinstance()`
+    "I001", # isort found an import in the wrong position
     "F401", # Module imported but unused
     "D415", # First line should end with a period, question mark, or exclamation point
     "RUF012", # Mutable class attributes should be annotated with `typing.ClassVar`
