@@ -17,6 +17,12 @@ WS_TYPE_ENTITY_REGISTRY_GET = "config/entity_registry/get"
 WS_TYPE_ENTITY_REGISTRY_UPDATE = "config/entity_registry/update"
 WS_TYPE_ENTITY_REGISTRY_REGISTRY = "config/entity_registry/remove"
 
+# Config entries (integrations)
+WS_TYPE_CONFIG_ENTRIES_GET = "config_entries/get"
+WS_TYPE_CONFIG_ENTRIES_GET_SINGLE = "config_entries/get_single"
+WS_TYPE_CONFIG_ENTRIES_UPDATE = "config_entries/update"
+WS_TYPE_CONFIG_ENTRIES_DISABLE = "config_entries/disable"
+
 ###############################################################################
 # Home Assistant constants
 

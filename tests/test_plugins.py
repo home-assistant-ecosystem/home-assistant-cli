@@ -13,6 +13,7 @@ DFEAULT_PLUGINS = [
     "event",
     "ha",
     "info",
+    "integration",
     "map",
     "raw",
     "service",
