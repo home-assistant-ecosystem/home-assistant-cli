@@ -122,6 +122,15 @@ def _default_token() -> str | None:
     envvar="HASS_TOKEN",
 )
 @click.option(
+    "--supervisor-token",
+    default=_default_token,
+    help=(
+        "The Bearer token for Home Assistant supervisor. Can also be set with "
+        "the environment variable HASS_SUPERVISOR_TOKEN."
+    ),
+    envvar="HASS_SUPERVISOR_TOKEN",
+)
+@click.option(
     "--password",
     default=None,
     help=(
@@ -206,6 +215,7 @@ def cli(
     verbose: bool,
     server: str,
     token: str | None,
+    supervisor_token: str | None,
     password: str | None,
     output: str,
     timeout: int,
@@ -222,6 +232,7 @@ def cli(
     ctx.verbose = verbose
     ctx.server = server
     ctx.token = token
+    ctx.supervisor_token = supervisor_token
     ctx.password = password
     ctx.timeout = timeout
     ctx.output = output
