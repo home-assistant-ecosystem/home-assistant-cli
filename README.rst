@@ -239,10 +239,10 @@ You can also explicitly create/edit via the ``--json`` flag:
 
 List possible services with or without a regular expression filter:
 
-.. code:: bash
-
 Services
 --------
+
+.. code:: bash
 
     $ hass-cli service list 'home.*toggle'
       DOMAIN         SERVICE    DESCRIPTION
