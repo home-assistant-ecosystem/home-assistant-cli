@@ -5,11 +5,13 @@ import os
 
 import click
 from jinja2 import FileSystemLoader
+from jinja2.exceptions import SecurityError
 from jinja2.sandbox import ImmutableSandboxedEnvironment
 
 import homeassistant_cli.remote as api
 from homeassistant_cli.cli import pass_context
 from homeassistant_cli.config import Configuration
+from homeassistant_cli.exceptions import HomeAssistantCliError, UnsafeTemplateError
 
 _LOGGING = logging.getLogger(__name__)
 
@@ -42,7 +44,13 @@ def render(template_path, data, strict=False) -> str:
     # Add environ global (allowlisted)
     env.globals["environ"] = _safe_environ_get
 
-    output = env.get_template(os.path.basename(template_path)).render(data)
+    try:
+        output = env.get_template(os.path.basename(template_path)).render(data)
+    except SecurityError as err:
+        raise UnsafeTemplateError(
+            f"Template '{os.path.basename(template_path)}' contains unsafe "
+            f"operations: {err}"
+        ) from None
     return output
 
 
@@ -70,9 +78,12 @@ def cli(ctx: Configuration, template, datafile, local: bool) -> None:
 
     _LOGGING.debug("Rendering: %s Variables: %s", template_string, variables)
 
-    if local:
-        output = render(template.name, variables, True)
-    else:
-        output = api.render_template(ctx, template_string, variables)
+    try:
+        if local:
+            output = render(template.name, variables, True)
+        else:
+            output = api.render_template(ctx, template_string, variables)
+    except (UnsafeTemplateError, HomeAssistantCliError) as err:
+        raise click.ClickException(str(err)) from None
 
     ctx.echo(output)
