@@ -5,7 +5,7 @@ Home Assistant Command-line Interface (``hass-cli``)
 
 The Home Assistant Command-line interface (``hass-cli``) allows one to
 work with a local or a remote `Home Assistant <https://home-assistant.io>`_
-Core or Home Assistant (former Hass.io) instance directly from the command-line.
+instance directly from the command-line.
 
 .. image:: https://asciinema.org/a/216235.png
       :alt: hass-cli screencast
@@ -78,7 +78,7 @@ Setup
 ======
 
 To get started you'll need to have or generate a long lasting token format
-on your Home Assistant profile page (i.e. https://localhost:8123/profile
+on your Home Assistant profile page (e. g., http://homeassistant.local:8123/profile
 then scroll down to "Long-Lived Access Tokens").
 
 Then you can use ``--server`` and ``--token`` parameter on each call or as is
@@ -86,8 +86,36 @@ recommended setup ``HASS_SERVER`` and ``HASS_TOKEN`` environment variables.
 
 .. code:: bash
 
-    $ export HASS_SERVER=https://homeassistant.local:8123
+    $ export HASS_SERVER=http://homeassistant.local:8123
     $ export HASS_TOKEN=<secret>
+
+
+Remote API access
+-----------------
+
+For Home Assistant Operating System users, the `Remote API proxy <https://developers.home-assistant.io/docs/supervisor/development/#supervisor-api-access>`
+add-on is needed. Keep in mind that this is not a feature for regular users as it allows access to
+the Supervisor API. This is relevant for the ``ha`` commands in ``hass-cli``.
+
+Install the add-on and start it. Once started you can get the Supervisor API key for the add-on via
+the logs:
+
+.. code:: text
+
+    s6-rc: info: service legacy-services: starting
+    s6-rc: info: service legacy-services successfully started
+    Your API key is: 89400091.....d0897
+
+
+Use ``--supervisor-token`` or the ``HASS_SUPERVISOR_TOKEN`` environment variable.
+
+.. code:: bash
+
+    $ export HASS_SUPERVISOR_TOKEN=<supervisor_secret>
+
+
+Automatic completion
+--------------------
 
 Once that is enabled, run one of the following commands to enable
 autocompletion for ``hass-cli`` commands.
@@ -98,30 +126,46 @@ autocompletion for ``hass-cli`` commands.
   $ source <(_HASS_CLI_COMPLETE=zsh_source hass-cli)  # for zsh
   $ eval (_HASS_CLI_COMPLETE=fish_source hass-cli)    # for fish
 
+
 Usage
-=======
+=====
+
+Basic info
+----------
 
 Note: Below is listed **some** of the features, make sure to use ``--help`` and
 autocompletion to learn more of the features as they become available.
 
 Most commands returns a table version of what the Home Assistant API returns.
-For example to get basic info about your Home Assistant server you use ``info``:
+For example to get basic info about your Home Assistant server you use ``system``:
 
 .. code:: bash
 
-   $ hass-cli info
-     BASE_URL                           LOCATION         REQUIRES_API_PASWORD  VERSION
-     https://home-assistant.local:8123  Fort of Solitude False                 0.86.2
+   $ hass-cli config release
+   VERSION
+   2026.4.1
+
 
 If you prefer yaml you can use ``--output=yaml``:
 
 .. code:: bash
 
-    $ hass-cli --output yaml info
-      base_url: https://home-assistant.local:8123
-      location_name: Wayne Manor
-      requires_api_password: false
-      version: 0.86.2
+    $ hass-cli --output=yaml config release
+      -  2026.4.1
+
+
+Backup
+------
+
+Backup can be created with command:
+
+.. code:: bash
+
+    $ hass-cli service list | grep backup
+    $ hass-cli service call backup.create
+
+States
+------
 
 To get list of states you use `state list`:
 
@@ -196,6 +240,9 @@ You can also explicitly create/edit via the ``--json`` flag:
 List possible services with or without a regular expression filter:
 
 .. code:: bash
+
+Services
+--------
 
     $ hass-cli service list 'home.*toggle'
       DOMAIN         SERVICE    DESCRIPTION
@@ -330,10 +377,10 @@ by specifying it as an argument:
    $ hass-cli event watch deconz_event
 
 
-Home Assistant (former Hass.io)
+Home Assistant Operating System
 -------------------------------
 
-If you are using Home Assistant (former Hass.io) there are commands available
+If you are using Home Assistant Operating System there are commands available
 for you to interact with Home Assistant services/systems. This includes the
 underlying services like the supervisor.
 
@@ -342,11 +389,12 @@ Check the Supervisor release you are running:
 .. code:: bash
 
    $ hass-cli ha supervisor info
-   result: ok
-   data:
-    version: '217'
-    version_latest: '217'
-    channel: stable
+     result: ok
+     data:
+       version: 2026.03.3
+        version_latest: 2026.03.3
+       update_available: false
+       channel: stable
     [...]
 
 Check the Core release you are using at the moment:
@@ -356,8 +404,10 @@ Check the Core release you are using at the moment:
    $ hass-cli ha core info
    result: ok
    data:
-       version: 0.108.2
-       version_latest: 0.108.3
+       version: 2026.4.1
+       version_latest: 2026.4.1
+       update_available: false
+       machine: generic-x86-64
        [...]
 
 Update Core to the latest available release:
@@ -450,63 +500,66 @@ Help
 
 .. code:: bash
 
-    $ hass-cli
-    Usage: hass-cli [OPTIONS] COMMAND [ARGS]...
+   $ hass-cli --help
+   Usage: hass-cli [OPTIONS] COMMAND [ARGS]...
 
-      Command line interface for Home Assistant.
+   Command line interface for Home Assistant.
 
-    Options:
-      -l, --loglevel LVL              Either CRITICAL, ERROR, WARNING, INFO or
-                                      DEBUG
-      --version                       Show the version and exit.
-      -s, --server TEXT               The server URL or `auto` for automatic
-                                      detection. Can also be set with the
-                                      environment variable HASS_SERVER.  [default:
-                                      auto]
-      --token TEXT                    The Bearer token for Home Assistant
-                                      instance. Can also be set with the
-                                      environment variable HASS_TOKEN.
-      --password TEXT                 The API password for Home Assistant
-                                      instance. Can also be set with the
-                                      environment variable HASS_PASSWORD.
-      --timeout INTEGER               Timeout for network operations.  [default:
-                                      5]
-      -o, --output [json|yaml|table|ndjson|auto]
-                                      Output format.  [default: auto]
-      -v, --verbose                   Enables verbose mode.
-      -x                              Print backtraces when exception occurs.
-      --cert TEXT                     Path to client certificate file (.pem) to
-                                      use when connecting.
-      --insecure                      Ignore SSL Certificates. Allow to connect to
-                                      servers with self-signed certificates. Be
-                                      careful!
-      --debug                         Enables debug mode.
-      --columns TEXT                  Custom columns key=value list. Example:
-                                      ENTITY=entity_id,
-                                      NAME=attributes.friendly_name
-      --no-headers                    When printing tables don't use headers
-                                      (default: print headers)
-      --table-format TEXT             Which table format to use.
-      --sort-by TEXT                  Sort table by the jsonpath expression.
-                                      Example: last_changed
-      --help                          Show this message and exit.
+   Options:
+   -l, --loglevel LVL              Either CRITICAL, ERROR, WARNING, INFO or
+                                    DEBUG
+   --version                       Show the version and exit.
+   -s, --server TEXT               The server URL or `auto` for automatic
+                                    detection. Can also be set with the
+                                    environment variable HASS_SERVER.  [default:
+                                    auto]
+   --token TEXT                    The Bearer token for Home Assistant
+                                    instance. Can also be set with the
+                                    environment variable HASS_TOKEN.
+   --supervisor-token TEXT         The Bearer token for Home Assistant
+                                    supervisor. Can also be set with the
+                                    environment variable HASS_SUPERVISOR_TOKEN.
+   --password TEXT                 The API password for Home Assistant
+                                    instance. Can also be set with the
+                                    environment variable HASS_PASSWORD.
+   --timeout INTEGER               Timeout for network operations.  [default:
+                                    5]
+   -o, --output [json|yaml|table|auto|ndjson]
+                                    Output format.  [default: auto]
+   -v, --verbose                   Enables verbose mode.
+   -x                              Print backtraces when exception occurs.
+   --cert TEXT                     Path to client certificate file (.pem) to
+                                    use when connecting.
+   --insecure                      Ignore SSL Certificates. Allow to connect to
+                                    servers with self-signed certificates. Be
+                                    careful!
+   --debug                         Enables debug mode.
+   --columns TEXT                  Custom columns key=value list. Example:
+                                    ENTITY=entity_id,
+                                    NAME=attributes.friendly_name
+   --no-headers                    When printing tables don't use headers
+                                    (default: print headers)
+   --table-format TEXT             Which table format to use.
+   --sort-by TEXT                  Sort table by the jsonpath expression.
+                                    Example: last_changed
+   --help                          Show this message and exit.
 
-    Commands:
-      area        Get info and operate on areas from Home Assistant...
-      completion  Output shell completion code for the specified shell (bash or...
-      config      Get configuration from a Home Assistant instance.
-      device      Get info and operate on devices from Home Assistant...
-      discover    Discovery for the local network.
-      entity      Get info on entities from Home Assistant.
-      event       Interact with events.
-      ha          Home Assistant (former Hass.io) commands.
-      info        Get basic info from Home Assistant.
-      map         Show the location of the config or an entity on a map.
-      raw         Call the raw API (advanced).
-      service     Call and work with services.
-      state       Get info on entity state from Home Assistant.
-      system      System details and operations for Home Assistant.
-      template    Render templates on server or locally.
+   Commands:
+   area         Get info and operate on areas from Home Assistant...
+   config       Get configuration from a Home Assistant instance.
+   device       Get info and operate on devices from Home Assistant.
+   discover     Discovery for the local network.
+   entity       Get info on entities from Home Assistant.
+   event        Interact with events.
+   ha           Home Assistant Operating System commands.
+   info         Show information about Home Assistant CLI.
+   integration  Get info and operate on integrations (config entries) from...
+   map          Show the location of the config or an entity on a map.
+   raw          Call the raw API (advanced).
+   service      Call and work with services.
+   state        Get info on entity state from Home Assistant.
+   system       System details and operations for Home Assistant.
+   template     Render templates on server or locally.
 
 
 Clone the git repository and
@@ -521,7 +574,7 @@ Development
 ###########
 
 Developing is (re)using as much as possible from
-[Home Assistant development setup](https://developers.home-assistant.io/docs/en/development_environment.html).
+`Home Assistant development setup <https://developers.home-assistant.io/docs/en/development_environment.html>`_.
 
 Recommended way to develop is to use virtual environment to ensure isolation
 from rest of your system using the following steps:

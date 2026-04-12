@@ -1,13 +1,13 @@
 """Configuration for Home Assistant CLI (hass-cli)."""
+
 import logging
 import os
 import sys
-from typing import Any, Dict, List, Optional, Tuple, cast  # noqa: F401
+from typing import Any, Dict, List, Optional, Tuple, cast
 
 import click
-from requests import Session  # noqa: ignore
-from ruamel.yaml import YAML
 import zeroconf
+from ruamel.yaml import YAML
 
 import homeassistant_cli.const as const
 import homeassistant_cli.yaml as yaml
@@ -16,7 +16,7 @@ _LOGGING = logging.getLogger(__name__)
 
 
 class _ZeroconfListener:
-    """Reporesentation of the ZeroCOnf listener."""
+    """Representation of the Zeroconf listener."""
 
     def __init__(self) -> None:
         """Initialize the listener."""
@@ -28,16 +28,20 @@ class _ZeroconfListener:
         """Remove service."""
         self.services[name] = None
 
-    def add_service(
-        self, _zeroconf: zeroconf.Zeroconf, _type: str, name: str
-    ) -> None:
+    def add_service(self, _zeroconf: zeroconf.Zeroconf, _type: str, name: str) -> None:
         """Add service."""
         self.services[name] = _zeroconf.get_service_info(_type, name)
 
+    def update_service(
+        self, _zeroconf: zeroconf.Zeroconf, _type: str, name: str
+    ) -> None:
+        """Update service."""
+        self.services[name] = _zeroconf.get_service_info(_type, name)
 
-def _locate_ha() -> Optional[str]:
-    """Locate the HOme Assistant instance."""
-    _zeroconf = zeroconf.Zeroconf()
+
+def _locate_ha() -> str | None:
+    """Locate the Home Assistant instance."""
+    _zeroconf = zeroconf.Zeroconf(interfaces=zeroconf.InterfaceChoice.Default)
     listener = _ZeroconfListener()
     zeroconf.ServiceBrowser(_zeroconf, "_home-assistant._tcp.local.", listener)
     try:
@@ -45,9 +49,7 @@ def _locate_ha() -> Optional[str]:
 
         retries = 0
         while not listener.services and retries < 5:
-            _LOGGING.info(
-                "Trying to locate Home Assistant on local network..."
-            )
+            _LOGGING.info("Trying to locate Home Assistant on local network...")
             time.sleep(0.5)
             retries = retries + 1
     finally:
@@ -56,37 +58,32 @@ def _locate_ha() -> Optional[str]:
     if listener.services:
         if len(listener.services) > 1:
             _LOGGING.warning(
-                "Found multiple Home Assistant instances at %s",
-                ", ".join(listener.services),
+                f"Found multiple Home Assistant instances at "
+                f"{', '.join(listener.services)}"
             )
             _LOGGING.warning("Use --server to explicitly specify one.")
             return None
 
         _, service = listener.services.popitem()
-        base_url = service.properties[b'base_url'].decode('utf-8')
-        _LOGGING.info("Found and using %s as server", base_url)
+        base_url = service.properties[b"base_url"].decode("utf-8")
+        _LOGGING.info(f"Found and using {base_url} as server")
         return cast(str, base_url)
 
-    _LOGGING.warning(
-        "Found no Home Assistant on local network. Using defaults"
-    )
+    _LOGGING.warning("Found no Home Assistant on local network. Using defaults")
     return None
 
 
-def resolve_server(ctx: Any) -> str:  # noqa: F821
+def resolve_server(ctx: Any) -> str:
     """Resolve server if not already done.
 
     if server is `auto` try and resolve it
     """
-    # to work around bug in click that hands out
-    # non-Configuration context objects.
+    # Work-around for bug in click that hands out non-Configuration context objects
     if not hasattr(ctx, "resolved_server"):
         ctx.resolved_server = None
 
     if not ctx.resolved_server:
-
         if ctx.server == "auto":
-
             if "HASSIO_TOKEN" in os.environ and "HASS_TOKEN" not in os.environ:
                 ctx.resolved_server = const.DEFAULT_SERVER_MDNS
             else:
@@ -105,6 +102,22 @@ def resolve_server(ctx: Any) -> str:  # noqa: F821
     return cast(str, ctx.resolved_server)
 
 
+def set_supervisor_server(ctx: Any) -> str:
+    """Derive the supervisor server URL from the main server URL."""
+    if not hasattr(ctx, "supervisor_server"):
+        ctx.supervisor_server = None
+
+    if not ctx.supervisor_server:
+        if ctx.server and ctx.server != "auto":
+            ctx.supervisor_server = ctx.server.rsplit(":", 1)[0]
+        else:
+            # Ensure resolved_server is set first
+            resolved = resolve_server(ctx)
+            ctx.supervisor_server = resolved.rsplit(":", 1)[0]
+
+    return cast(str, ctx.supervisor_server)
+
+
 class Configuration:
     """The configuration context for the Home Assistant CLI."""
 
@@ -113,8 +126,10 @@ class Configuration:
         self.verbose = False  # type: bool
         self.server = const.AUTO_SERVER  # type: str
         self.resolved_server = None  # type: Optional[str]
+        self.supervisor_server = None  # type: Optional[str]
         self.output = const.DEFAULT_OUTPUT  # type: str
         self.token = None  # type: Optional[str]
+        self.supervisor_token = None  # type: Optional[str]
         self.password = None  # type: Optional[str]
         self.insecure = False  # type: bool
         self.timeout = const.DEFAULT_TIMEOUT  # type: int
@@ -124,22 +139,22 @@ class Configuration:
         self.cert = None  # type: Optional[str]
         self.columns = None  # type: Optional[List[Tuple[str, str]]]
         self.no_headers = False
-        self.table_format = 'plain'
+        self.table_format = "plain"
         self.sort_by = None
 
-    def echo(self, msg: str, *args: Optional[Any]) -> None:
+    def echo(self, msg: str, *args: Any | None) -> None:
         """Put content message to stdout."""
         self.log(msg, *args)
 
     def log(  # pylint: disable=no-self-use
-        self, msg: str, *args: Optional[str]
+        self, msg: str, *args: str | None
     ) -> None:  # pylint: disable=no-self-use
         """Log a message to stdout."""
         if args:
             msg %= args
         click.echo(msg, file=sys.stdout)
 
-    def vlog(self, msg: str, *args: Optional[str]) -> None:
+    def vlog(self, msg: str, *args: str | None) -> None:
         """Log a message only if verbose is enabled."""
         if self.verbose:
             self.log(msg, *args)
@@ -148,12 +163,15 @@ class Configuration:
         """Return the representation of the Configuration."""
         view = {
             "server": self.server,
-            "access-token": 'yes' if self.token is not None else 'no',
-            "api-password": 'yes' if self.password is not None else 'no',
+            "access-token": "yes" if self.token is not None else "no",
+            "api-password": "yes" if self.password is not None else "no",
             "insecure": self.insecure,
             "output": self.output,
             "verbose": self.verbose,
         }
+
+        print("-------------------------------")
+        print(view)
 
         return f"<Configuration({view})"
 
@@ -161,10 +179,14 @@ class Configuration:
         """Return resolved server (after resolving if needed)."""
         return resolve_server(self)
 
+    def set_supervisor_server(self) -> str:
+        """Return supervisor server."""
+        return set_supervisor_server(self)
+
     def auto_output(self, auto_output: str) -> str:
         """Configure output format."""
         if self.output == "auto":
-            if auto_output == 'data':
+            if auto_output == "data":
                 auto_output = const.DEFAULT_DATAOUTPUT
             _LOGGING.debug("Setting auto-output to: %s", auto_output)
             self.output = auto_output

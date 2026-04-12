@@ -1,10 +1,11 @@
 """Tests file for Home Assistant CLI (hass-cli)."""
+
 import json
 import unittest.mock as mocker
 from unittest.mock import ANY
 
-from click.testing import CliRunner
 import requests_mock
+from click.testing import CliRunner
 
 import homeassistant_cli.autocompletion as autocompletion
 import homeassistant_cli.cli as cli
@@ -28,7 +29,7 @@ def test_raw_get() -> None:
         )
         assert result.exit_code == 0
         data = json.loads(result.output)
-        assert data['message'] == 'success'
+        assert data["message"] == "success"
 
 
 def test_raw_post() -> None:
@@ -48,19 +49,19 @@ def test_raw_post() -> None:
         )
         assert result.exit_code == 0
         data = json.loads(result.output)
-        assert data['message'] == 'success'
+        assert data["message"] == "success"
 
 
 def test_apimethod_completion(default_services) -> None:
     """Test completion for raw API methods."""
     cfg = Configuration()
 
-    result = autocompletion.api_methods(cfg, ["raw", "get"], "/api/disc")
+    result = autocompletion.api_methods(cfg, ["raw", "get"], "/api/conf")
     assert len(result) == 1
 
-    resultdict = dict(result)
+    result_dict = dict(result)
 
-    assert "/api/discovery_info" in resultdict
+    assert "/api/config" in result_dict
 
 
 # def test_wsapimethod_completion(default_services) -> None:
@@ -72,17 +73,16 @@ def test_apimethod_completion(default_services) -> None:
 #     )
 #     assert len(result) == 1
 
-#     resultdict = dict(result)
+#     result_dict = dict(result)
 
-#     assert "config/device_registry/list" in resultdict
+#     assert "config/device_registry/list" in result_dict
 
 
 def test_raw_ws() -> None:
     """Test websocket."""
     with mocker.patch(
-        'homeassistant_cli.remote.wsapi', return_value={"result": "worked"}
+        "homeassistant_cli.remote.wsapi", return_value={"result": "worked"}
     ) as mockmethod:
-
         runner = CliRunner()
         result = runner.invoke(
             cli.cli,
@@ -101,9 +101,8 @@ def test_raw_ws() -> None:
 def test_raw_ws_data() -> None:
     """Test websocket with data."""
     with mocker.patch(
-        'homeassistant_cli.remote.wsapi', return_value={"result": "worked"}
+        "homeassistant_cli.remote.wsapi", return_value={"result": "worked"}
     ) as mockmethod:
-
         runner = CliRunner()
         result = runner.invoke(
             cli.cli,
@@ -119,9 +118,7 @@ def test_raw_ws_data() -> None:
         )
         assert result.exit_code == 0
 
-        mockmethod.assert_called_with(
-            ANY, {"type": "config/wsmethod", "id": "secret"}
-        )
+        mockmethod.assert_called_with(ANY, {"type": "config/wsmethod", "id": "secret"})
 
         data = json.loads(result.output)
         assert len(data) == 1
