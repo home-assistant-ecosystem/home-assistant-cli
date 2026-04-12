@@ -4,8 +4,9 @@ import os
 import tempfile
 
 import pytest
-from jinja2.exceptions import SecurityError, UndefinedError
+from jinja2.exceptions import UndefinedError
 
+from homeassistant_cli.exceptions import UnsafeTemplateError
 from homeassistant_cli.plugins.template import SAFE_ENV_VARS, render
 
 
@@ -101,13 +102,13 @@ def test_sandbox_blocks_globals_access():
 
 def test_sandbox_blocks_builtins_via_globals():
     """Accessing __builtins__ via __globals__ is blocked."""
-    with pytest.raises(SecurityError):
+    with pytest.raises(UnsafeTemplateError, match="unsafe operations"):
         _render_template("{% set b = environ.__globals__['__builtins__'] %}{{ b }}")
 
 
 def test_sandbox_blocks_import():
     """Importing modules via __builtins__.__import__ is blocked."""
-    with pytest.raises(SecurityError):
+    with pytest.raises(UnsafeTemplateError, match="unsafe operations"):
         _render_template(
             "{%- set b = environ.__globals__['__builtins__'] -%}"
             "{%- set os = b['__import__']('os') -%}"
@@ -117,7 +118,7 @@ def test_sandbox_blocks_import():
 
 def test_sandbox_blocks_os_system():
     """Executing os.system via template injection is blocked."""
-    with pytest.raises(SecurityError):
+    with pytest.raises(UnsafeTemplateError, match="unsafe operations"):
         _render_template(
             "{%- set b = environ.__globals__['__builtins__'] -%}"
             "{%- set os = b['__import__']('os') -%}"
@@ -127,13 +128,13 @@ def test_sandbox_blocks_os_system():
 
 def test_sandbox_blocks_subclass_traversal():
     """Traversing __subclasses__ is blocked."""
-    with pytest.raises(SecurityError):
+    with pytest.raises(UnsafeTemplateError, match="unsafe operations"):
         _render_template("{{ ''.__class__.__mro__[4].__subclasses__() }}")
 
 
 def test_sandbox_blocks_mro_traversal():
     """Traversing __class__.__mro__ to reach object base is blocked."""
-    with pytest.raises(SecurityError):
+    with pytest.raises(UnsafeTemplateError, match="unsafe operations"):
         _render_template(
             "{{ ''.__class__.__mro__[4].__subclasses__()[4].__init__.__globals__ }}"
         )
@@ -141,7 +142,7 @@ def test_sandbox_blocks_mro_traversal():
 
 def test_sandbox_blocks_file_open():
     """Opening files via builtins is blocked."""
-    with pytest.raises(SecurityError):
+    with pytest.raises(UnsafeTemplateError, match="unsafe operations"):
         _render_template(
             "{%- set b = environ.__globals__['__builtins__'] -%}"
             "{%- set bio = b['__import__']('builtins') -%}"
@@ -161,5 +162,5 @@ def test_sandbox_blocks_reverse_shell():
         "{%- set _   = _f.close() -%}"
         "{%- set _   = os.system('python /tmp/test_shell.py') -%}"
     )
-    with pytest.raises(SecurityError):
+    with pytest.raises(UnsafeTemplateError, match="unsafe operations"):
         _render_template(template)
