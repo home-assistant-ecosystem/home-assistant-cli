@@ -2,7 +2,7 @@
 
 PACKAGE_NAME = "homeassistant_cli"
 
-__version__ = "1.0.0"
+__version__ = "1.0.1"
 
 AUTO_SERVER = "auto"
 DEFAULT_SERVER = "http://localhost:8123"

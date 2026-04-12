@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "homeassistant-cli"
-version = "1.0.0"
+version = "1.0.1"
 description  = "Command-line tool for Home Assistant."
 license = "Apache Software License 2.0"
 readme = "README.rst"
