@@ -54,6 +54,7 @@ def list_cmd(ctx: Configuration, device_filter: str):
     cols = [
         ("ID", "id"),
         ("NAME", "name"),
+        ("NAME BY USER", "name_by_user"),
         ("MODEL", "model"),
         ("MANUFACTURER", "manufacturer"),
         ("AREA", "area_name"),
