@@ -4,7 +4,8 @@ import logging
 import os
 
 import click
-from jinja2 import Environment, FileSystemLoader
+from jinja2 import FileSystemLoader
+from jinja2.sandbox import ImmutableSandboxedEnvironment
 
 import homeassistant_cli.remote as api
 from homeassistant_cli.cli import pass_context
@@ -12,10 +13,24 @@ from homeassistant_cli.config import Configuration
 
 _LOGGING = logging.getLogger(__name__)
 
+# Allowlist of environment variables accessible from templates
+SAFE_ENV_VARS = frozenset({
+    "HASS_SERVER",
+    "LANG",
+    "TZ",
+})
+
+
+def _safe_environ_get(key: str, default: str | None = None) -> str | None:
+    """Return env var only if it is in the allowlist."""
+    if key in SAFE_ENV_VARS:
+        return os.environ.get(key, default)
+    return default
+
 
 def render(template_path, data, strict=False) -> str:
     """Render template."""
-    env = Environment(
+    env = ImmutableSandboxedEnvironment(
         loader=FileSystemLoader(os.path.dirname(template_path)),
         keep_trailing_newline=True,
     )
@@ -24,8 +39,8 @@ def render(template_path, data, strict=False) -> str:
 
         env.undefined = StrictUndefined
 
-    # Add environ global
-    env.globals["environ"] = os.environ.get
+    # Add environ global (allowlisted)
+    env.globals["environ"] = _safe_environ_get
 
     output = env.get_template(os.path.basename(template_path)).render(data)
     return output
@@ -51,13 +66,13 @@ def cli(ctx: Configuration, template, datafile, local: bool) -> None:
     if datafile:
         variables = ctx.yamlload(datafile)
 
-    templatestr = template.read()
+    template_string = template.read()
 
-    _LOGGING.debug("Rendering: %s Variables: %s", templatestr, variables)
+    _LOGGING.debug("Rendering: %s Variables: %s", template_string, variables)
 
     if local:
         output = render(template.name, variables, True)
     else:
-        output = api.render_template(ctx, templatestr, variables)
+        output = api.render_template(ctx, template_string, variables)
 
     ctx.echo(output)
