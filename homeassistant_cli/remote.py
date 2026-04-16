@@ -149,8 +149,6 @@ def wsapi(
 
     If no callback return data returned.
     """
-    loop = asyncio.get_event_loop()
-
     async def fetcher() -> dict | None:
         """Fetch data from WS API."""
         async with aiohttp.ClientSession() as session:
@@ -183,7 +181,7 @@ def wsapi(
                             raise HomeAssistantCliError(mydata.get("message"))
         return None
 
-    result = loop.run_until_complete(fetcher())
+    result = asyncio.run(fetcher())
     return result
 
 
