@@ -81,9 +81,9 @@ def restapi(
 
     try:
         if method == METH_GET:
-            return requests.get(url, params=data_str, headers=headers)
+            return ctx.session.get(url, params=data_str, headers=headers)
 
-        return requests.request(method, url, data=data_str, headers=headers)
+        return ctx.session.request(method, url, data=data_str, headers=headers)
 
     except requests.exceptions.ConnectionError:
         raise HomeAssistantCliError(f"Error connecting to {url}") from None
@@ -124,9 +124,9 @@ def restapi_supervisor(
 
     try:
         if method == METH_GET:
-            return requests.get(url, params=data_str, headers=headers)
+            return ctx.session.get(url, params=data_str, headers=headers)
 
-        return requests.request(method, url, data=data_str, headers=headers)
+        return ctx.session.request(method, url, data=data_str, headers=headers)
 
     except requests.exceptions.ConnectionError:
         raise HomeAssistantCliError(f"Error connecting to {url}") from None
