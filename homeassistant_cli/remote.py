@@ -545,6 +545,45 @@ def get_config(ctx: Configuration) -> dict[str, Any]:
     raise HomeAssistantCliError(f"Error while getting all configuration: {req.text}")
 
 
+def get_dashboards(ctx: Configuration) -> list[dict[str, Any]]:
+    """Return list of all dashboards."""
+    frame = {"type": hass.WS_TYPE_LOVELACE_DASHBOARDS_LIST}
+    result = cast(dict, wsapi(ctx, frame))
+    return result["result"]
+
+
+def get_dashboard_config(ctx: Configuration, url_path: str = "") -> dict[str, Any]:
+    """Return a dashboard config as a raw dict."""
+    path = hass.URL_API_LOVELACE_CONFIG
+    if url_path:
+        path = f"{path}?url_path={url_path}"
+    try:
+        req = restapi(ctx, METH_GET, path)
+    except HomeAssistantCliError as exception:
+        raise HomeAssistantCliError(
+            f"Unexpected error retrieving dashboard config: {exception}"
+        ) from exception
+    if req.status_code == 200:
+        return cast(dict[str, Any], req.json())
+    raise HomeAssistantCliError(f"Error retrieving dashboard config: {req.text}")
+
+
+def save_dashboard_config(
+    ctx: Configuration, config: dict[str, Any], url_path: str = ""
+) -> requests.Response:
+    """Save a dashboard config."""
+    path = hass.URL_API_LOVELACE_CONFIG
+    if url_path:
+        path = f"{path}?url_path={url_path}"
+    try:
+        req = restapi(ctx, METH_POST, path, config)
+    except HomeAssistantCliError as exception:
+        raise HomeAssistantCliError(
+            f"Unexpected error saving dashboard config: {exception}"
+        ) from exception
+    return req
+
+
 def get_state(ctx: Configuration, entity_id: str) -> dict[str, Any] | None:
     """Get entity state. If ok, return dictionary with state.
 
