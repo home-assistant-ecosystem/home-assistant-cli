@@ -583,6 +583,44 @@ def save_dashboard_config(
     return cast(dict[str, Any], result)
 
 
+def create_dashboard(
+    ctx: Configuration, url_path: str, title: str
+) -> dict[str, Any]:
+    """Create a new dashboard registry entry."""
+    frame: dict[str, Any] = {
+        "type": hass.WS_TYPE_LOVELACE_DASHBOARDS_CREATE,
+        "url_path": url_path,
+        "title": title,
+    }
+    result = cast(dict, wsapi(ctx, frame))
+    if not result.get("success"):
+        raise HomeAssistantCliError(
+            f"Error creating dashboard: {result.get('error', {}).get('message', 'unknown error')}"
+        )
+    return cast(dict[str, Any], result)
+
+
+def delete_dashboard(ctx: Configuration, url_path: str) -> dict[str, Any]:
+    """Delete a dashboard registry entry."""
+    dashboards = get_dashboards(ctx)
+    dashboard = next(
+        (d for d in dashboards if d.get("url_path") == url_path or d.get("id") == url_path),
+        None,
+    )
+    if not dashboard:
+        raise HomeAssistantCliError(f"Could not find dashboard with url_path or id: {url_path}")
+    frame: dict[str, Any] = {
+        "type": hass.WS_TYPE_LOVELACE_DASHBOARDS_DELETE,
+        "dashboard_id": dashboard["id"],
+    }
+    result = cast(dict, wsapi(ctx, frame))
+    if not result.get("success"):
+        raise HomeAssistantCliError(
+            f"Error deleting dashboard: {result.get('error', {}).get('message', 'unknown error')}"
+        )
+    return cast(dict[str, Any], result)
+
+
 def get_state(ctx: Configuration, entity_id: str) -> dict[str, Any] | None:
     """Get entity state. If ok, return dictionary with state.
 

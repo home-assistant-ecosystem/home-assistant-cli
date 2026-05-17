@@ -72,5 +72,36 @@ def set_cmd(ctx: Configuration, filename: str, url_path: str) -> None:
         _LOGGING.error("Failed to read %s: %s", filename, err)
         sys.exit(1)
 
+    if url_path:
+        existing = {d["url_path"] for d in api.get_dashboards(ctx)}
+        if url_path not in existing:
+            title = config.get("title", url_path) if isinstance(config, dict) else url_path
+            _LOGGING.info("Dashboard '%s' not found, creating it", url_path)
+            api.create_dashboard(ctx, url_path, title)
+
     api.save_dashboard_config(ctx, dict(config), url_path)
     _LOGGING.info("Dashboard uploaded successfully")
+
+
+@cli.command("delete")
+@click.argument("url_path", required=True)
+@click.option(
+    "--confirm",
+    is_flag=True,
+    default=False,
+    help="Confirm deletion without prompting",
+)
+@pass_context
+def delete(ctx: Configuration, url_path: str, confirm: bool) -> None:
+    """Delete a dashboard.
+
+    URL_PATH - the url_path of the dashboard to delete
+    """
+    if not confirm:
+        click.confirm(
+            f"Are you sure you want to delete dashboard '{url_path}'?",
+            abort=True,
+        )
+
+    api.delete_dashboard(ctx, url_path)
+    _LOGGING.info("Dashboard '%s' deleted successfully", url_path)
