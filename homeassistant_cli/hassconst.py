@@ -617,6 +617,8 @@ URL_API_TEMPLATE = "/api/template"
 URL_API_HISTORY_PERIOD = "/api/history/period/{}"
 URL_API_LOVELACE_CONFIG = "/api/lovelace/config"
 WS_TYPE_LOVELACE_DASHBOARDS_LIST = "lovelace/dashboards/list"
+WS_TYPE_LOVELACE_CONFIG_GET = "lovelace/config"
+WS_TYPE_LOVELACE_CONFIG_SAVE = "lovelace/config/save"
 
 HTTP_OK = 200
 HTTP_CREATED = 201

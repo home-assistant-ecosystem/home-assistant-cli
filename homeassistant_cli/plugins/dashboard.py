@@ -72,9 +72,5 @@ def set_cmd(ctx: Configuration, filename: str, url_path: str) -> None:
         _LOGGING.error("Failed to read %s: %s", filename, err)
         sys.exit(1)
 
-    result = api.save_dashboard_config(ctx, dict(config), url_path)
-    if result.status_code in (200, 201):
-        _LOGGING.info("Dashboard uploaded successfully")
-    else:
-        _LOGGING.error("Failed (%s): %s", result.status_code, result.text)
-        sys.exit(1)
+    api.save_dashboard_config(ctx, dict(config), url_path)
+    _LOGGING.info("Dashboard uploaded successfully")

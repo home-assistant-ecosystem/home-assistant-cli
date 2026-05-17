@@ -554,34 +554,33 @@ def get_dashboards(ctx: Configuration) -> list[dict[str, Any]]:
 
 def get_dashboard_config(ctx: Configuration, url_path: str = "") -> dict[str, Any]:
     """Return a dashboard config as a raw dict."""
-    path = hass.URL_API_LOVELACE_CONFIG
+    frame: dict[str, Any] = {"type": hass.WS_TYPE_LOVELACE_CONFIG_GET}
     if url_path:
-        path = f"{path}?url_path={url_path}"
-    try:
-        req = restapi(ctx, METH_GET, path)
-    except HomeAssistantCliError as exception:
+        frame["url_path"] = url_path
+    result = cast(dict, wsapi(ctx, frame))
+    if not result.get("success"):
         raise HomeAssistantCliError(
-            f"Unexpected error retrieving dashboard config: {exception}"
-        ) from exception
-    if req.status_code == 200:
-        return cast(dict[str, Any], req.json())
-    raise HomeAssistantCliError(f"Error retrieving dashboard config: {req.text}")
+            f"Error retrieving dashboard config: {result.get('error', {}).get('message', 'unknown error')}"
+        )
+    return cast(dict[str, Any], result["result"])
 
 
 def save_dashboard_config(
     ctx: Configuration, config: dict[str, Any], url_path: str = ""
-) -> requests.Response:
+) -> dict[str, Any]:
     """Save a dashboard config."""
-    path = hass.URL_API_LOVELACE_CONFIG
+    frame: dict[str, Any] = {
+        "type": hass.WS_TYPE_LOVELACE_CONFIG_SAVE,
+        "config": config,
+    }
     if url_path:
-        path = f"{path}?url_path={url_path}"
-    try:
-        req = restapi(ctx, METH_POST, path, config)
-    except HomeAssistantCliError as exception:
+        frame["url_path"] = url_path
+    result = cast(dict, wsapi(ctx, frame))
+    if not result.get("success"):
         raise HomeAssistantCliError(
-            f"Unexpected error saving dashboard config: {exception}"
-        ) from exception
-    return req
+            f"Error saving dashboard config: {result.get('error', {}).get('message', 'unknown error')}"
+        )
+    return cast(dict[str, Any], result)
 
 
 def get_state(ctx: Configuration, entity_id: str) -> dict[str, Any] | None:
