@@ -5,12 +5,10 @@ import pytest
 from homeassistant_cli.cli import HomeAssistantCli, cli
 
 DFEAULT_PLUGINS = [
-    "area",
     "completion",
     "config",
-    "dashboard",
-    "device",
     "discover",
+    "state",
     "entity",
     "event",
     "ha",
@@ -19,9 +17,11 @@ DFEAULT_PLUGINS = [
     "map",
     "raw",
     "service",
-    "state",
     "system",
     "template",
+    "area",
+    "device",
+    "dashboard",
 ]
 
 DFEAULT_PLUGINS.sort()
