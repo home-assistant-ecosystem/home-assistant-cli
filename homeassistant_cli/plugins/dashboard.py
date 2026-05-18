@@ -75,7 +75,9 @@ def set_cmd(ctx: Configuration, filename: str, url_path: str) -> None:
     if url_path:
         existing = {d["url_path"] for d in api.get_dashboards(ctx)}
         if url_path not in existing:
-            title = config.get("title", url_path) if isinstance(config, dict) else url_path
+            title = (
+                config.get("title", url_path) if isinstance(config, dict) else url_path
+            )
             _LOGGING.info("Dashboard '%s' not found, creating it", url_path)
             api.create_dashboard(ctx, url_path, title)
 
