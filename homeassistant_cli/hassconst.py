@@ -615,6 +615,12 @@ URL_API_ERROR_LOG = "/api/error_log"
 URL_API_LOG_OUT = "/api/log_out"
 URL_API_TEMPLATE = "/api/template"
 URL_API_HISTORY_PERIOD = "/api/history/period/{}"
+URL_API_LOVELACE_CONFIG = "/api/lovelace/config"
+WS_TYPE_LOVELACE_DASHBOARDS_LIST = "lovelace/dashboards/list"
+WS_TYPE_LOVELACE_CONFIG_GET = "lovelace/config"
+WS_TYPE_LOVELACE_CONFIG_SAVE = "lovelace/config/save"
+WS_TYPE_LOVELACE_DASHBOARDS_CREATE = "lovelace/dashboards/create"
+WS_TYPE_LOVELACE_DASHBOARDS_DELETE = "lovelace/dashboards/delete"
 
 HTTP_OK = 200
 HTTP_CREATED = 201

@@ -21,6 +21,7 @@ DFEAULT_PLUGINS = [
     "template",
     "area",
     "device",
+    "dashboard",
 ]
 
 DFEAULT_PLUGINS.sort()
