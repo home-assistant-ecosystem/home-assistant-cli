@@ -34,10 +34,7 @@ def _report(ctx, cmd, method, response) -> None:
             ctx.echo(response.text)
     else:
         _LOGGING.warning(
-            "%s: <No output returned from %s %s>",
-            response.status_code,
-            cmd,
-            method,
+            "%s: <No output returned from %s %s>", response.status_code, cmd, method
         )
 
 
@@ -73,6 +70,22 @@ def post(ctx: Configuration, method, json):
     response = api.restapi(ctx, "post", method, data)
 
     _report(ctx, "GET", method, response)
+
+
+@cli.command()
+@click.argument("path", shell_complete=autocompletion.api_methods)
+@click.option("--json", help="JSON request body, or - to read from stdin.")
+@pass_context
+def delete(ctx: Configuration, path: str, json: str | None) -> None:
+    """Do a DELETE request against PATH (including the /api/ prefix)."""
+    data = None
+    if json:
+        data = json_.loads(
+            json if json != "-" else click.get_text_stream("stdin").read()
+        )
+
+    response = api.restapi(ctx, "delete", path, data)
+    _report(ctx, "DELETE", path, response)
 
 
 @cli.command("ws")
