@@ -282,3 +282,40 @@ def test_state_filter(default_entities) -> None:
 #         )
 #         assert result.exit_code == 0
 #         # TODO: actually have history result testing
+
+def test_history_rejects_unparseable_since() -> None:
+    """Unparseable --since values must be a clean usage error, not a traceback."""
+    runner = CliRunner()
+    result = runner.invoke(
+        cli.cli,
+        [
+            "--server",
+            "http://localhost:8123",
+            "state",
+            "history",
+            "sensor.test",
+            "--since",
+            "not-a-date",
+        ],
+    )
+    assert result.exit_code == 2
+    assert "Could not parse" in result.output
+
+
+def test_history_rejects_unparseable_end() -> None:
+    """Unparseable --end values must be a clean usage error, not a traceback."""
+    runner = CliRunner()
+    result = runner.invoke(
+        cli.cli,
+        [
+            "--server",
+            "http://localhost:8123",
+            "state",
+            "history",
+            "sensor.test",
+            "--end",
+            "not-a-date",
+        ],
+    )
+    assert result.exit_code == 2
+    assert "Could not parse" in result.output

@@ -285,6 +285,11 @@ def history(ctx: Configuration, entities: list, since: str, end: str):
 
     end_time = dateparser.parse(end, settings=settings)
 
+    if start_time is None:
+        raise click.BadParameter(f"Could not parse --since value: {since!r}")
+    if end_time is None:
+        raise click.BadParameter(f"Could not parse --end value: {end!r}")
+
     delta = end_time - start_time
 
     if ctx.verbose:
