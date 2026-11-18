@@ -452,6 +452,35 @@ Render templates client (local) side:
     $ hass-cli template --local lovelace-template.yaml
 
 
+Removing helpers
+################
+
+Helpers created through configuration flows, such as Template, Integral and
+Utility Meter helpers, are configuration entries. Find their entry IDs and
+remove them with the integration commands:
+
+.. code:: bash
+
+   $ hass-cli integration list 'template|integration|utility_meter'
+   $ hass-cli integration delete ENTRY_ID
+
+Deletion prompts for confirmation. For scripts, use ``--confirm`` and check
+the exit status. Use the full entry ID or an unambiguous prefix. This removes
+the configuration entry and all its entities; ``state delete`` only removes
+a current state and does not delete the underlying helper configuration.
+Helpers managed in YAML must be removed from their YAML configuration instead.
+
+For direct access to REST endpoints, ``raw delete`` accepts a path including
+the ``/api/`` prefix and prints the server response:
+
+.. code:: bash
+
+   $ hass-cli -o json raw delete /api/config/config_entries/entry/ENTRY_ID
+
+This advanced command sends DELETE immediately without a confirmation prompt.
+An optional ``--json`` body works like ``raw post``, including ``--json -`` to
+read JSON from standard input. HTTP errors produce a nonzero exit status.
+
 Auto-completion
 ###############
 

@@ -116,26 +116,28 @@ def reload(ctx: Configuration, entry_id: str):
 @cli.command("delete")
 @click.argument("entry_id", required=True)
 @click.option(
-    "--confirm",
-    is_flag=True,
-    default=False,
-    help="Confirm deletion without prompting",
+    "--confirm", is_flag=True, default=False, help="Confirm deletion without prompting"
 )
 @pass_context
 def delete(ctx: Configuration, entry_id: str, confirm: bool):
-    """Delete an integration.
+    """Delete an integration or a config-entry-based helper.
 
-    ENTRY_ID - the entry_id of the config entry to delete
+    ENTRY_ID - the full entry_id or an unambiguous prefix, not an entity_id.
+    All entities belonging to the config entry are removed.
     """
     ctx.auto_output("data")
+    if not entry_id:
+        raise click.ClickException("entry_id must not be empty")
 
-    # Find full entry_id if partial match
     entries = api.get_config_entries(ctx)
-    entry = None
-    for e in entries:
-        if e.get("entry_id") == entry_id or e.get("entry_id", "").startswith(entry_id):
-            entry = e
-            break
+    entry = next((e for e in entries if e.get("entry_id") == entry_id), None)
+    if entry is None:
+        matches = [e for e in entries if e.get("entry_id", "").startswith(entry_id)]
+        if len(matches) > 1:
+            raise click.ClickException(
+                f"Ambiguous entry_id: {entry_id!r}. Use a full entry_id."
+            )
+        entry = matches[0] if matches else None
 
     if not entry:
         _LOGGING.error("Could not find integration with entry_id: %s", entry_id)
@@ -156,7 +158,7 @@ def delete(ctx: Configuration, entry_id: str, confirm: bool):
     if result.get("success"):
         ctx.echo(f"Successfully deleted integration: {domain} ({title})")
     else:
-        ctx.echo(helper.format_output(ctx, result))
+        raise click.ClickException(result.get("error", "Failed to delete config entry"))
 
 
 @cli.command("disable")
@@ -241,6 +243,7 @@ def list_disabled(ctx: Configuration):
     ctx.echo(
         helper.format_output(ctx, result, columns=ctx.columns if ctx.columns else cols)
     )
+
 
 @cli.command("list-loaded")
 @pass_context
